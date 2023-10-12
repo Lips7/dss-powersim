@@ -1,21 +1,10 @@
----
-output:
-  html_document:
-    toc: yes
-    keep_md: yes
-  html_notebook:
-    toc: yes
-  pdf_document:
-    includes:
-      in_header: "wrap-code.tex"
-    toc: yes
-    keep_tex: yes
----
-
 ```{r setup, include=FALSE}
 require(knitr)
+knitr::opts_chunk$set(eval = TRUE, results = TRUE, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.path = "figures/")
+
+# https://users.ssc.wisc.edu/~hemken/Stataworkshops/Statamarkdown/stata-and-r-markdown.html
 library(Statamarkdown)
-knitr::opts_chunk$set(engine.path = list(stata = "C:/Program Files/Stata17/StataMP-64.exe"))
+knitr::opts_chunk$set(engine="stata", comment="", engine.path=list(stata="C:/Program Files/Stata17/StataMP-64.exe"))
 ```
 
 # Stata
@@ -24,7 +13,7 @@ knitr::opts_chunk$set(engine.path = list(stata = "C:/Program Files/Stata17/Stata
 
 We will need several Stata packages to draw a violin plot. We can use "ssc install [package_name]" to install them.
 
-```{stata, results=FALSE}
+```{stata}
 clear all
 // ssc install violinplot, replace     // module to draw violin plots
 // ssc install dstat, replace          // violinplot's dependency, module to compute summary statistics
@@ -35,7 +24,7 @@ clear all
 
 We will also set the pseudo-random number generator seed to `02138` to make the stochastic components of our simulations reproducible (this is similar to the process in R and Python).
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 set seed 02138
 ```
 
@@ -45,7 +34,7 @@ To give an overview of the power simulation task, we will simulate data from a d
 
 Before we start, let's set some global parameters for our power simulations.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 // number of simulation replications for power calculation
 global reps = 30
 
@@ -59,7 +48,7 @@ The first thing to do is to set up the parameters that govern the process we ass
 
 Note: There is a difference between Stata and R and the Python: We decrease the data-generating parameters to simplify our model, and we delete some parameters: by-song random intercept `omega_0`, by-subject random slope sd `tau_1`, and the correlation between intercept and slope `rho`.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 // set all data-generating parameters
 global beta_0 = 60   // intercept; i.e., the grand mean
 global beta_1 = 5    // slope; i.e., effect of category
@@ -71,7 +60,7 @@ global sigma = 8     // residual (error) sd
 
 Next, we will simulate the sampling process for the data. First, let's define parameters related to the number of observations.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 // Set number of subjects and songs
 global n_subj = 25   // number of subjects
 global n_pop = 15    // number of songs in pop category
@@ -228,7 +217,7 @@ matrix list b
 
 Now that we've tested the data generating code, we can put it into a function so that it's easy to run it repeatedly.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 capture program drop sim_data
 program define sim_data
 	args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
@@ -270,7 +259,7 @@ end
 
 We can wrap the data generating function and modeling code in a new function `single_run()` that returns the analysis results for a single simulation run. We'll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 capture program drop single_run
 program define single_run, rclass
 	args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
@@ -376,7 +365,7 @@ Ideally, the false positive rate will be equal to `alpha`, which we set at 0.05.
 
 In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 // grid of parameter values of interest
 quietly matrix define params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3 \ 10, 10, 10, 4 \ 10, 10, 10, 5 ///
 \ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40, 5 ///
@@ -394,7 +383,7 @@ quietly matrix define params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3 \ 
 
 We can now wrap our `single_run()` function within a more general function `parameter_search()` that takes the grid of parameter values as input and uses a matrix `results` to store analysis results of each `single_run()`.
 
-```{stata, collectcode=TRUE, results=FALSE}
+```{stata, collectcode=TRUE}
 capture program drop parameter_search
 program define parameter_search, rclass
 	args params

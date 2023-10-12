@@ -1,0 +1,30 @@
+---
+title: ""
+author: ""
+date: "`r format(Sys.Date(), '%B %Y')`"
+description: "This is a tutorial for power simulation"
+github-repo: "Lips7/dss-powersim"
+site: "bookdown::bookdown_site"
+documentclass: book
+geometry: "margin=1.5in"
+biblio-style: apalike
+link-citations: yes
+---
+
+# Simulation-Based Power Analysis {-}
+
+This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses in R, Python, and Stata. We focus particularly on power for mixed effects models, but the principles employed can be repurposed for any model and study design. The tutorial is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.
+
+While high-level packages exist in some of these languages for conducting simulation-based power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of conducting simulations and thus are best used after gaining an understanding of the power simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models - and it's fun!
+
+We are always grateful for any feedback you are willing to provide about our tutorials! Please email <help@iq.harvard.edu> with any thoughts.
+
+## Table of Contents {-}
+
+1. [R Examples](./r.html)
+2. [Python Examples](./python.html)
+3. [Stata Examples](./stata.html)
+
+## Contributors {-}
+
+The contents of these workshops are the result of a collaborative effort from members of the [Data Science Services](http://dss.iq.harvard.edu) team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.

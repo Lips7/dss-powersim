@@ -1,17 +1,3 @@
----
-output:
-  html_document: 
-    toc: yes
-    keep_md: yes
-  html_notebook: 
-    toc: yes
-  pdf_document: 
-    includes:
-      in_header: "wrap-code.tex"
-    toc: yes
-    keep_tex: yes
----
-
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
@@ -235,9 +221,9 @@ for the means of these two groups.
 dat_sim |>
 ggplot(aes(category, liking_ij, color = category)) +
   # predicted means
-  geom_hline(yintercept = (beta_0 + 0*beta_1), 
+  geom_hline(yintercept = (beta_0 + 0*beta_1),
              color = "orange", linetype = "dashed", linewidth = 1) +
-  geom_hline(yintercept = (beta_0 + 1*beta_1), 
+  geom_hline(yintercept = (beta_0 + 1*beta_1),
              color = "dodgerblue", linetype = "dashed", linewidth = 1) +
   # actual data
   geom_violin(alpha = 0.5, show.legend = FALSE, fill = "grey65") +
@@ -443,7 +429,7 @@ pgrid <- crossing(
   n_subj = c(10, 25, 50),
   n_pop = c(10, 40),
   n_rock = c(10, 40),
-  beta_1 = 1:5 
+  beta_1 = 1:5
 )
 ```
 
@@ -459,7 +445,7 @@ parameter_search <- function(params = pgrid){
     .l = params, # iterate over the grid of parameter values
     .f = ~ single_run(
              n_subj = ..1, # plug each row of parameter values into single_run()
-             n_pop  = ..2, 
+             n_pop  = ..2,
              n_rock = ..3,
              beta_1 = ..4
              ),
@@ -484,14 +470,14 @@ replications!
 
 ```{r}
 # replicate the parameter grid to match the dimensions of the model outputs
-pgrid_expand <- pgrid |> 
+pgrid_expand <- pgrid |>
   slice(rep(1:n(), each = 7)) |> # replicate each row by 7 parameters
   map_df(rep.int, times = reps) # replicate the whole grid by number of reps
 
 # replicate the parameter search many times
 sims_params <- future_replicate(
-    n = reps, 
-    expr = parameter_search(), 
+    n = reps,
+    expr = parameter_search(),
     simplify = FALSE
     ) |>
   imap( ~ mutate(.x, rep = .y, .before = "effect")) |> # include rep ID
@@ -524,7 +510,7 @@ sims_table |>
          n_rock = paste0("n_rock: ", n_rock)) |>
   ggplot(aes(x = mean_estimate, y = power,
              group = n_subj, color = n_subj)) +
-  geom_hline(yintercept = 0.8, linetype = "dashed", 
+  geom_hline(yintercept = 0.8, linetype = "dashed",
              color = "grey50", linewidth =  0.5) +
   geom_line() +
   geom_point(size = 2) +

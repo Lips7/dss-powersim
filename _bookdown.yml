@@ -1,0 +1,16 @@
+book_filename: 'dss-powersim'
+
+output_dir: docs
+
+repo: https://github.com/Lips7/dss-powersim
+
+rmd_files:
+  - "04_R.Rmd"
+  - "05_Python.Rmd"
+  - "06_Stata.Rmd"
+
+delete_merged_file: true
+
+clean: [packages.bib, bookdown.bbl]
+
+new_session: yes

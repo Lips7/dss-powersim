@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Python | dss-powersim</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Python | dss-powersim" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Python | dss-powersim" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="r.html"/>
+<link rel="next" href="stata.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Power Simulation</a></li>
+
+<li class="divider"></li>
+<li class="part"><span><b>I Implementation</b></span></li>
+<li class="chapter" data-level="1" data-path="r.html"><a href="r.html"><i class="fa fa-check"></i><b>1</b> R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="r.html"><a href="r.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
+<li class="chapter" data-level="1.2" data-path="r.html"><a href="r.html#data-simulation-step-by-step"><i class="fa fa-check"></i><b>1.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="r.html"><a href="r.html#establish-the-simulation-parameters"><i class="fa fa-check"></i><b>1.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="1.2.2" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>1.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="1.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>1.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="1.2.4" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>1.2.4</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>1.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="1.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>1.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="1.5" data-path="r.html"><a href="r.html#power-calculation-automated"><i class="fa fa-check"></i><b>1.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="r.html"><a href="r.html#check-false-positive-rate"><i class="fa fa-check"></i><b>1.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="r.html"><a href="r.html#power-for-different-effect-sizes"><i class="fa fa-check"></i><b>1.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="python.html"><a href="python.html"><i class="fa fa-check"></i><b>2</b> Python</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="python.html"><a href="python.html#setup-1"><i class="fa fa-check"></i><b>2.1</b> Setup</a></li>
+<li class="chapter" data-level="2.2" data-path="python.html"><a href="python.html#data-simulation-step-by-step-1"><i class="fa fa-check"></i><b>2.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="python.html"><a href="python.html#establish-the-simulation-parameters-1"><i class="fa fa-check"></i><b>2.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="2.2.2" data-path="python.html"><a href="python.html#establish-the-data-generating-parameters-1"><i class="fa fa-check"></i><b>2.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="2.2.3" data-path="python.html"><a href="python.html#simulate-the-sampling-process-1"><i class="fa fa-check"></i><b>2.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="2.2.4" data-path="python.html"><a href="python.html#analyze-the-simulated-data-1"><i class="fa fa-check"></i><b>2.2.4</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="python.html"><a href="python.html#data-simulation-automated-1"><i class="fa fa-check"></i><b>2.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="2.4" data-path="python.html"><a href="python.html#power-calculation-single-run-1"><i class="fa fa-check"></i><b>2.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="2.5" data-path="python.html"><a href="python.html#power-calculation-automated-1"><i class="fa fa-check"></i><b>2.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="python.html"><a href="python.html#check-false-positive-rate-1"><i class="fa fa-check"></i><b>2.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="python.html"><a href="python.html#power-for-different-effect-sizes-1"><i class="fa fa-check"></i><b>2.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="stata.html"><a href="stata.html"><i class="fa fa-check"></i><b>3</b> Stata</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="stata.html"><a href="stata.html#setup-2"><i class="fa fa-check"></i><b>3.1</b> Setup</a></li>
+<li class="chapter" data-level="3.2" data-path="stata.html"><a href="stata.html#data-simulation-step-by-step-2"><i class="fa fa-check"></i><b>3.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="stata.html"><a href="stata.html#establish-the-data-generating-parameters-2"><i class="fa fa-check"></i><b>3.2.1</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="3.2.2" data-path="stata.html"><a href="stata.html#simulate-the-sampling-process-2"><i class="fa fa-check"></i><b>3.2.2</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="3.2.3" data-path="stata.html"><a href="stata.html#analyze-the-simulated-data-2"><i class="fa fa-check"></i><b>3.2.3</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="stata.html"><a href="stata.html#data-simulation-automated-2"><i class="fa fa-check"></i><b>3.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="3.4" data-path="stata.html"><a href="stata.html#power-calculation-single-run-2"><i class="fa fa-check"></i><b>3.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="3.5" data-path="stata.html"><a href="stata.html#power-calculation-automated-2"><i class="fa fa-check"></i><b>3.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="stata.html"><a href="stata.html#check-false-positive-rate-2"><i class="fa fa-check"></i><b>3.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="stata.html"><a href="stata.html#power-for-different-effect-sizes-2"><i class="fa fa-check"></i><b>3.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="python" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Python<a href="python.html#python" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>To begin with, the simulation based power analysis in Python just follows the structure in the last section in R, and there are repetitions in the texts to describe the method. However, there are differences between the two languages and we will specify those discrepancy in the following “note” parts.</p>
+<div id="setup-1" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Setup<a href="python.html#setup-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Note: There are two differences between Python and the R language:
+1. R uses the p_load function to automatically install missing libraries and import libraries. Python needs to manually configure the environment. If the library is missing, you can use “! pip install [package_name]” to install;
+2. The R has set parallelism in the setup part, but Python uses the dask package to perform parallel computing in the simulation part.</p>
+<p>We will need to use several Python packages to optimize our workflow and fit mixed effects models.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="python.html#cb41-1" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb41-2"><a href="python.html#cb41-2" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb41-3"><a href="python.html#cb41-3" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb41-4"><a href="python.html#cb41-4" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb41-5"><a href="python.html#cb41-5" tabindex="-1"></a><span class="im">import</span> matplotlib</span>
+<span id="cb41-6"><a href="python.html#cb41-6" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb41-7"><a href="python.html#cb41-7" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb41-8"><a href="python.html#cb41-8" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb41-9"><a href="python.html#cb41-9" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="python.html#cb41-10" tabindex="-1"></a><span class="im">from</span> dask.distributed <span class="im">import</span> Client</span>
+<span id="cb41-11"><a href="python.html#cb41-11" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product</span>
+<span id="cb41-12"><a href="python.html#cb41-12" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="python.html#cb41-13" tabindex="-1"></a>matplotlib.use(<span class="st">&quot;Agg&quot;</span>)</span>
+<span id="cb41-14"><a href="python.html#cb41-14" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler <span class="op">=</span> <span class="st">&quot;processes&quot;</span>)</span></code></pre></div>
+<pre><code>## &lt;dask.config.set object at 0x0000014041902450&gt;</code></pre>
+<p>We will also set the pseudo-random number generator seed to 2138 to make the stochastic components of our simulations reproducible.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="python.html#cb43-1" tabindex="-1"></a>np.random.seed(<span class="dv">2138</span>)</span></code></pre></div>
+</div>
+<div id="data-simulation-step-by-step-1" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Data simulation step by step<a href="python.html#data-simulation-step-by-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see Power of What? for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. Much of the general workflow here is borrowed from DeBruine &amp; Dale (2021) Understanding Mixed-Effects Models through Simulation. We’ll start by writing code that simulates datasets under the alternative hypothesis.</p>
+<p>Note: There are two differences between Python and the R:
+1. We use the package of “statsmodels” to set up the mixd effect model in Python. However, this package doesn’t have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
+2. There’s no “broom.mixed::tidy()” function in Python and that’s why the output is incomplete.</p>
+<div id="establish-the-simulation-parameters-1" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Establish the simulation parameters<a href="python.html#establish-the-simulation-parameters-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before we start, let’s set some global parameters for our power simulations. Since simulations can take a long time to run, we’ll use 30 replications here as an example, but we recommend increasing this number to at least 1000 replications for a more accurate final power calculation.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="python.html#cb44-1" tabindex="-1"></a><span class="co"># number of simulation replicates for power calculation</span></span>
+<span id="cb44-2"><a href="python.html#cb44-2" tabindex="-1"></a>reps <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb44-3"><a href="python.html#cb44-3" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="python.html#cb44-4" tabindex="-1"></a><span class="co"># specified alpha for power calculation</span></span>
+<span id="cb44-5"><a href="python.html#cb44-5" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.05</span></span></code></pre></div>
+</div>
+<div id="establish-the-data-generating-parameters-1" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Establish the data-generating parameters<a href="python.html#establish-the-data-generating-parameters-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the data-generating process, or DGP. We previously decided upon the the data-generating parameters (see Power of What?), so we just need to code them here.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="python.html#cb45-1" tabindex="-1"></a><span class="co"># set all data-generating parameters</span></span>
+<span id="cb45-2"><a href="python.html#cb45-2" tabindex="-1"></a>beta_0 <span class="op">=</span> <span class="dv">60</span>  <span class="co"># intercept; i.e., the grand mean</span></span>
+<span id="cb45-3"><a href="python.html#cb45-3" tabindex="-1"></a>beta_1 <span class="op">=</span> <span class="dv">5</span>   <span class="co"># slope; i.e, effect of category</span></span>
+<span id="cb45-4"><a href="python.html#cb45-4" tabindex="-1"></a>omega_0 <span class="op">=</span> <span class="dv">3</span>  <span class="co"># by-song random intercept sd</span></span>
+<span id="cb45-5"><a href="python.html#cb45-5" tabindex="-1"></a>tau_0 <span class="op">=</span> <span class="dv">7</span>    <span class="co"># by-subject random intercept sd</span></span>
+<span id="cb45-6"><a href="python.html#cb45-6" tabindex="-1"></a>tau_1 <span class="op">=</span> <span class="dv">4</span>    <span class="co"># by-subject random slope sd</span></span>
+<span id="cb45-7"><a href="python.html#cb45-7" tabindex="-1"></a>rho <span class="op">=</span> <span class="fl">0.2</span>    <span class="co"># correlation between intercept and slope</span></span>
+<span id="cb45-8"><a href="python.html#cb45-8" tabindex="-1"></a>sigma <span class="op">=</span> <span class="dv">8</span>    <span class="co"># residual (error) sd</span></span></code></pre></div>
+</div>
+<div id="simulate-the-sampling-process-1" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Simulate the sampling process<a href="python.html#simulate-the-sampling-process-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Next, we will simulate the sampling process for the data. First, let’s define parameters related to the number of observations.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="python.html#cb46-1" tabindex="-1"></a><span class="co"># set number of subjects and songs</span></span>
+<span id="cb46-2"><a href="python.html#cb46-2" tabindex="-1"></a>n_subj <span class="op">=</span> <span class="dv">25</span>  <span class="co"># number of subjects</span></span>
+<span id="cb46-3"><a href="python.html#cb46-3" tabindex="-1"></a>n_pop <span class="op">=</span> <span class="dv">15</span>   <span class="co"># number of songs in pop category</span></span>
+<span id="cb46-4"><a href="python.html#cb46-4" tabindex="-1"></a>n_rock <span class="op">=</span> <span class="dv">15</span>  <span class="co"># number of songs in rock category</span></span></code></pre></div>
+<div id="simulate-the-sampling-of-songs-1" class="section level4 hasAnchor" number="2.2.3.1">
+<h4><span class="header-section-number">2.2.3.1</span> Simulate the sampling of songs<a href="python.html#simulate-the-sampling-of-songs-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We need to create a table listing each song <span class="math inline">\(i\)</span>, which category it is in (rock or pop), and its random effect <span class="math inline">\(O_{0i}\)</span>. The latter is sampled from a univariate normal distribution using the function np.random.normal().</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="python.html#cb47-1" tabindex="-1"></a><span class="co"># simulate a sample of songs</span></span>
+<span id="cb47-2"><a href="python.html#cb47-2" tabindex="-1"></a>songs <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb47-3"><a href="python.html#cb47-3" tabindex="-1"></a>    <span class="st">&#39;song_id&#39;</span>: <span class="bu">range</span>(<span class="dv">1</span>, n_pop <span class="op">+</span> n_rock <span class="op">+</span> <span class="dv">1</span>),</span>
+<span id="cb47-4"><a href="python.html#cb47-4" tabindex="-1"></a>    <span class="st">&#39;category&#39;</span>: [<span class="st">&#39;pop&#39;</span>]<span class="op">*</span>n_pop <span class="op">+</span> [<span class="st">&#39;rock&#39;</span>]<span class="op">*</span>n_rock,</span>
+<span id="cb47-5"><a href="python.html#cb47-5" tabindex="-1"></a>    <span class="st">&#39;genre_i&#39;</span>: [<span class="dv">0</span>]<span class="op">*</span>n_pop <span class="op">+</span> [<span class="dv">1</span>]<span class="op">*</span>n_rock,</span>
+<span id="cb47-6"><a href="python.html#cb47-6" tabindex="-1"></a>    <span class="st">&#39;O_0i&#39;</span>: np.random.normal(<span class="dv">0</span>, omega_0, n_pop <span class="op">+</span> n_rock)</span>
+<span id="cb47-7"><a href="python.html#cb47-7" tabindex="-1"></a>})</span>
+<span id="cb47-8"><a href="python.html#cb47-8" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="python.html#cb47-9" tabindex="-1"></a><span class="bu">print</span>(songs.head(<span class="dv">10</span>))</span></code></pre></div>
+<pre><code>##    song_id category  genre_i      O_0i
+## 0        1      pop        0 -1.803722
+## 1        2      pop        0 -4.618354
+## 2        3      pop        0 -4.847097
+## 3        4      pop        0 -1.097951
+## 4        5      pop        0 -1.394909
+## 5        6      pop        0  2.424235
+## 6        7      pop        0 -3.956914
+## 7        8      pop        0  0.873891
+## 8        9      pop        0  3.318065
+## 9       10      pop        0  5.513671</code></pre>
+</div>
+<div id="simulate-the-sampling-of-subjects-1" class="section level4 hasAnchor" number="2.2.3.2">
+<h4><span class="header-section-number">2.2.3.2</span> Simulate the sampling of subjects<a href="python.html#simulate-the-sampling-of-subjects-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Now we simulate the sampling of participants, which results in table listing each individual and their two correlated random effects (a random intercept and random slope). To do this, we must sample <span class="math inline">\(T_{0j} ,T_{1j}\)</span> pairs - one for each subject - from a bivariate normal distribution.</p>
+<p>We will use the function np.random.multivariate_normal(), which generates a table of n simulated values from a multivariate normal distribution by specifying the means and covariance matrix(cov).</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="python.html#cb49-1" tabindex="-1"></a><span class="co"># simulate a sample of subjects</span></span>
+<span id="cb49-2"><a href="python.html#cb49-2" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="python.html#cb49-3" tabindex="-1"></a><span class="co"># sample from a multivariate normal distribution</span></span>
+<span id="cb49-4"><a href="python.html#cb49-4" tabindex="-1"></a>mean <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>]  <span class="co"># means for random effects are always 0</span></span>
+<span id="cb49-5"><a href="python.html#cb49-5" tabindex="-1"></a>cov <span class="op">=</span> [[tau_0<span class="op">**</span><span class="dv">2</span>, rho<span class="op">*</span>tau_0<span class="op">*</span>tau_1], [rho<span class="op">*</span>tau_0<span class="op">*</span>tau_1, tau_1<span class="op">**</span><span class="dv">2</span>]]  <span class="co"># set covariance matrix</span></span>
+<span id="cb49-6"><a href="python.html#cb49-6" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="python.html#cb49-7" tabindex="-1"></a>random_effects <span class="op">=</span> np.random.multivariate_normal(mean, cov, n_subj)</span>
+<span id="cb49-8"><a href="python.html#cb49-8" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="python.html#cb49-9" tabindex="-1"></a>subjects <span class="op">=</span> pd.DataFrame(random_effects, columns<span class="op">=</span>[<span class="st">&#39;T_0j&#39;</span>, <span class="st">&#39;T_1j&#39;</span>])</span>
+<span id="cb49-10"><a href="python.html#cb49-10" tabindex="-1"></a>subjects[<span class="st">&#39;subj_id&#39;</span>] <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, n_subj <span class="op">+</span> <span class="dv">1</span>) <span class="co"># add subject IDs</span></span>
+<span id="cb49-11"><a href="python.html#cb49-11" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="python.html#cb49-12" tabindex="-1"></a><span class="bu">print</span>(subjects.head(<span class="dv">10</span>))</span></code></pre></div>
+<pre><code>##         T_0j      T_1j  subj_id
+## 0  -0.547564 -2.796419        1
+## 1 -10.695092 -3.700622        2
+## 2   3.387493 -7.940628        3
+## 3   4.344241  0.531463        4
+## 4   6.461586  5.260280        5
+## 5 -12.373764 -1.387928        6
+## 6   0.352194 -3.990547        7
+## 7  -6.962734  2.358670        8
+## 8  -2.636463 -0.370637        9
+## 9   0.619930 -4.416671       10</code></pre>
+</div>
+<div id="check-the-simulated-values-1" class="section level4 hasAnchor" number="2.2.3.3">
+<h4><span class="header-section-number">2.2.3.3</span> Check the simulated values<a href="python.html#check-the-simulated-values-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s do a quick sanity check by comparing our simulated values to the parameters we used as inputs. Because the sampling process is stochastic, we shouldn’t expect that these will exactly match for any given run of the simulation.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="python.html#cb51-1" tabindex="-1"></a>check_values <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb51-2"><a href="python.html#cb51-2" tabindex="-1"></a>    <span class="st">&#39;parameter&#39;</span>: [<span class="st">&#39;omega_0&#39;</span>, <span class="st">&#39;tau_0&#39;</span>, <span class="st">&#39;tau_1&#39;</span>, <span class="st">&#39;rho&#39;</span>],</span>
+<span id="cb51-3"><a href="python.html#cb51-3" tabindex="-1"></a>    <span class="st">&#39;value&#39;</span>: [omega_0, tau_0, tau_1, rho],</span>
+<span id="cb51-4"><a href="python.html#cb51-4" tabindex="-1"></a>    <span class="st">&#39;simulated&#39;</span>: [songs[<span class="st">&#39;O_0i&#39;</span>].std(), subjects[<span class="st">&#39;T_0j&#39;</span>].std(), subjects[<span class="st">&#39;T_1j&#39;</span>].std(), subjects[<span class="st">&#39;T_0j&#39;</span>].corr(subjects[<span class="st">&#39;T_1j&#39;</span>])]</span>
+<span id="cb51-5"><a href="python.html#cb51-5" tabindex="-1"></a>})</span>
+<span id="cb51-6"><a href="python.html#cb51-6" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="python.html#cb51-7" tabindex="-1"></a><span class="bu">print</span>(check_values)</span></code></pre></div>
+<pre><code>##   parameter  value  simulated
+## 0   omega_0    3.0   3.372345
+## 1     tau_0    7.0   5.648262
+## 2     tau_1    4.0   4.439518
+## 3       rho    0.2   0.063860</code></pre>
+</div>
+<div id="simulate-trials-1" class="section level4 hasAnchor" number="2.2.3.4">
+<h4><span class="header-section-number">2.2.3.4</span> Simulate trials<a href="python.html#simulate-trials-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the subjects and songs tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of sigma.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="python.html#cb53-1" tabindex="-1"></a><span class="co"># cross subject and song IDs; add an error term</span></span>
+<span id="cb53-2"><a href="python.html#cb53-2" tabindex="-1"></a>trials <span class="op">=</span> subjects.assign(key<span class="op">=</span><span class="dv">1</span>).merge(songs.assign(key<span class="op">=</span><span class="dv">1</span>), on<span class="op">=</span><span class="st">&#39;key&#39;</span>).drop(columns<span class="op">=</span><span class="st">&#39;key&#39;</span>)</span>
+<span id="cb53-3"><a href="python.html#cb53-3" tabindex="-1"></a>trials[<span class="st">&#39;e_ij&#39;</span>] <span class="op">=</span> np.random.normal(<span class="dv">0</span>, sigma, <span class="bu">len</span>(trials))</span>
+<span id="cb53-4"><a href="python.html#cb53-4" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="python.html#cb53-5" tabindex="-1"></a><span class="bu">print</span>(trials.head(<span class="dv">10</span>))</span></code></pre></div>
+<pre><code>##        T_0j      T_1j  subj_id  song_id category  genre_i      O_0i       e_ij
+## 0 -0.547564 -2.796419        1        1      pop        0 -1.803722   6.954841
+## 1 -0.547564 -2.796419        1        2      pop        0 -4.618354  -6.588163
+## 2 -0.547564 -2.796419        1        3      pop        0 -4.847097   5.226969
+## 3 -0.547564 -2.796419        1        4      pop        0 -1.097951 -11.285800
+## 4 -0.547564 -2.796419        1        5      pop        0 -1.394909   2.418785
+## 5 -0.547564 -2.796419        1        6      pop        0  2.424235  -7.579483
+## 6 -0.547564 -2.796419        1        7      pop        0 -3.956914  -2.553524
+## 7 -0.547564 -2.796419        1        8      pop        0  0.873891  12.726906
+## 8 -0.547564 -2.796419        1        9      pop        0  3.318065  -6.371494
+## 9 -0.547564 -2.796419        1       10      pop        0  5.513671  13.508966</code></pre>
+</div>
+<div id="calculate-response-values-1" class="section level4 hasAnchor" number="2.2.3.5">
+<h4><span class="header-section-number">2.2.3.5</span> Calculate response values<a href="python.html#calculate-response-values-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>With this resulting trials table, in combination with the constants <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, we have the full set of values that we need to compute the response variable liking_ij according the linear model we defined previously (see Power of What?).</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="python.html#cb55-1" tabindex="-1"></a>dat_sim <span class="op">=</span> trials.copy()</span>
+<span id="cb55-2"><a href="python.html#cb55-2" tabindex="-1"></a>dat_sim[<span class="st">&#39;liking_ij&#39;</span>] <span class="op">=</span> beta_0 <span class="op">+</span> dat_sim[<span class="st">&#39;T_0j&#39;</span>] <span class="op">+</span> dat_sim[<span class="st">&#39;O_0i&#39;</span>] <span class="op">+</span> (beta_1 <span class="op">+</span> dat_sim[<span class="st">&#39;T_1j&#39;</span>]) <span class="op">*</span> dat_sim[<span class="st">&#39;genre_i&#39;</span>] <span class="op">+</span> dat_sim[<span class="st">&#39;e_ij&#39;</span>]</span>
+<span id="cb55-3"><a href="python.html#cb55-3" tabindex="-1"></a>dat_sim <span class="op">=</span> dat_sim[[<span class="st">&#39;subj_id&#39;</span>, <span class="st">&#39;song_id&#39;</span>, <span class="st">&#39;category&#39;</span>, <span class="st">&#39;genre_i&#39;</span>, <span class="st">&#39;liking_ij&#39;</span>]]</span>
+<span id="cb55-4"><a href="python.html#cb55-4" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="python.html#cb55-5" tabindex="-1"></a><span class="bu">print</span>(dat_sim.head(<span class="dv">10</span>))</span></code></pre></div>
+<pre><code>##    subj_id  song_id category  genre_i  liking_ij
+## 0        1        1      pop        0  64.603556
+## 1        1        2      pop        0  48.245919
+## 2        1        3      pop        0  59.832308
+## 3        1        4      pop        0  47.068685
+## 4        1        5      pop        0  60.476312
+## 5        1        6      pop        0  54.297188
+## 6        1        7      pop        0  52.941998
+## 7        1        8      pop        0  73.053233
+## 8        1        9      pop        0  56.399007
+## 9        1       10      pop        0  78.475074</code></pre>
+</div>
+<div id="plot-the-data-1" class="section level4 hasAnchor" number="2.2.3.6">
+<h4><span class="header-section-number">2.2.3.6</span> Plot the data<a href="python.html#plot-the-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s visualize the distribution of the response variable for each of the two song genres and superimpose the simulated parameter estimates for the means of these two groups.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="python.html#cb57-1" tabindex="-1"></a>palette <span class="op">=</span> {<span class="st">&#39;pop&#39;</span>: <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;rock&#39;</span>: <span class="st">&#39;dodgerblue&#39;</span>}</span>
+<span id="cb57-2"><a href="python.html#cb57-2" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="python.html#cb57-3" tabindex="-1"></a><span class="co"># actual data</span></span>
+<span id="cb57-4"><a href="python.html#cb57-4" tabindex="-1"></a>sns.violinplot(x<span class="op">=</span><span class="st">&#39;category&#39;</span>, y<span class="op">=</span><span class="st">&#39;liking_ij&#39;</span>, data<span class="op">=</span>dat_sim, palette<span class="op">=</span>palette, inner<span class="op">=</span><span class="va">None</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb57-5"><a href="python.html#cb57-5" tabindex="-1"></a>sns.pointplot(x<span class="op">=</span><span class="st">&#39;category&#39;</span>, y<span class="op">=</span><span class="st">&#39;liking_ij&#39;</span>, data<span class="op">=</span>dat_sim, estimator<span class="op">=</span>np.mean, ci<span class="op">=</span><span class="va">None</span>, color<span class="op">=</span><span class="st">&#39;black&#39;</span>)</span>
+<span id="cb57-6"><a href="python.html#cb57-6" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="python.html#cb57-7" tabindex="-1"></a><span class="co"># predicted means</span></span>
+<span id="cb57-8"><a href="python.html#cb57-8" tabindex="-1"></a>plt.axhline(y<span class="op">=</span>(beta_0 <span class="op">+</span> <span class="dv">0</span><span class="op">*</span>beta_1), color<span class="op">=</span><span class="st">&#39;orange&#39;</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span>
+<span id="cb57-9"><a href="python.html#cb57-9" tabindex="-1"></a>plt.axhline(y<span class="op">=</span>(beta_0 <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>beta_1), color<span class="op">=</span><span class="st">&#39;dodgerblue&#39;</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span>
+<span id="cb57-10"><a href="python.html#cb57-10" tabindex="-1"></a></span>
+<span id="cb57-11"><a href="python.html#cb57-11" tabindex="-1"></a>plt.title(<span class="st">&quot;Predicted versus simulated values&quot;</span>)</span>
+<span id="cb57-12"><a href="python.html#cb57-12" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="figures/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="analyze-the-simulated-data-1" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Analyze the simulated data<a href="python.html#analyze-the-simulated-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now we can analyze our simulated data in a linear mixed effects model using the function mixedlm from the {statsmodels} package. The formula and vc_formula in mixedlm() map onto how we calculated our liking_ij outcome variable above.</p>
+<p>The terms in formula are as follows:
+liking_ij is the response.
+1 is the intercept (<span class="math inline">\(\beta_0\)</span>), which is the mean of the response for the pop genre of songs (because we used dummy coding for the genre_i term).
+genre_i is the dummy coded variable identifying whether song <span class="math inline">\(i\)</span> belongs to the pop or rock genre.</p>
+<p>The terms in vc_formula are as follows:</p>
+<ul>
+<li>0 + C(song_id) specifies a song-specific random intercept O_0i.</li>
+<li>0 + C(subject_id) specifies a subject-specific random intercept T_0j.</li>
+<li>0 + C(subject_id):genre_i specifies the subject specific random slope of the genre category T_1j.</li>
+</ul>
+<p>However, due to the inability of the function mixedlm(), the module did not indicate the correlation between subject-specific random intercept and the subject specific random slope of the genre category.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb58-1"><a href="python.html#cb58-1" tabindex="-1"></a><span class="co"># fit a linear mixed-effects model to data</span></span>
+<span id="cb58-2"><a href="python.html#cb58-2" tabindex="-1"></a>form <span class="op">=</span> <span class="st">&#39;liking_ij ~ 1 + genre_i&#39;</span></span>
+<span id="cb58-3"><a href="python.html#cb58-3" tabindex="-1"></a>dat_sim[<span class="st">&#39;groups&#39;</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb58-4"><a href="python.html#cb58-4" tabindex="-1"></a>vcf <span class="op">=</span> {<span class="st">&#39;song_id&#39;</span>:<span class="st">&#39;0 + C(song_id)&#39;</span>, <span class="st">&#39;subj_id&#39;</span>:<span class="st">&#39;0 + C(subj_id)&#39;</span>, <span class="st">&#39;genre_i&#39;</span>: <span class="st">&#39;0 + C(subj_id):genre_i&#39;</span>}</span></code></pre></div>
+<p>Now we can estimate the model.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="python.html#cb59-1" tabindex="-1"></a>model <span class="op">=</span> smf.mixedlm(form, groups<span class="op">=</span>dat_sim[<span class="st">&#39;groups&#39;</span>], vc_formula<span class="op">=</span>vcf, re_formula<span class="op">=</span><span class="st">&#39;0&#39;</span>, data<span class="op">=</span>dat_sim)</span>
+<span id="cb59-2"><a href="python.html#cb59-2" tabindex="-1"></a>mod_sim <span class="op">=</span> model.fit()</span>
+<span id="cb59-3"><a href="python.html#cb59-3" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="python.html#cb59-4" tabindex="-1"></a><span class="bu">print</span>(mod_sim.summary())</span></code></pre></div>
+<pre><code>##          Mixed Linear Model Regression Results
+## ========================================================
+## Model:            MixedLM Dependent Variable: liking_ij
+## No. Observations: 750     Method:             REML
+## No. Groups:       1       Scale:              66.4110
+## Min. group size:  750     Log-Likelihood:     -2708.1155
+## Max. group size:  750     Converged:          Yes
+## Mean group size:  750.0
+## --------------------------------------------------------
+##               Coef.  Std.Err.   z    P&gt;|z| [0.025 0.975]
+## --------------------------------------------------------
+## Intercept     58.078    1.494 38.873 0.000 55.150 61.007
+## genre_i        5.505    1.631  3.376 0.001  2.309  8.701
+## genre_i Var   22.355    1.106
+## song_id Var   10.578    0.443
+## subj_id Var   33.748    1.353
+## ========================================================</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb61-1"><a href="python.html#cb61-1" tabindex="-1"></a>formatted_sim_result <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb61-2"><a href="python.html#cb61-2" tabindex="-1"></a>    <span class="st">&#39;term&#39;</span>: [<span class="st">&#39;Intercept&#39;</span>, <span class="st">&#39;genre_i&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>],</span>
+<span id="cb61-3"><a href="python.html#cb61-3" tabindex="-1"></a>    <span class="st">&#39;parameter&#39;</span>: [<span class="st">&#39;beta_0&#39;</span>, <span class="st">&#39;beta_1&#39;</span>, <span class="st">&#39;omega_0&#39;</span>, <span class="st">&#39;tau_0&#39;</span>, <span class="st">&#39;rho&#39;</span>, <span class="st">&#39;tau_1&#39;</span>, <span class="st">&#39;sigma&#39;</span>],</span>
+<span id="cb61-4"><a href="python.html#cb61-4" tabindex="-1"></a>    <span class="st">&#39;value&#39;</span>: [beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma],</span>
+<span id="cb61-5"><a href="python.html#cb61-5" tabindex="-1"></a>    <span class="st">&#39;simulated&#39;</span>: [mod_sim.fe_params[<span class="dv">0</span>], mod_sim.fe_params[<span class="dv">1</span>],</span>
+<span id="cb61-6"><a href="python.html#cb61-6" tabindex="-1"></a>                  <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>,</span>
+<span id="cb61-7"><a href="python.html#cb61-7" tabindex="-1"></a>                 <span class="st">&#39;&#39;</span>, <span class="st">&#39;&#39;</span>,</span>
+<span id="cb61-8"><a href="python.html#cb61-8" tabindex="-1"></a>                 <span class="st">&#39;&#39;</span>]</span>
+<span id="cb61-9"><a href="python.html#cb61-9" tabindex="-1"></a>})</span>
+<span id="cb61-10"><a href="python.html#cb61-10" tabindex="-1"></a></span>
+<span id="cb61-11"><a href="python.html#cb61-11" tabindex="-1"></a><span class="bu">print</span>(formatted_sim_result)</span></code></pre></div>
+<pre><code>##         term parameter  value  simulated
+## 0  Intercept    beta_0   60.0  58.078342
+## 1    genre_i    beta_1    5.0   5.504843
+## 2              omega_0    3.0
+## 3                tau_0    7.0
+## 4                  rho    0.2
+## 5                tau_1    4.0
+## 6                sigma    8.0</code></pre>
+</div>
+</div>
+<div id="data-simulation-automated-1" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Data simulation automated<a href="python.html#data-simulation-automated-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb63-1"><a href="python.html#cb63-1" tabindex="-1"></a><span class="kw">def</span> sim_data(n_subj<span class="op">=</span><span class="dv">25</span>, n_pop<span class="op">=</span><span class="dv">15</span>, n_rock<span class="op">=</span><span class="dv">15</span>, beta_0<span class="op">=</span><span class="dv">60</span>, beta_1<span class="op">=</span><span class="dv">5</span>, omega_0<span class="op">=</span><span class="dv">3</span>, tau_0<span class="op">=</span><span class="dv">7</span>, tau_1<span class="op">=</span><span class="dv">4</span>, rho<span class="op">=</span><span class="fl">0.2</span>, sigma<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb63-2"><a href="python.html#cb63-2" tabindex="-1"></a>    songs <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb63-3"><a href="python.html#cb63-3" tabindex="-1"></a>        <span class="st">&#39;song_id&#39;</span>: np.arange(n_pop <span class="op">+</span> n_rock),</span>
+<span id="cb63-4"><a href="python.html#cb63-4" tabindex="-1"></a>        <span class="st">&#39;category&#39;</span>: np.repeat([<span class="st">&quot;pop&quot;</span>, <span class="st">&quot;rock&quot;</span>], [n_pop, n_rock]),</span>
+<span id="cb63-5"><a href="python.html#cb63-5" tabindex="-1"></a>        <span class="st">&#39;genre_i&#39;</span>: np.repeat([<span class="dv">0</span>, <span class="dv">1</span>], [n_pop, n_rock]),</span>
+<span id="cb63-6"><a href="python.html#cb63-6" tabindex="-1"></a>        <span class="st">&#39;O_0i&#39;</span>: np.random.normal(<span class="dv">0</span>, omega_0, n_pop <span class="op">+</span> n_rock)</span>
+<span id="cb63-7"><a href="python.html#cb63-7" tabindex="-1"></a>    })</span>
+<span id="cb63-8"><a href="python.html#cb63-8" tabindex="-1"></a></span>
+<span id="cb63-9"><a href="python.html#cb63-9" tabindex="-1"></a>    random_effects <span class="op">=</span> np.random.multivariate_normal([<span class="dv">0</span>, <span class="dv">0</span>], [[tau_0<span class="op">**</span><span class="dv">2</span>, rho<span class="op">*</span>tau_0<span class="op">*</span>tau_1], [rho<span class="op">*</span>tau_0<span class="op">*</span>tau_1, tau_1<span class="op">**</span><span class="dv">2</span>]], n_subj)</span>
+<span id="cb63-10"><a href="python.html#cb63-10" tabindex="-1"></a>    subjects <span class="op">=</span> pd.DataFrame(random_effects, columns<span class="op">=</span>[<span class="st">&#39;T_0j&#39;</span>, <span class="st">&#39;T_1j&#39;</span>])</span>
+<span id="cb63-11"><a href="python.html#cb63-11" tabindex="-1"></a>    subjects[<span class="st">&#39;subj_id&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, n_subj <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb63-12"><a href="python.html#cb63-12" tabindex="-1"></a></span>
+<span id="cb63-13"><a href="python.html#cb63-13" tabindex="-1"></a>    trials <span class="op">=</span> pd.merge(subjects, songs, how<span class="op">=</span><span class="st">&#39;cross&#39;</span>)</span>
+<span id="cb63-14"><a href="python.html#cb63-14" tabindex="-1"></a>    trials[<span class="st">&#39;e_ij&#39;</span>] <span class="op">=</span> np.random.normal(<span class="dv">0</span>, sigma, <span class="bu">len</span>(trials))</span>
+<span id="cb63-15"><a href="python.html#cb63-15" tabindex="-1"></a>    trials[<span class="st">&#39;liking_ij&#39;</span>] <span class="op">=</span> beta_0 <span class="op">+</span> trials[<span class="st">&#39;T_0j&#39;</span>] <span class="op">+</span> trials[<span class="st">&#39;O_0i&#39;</span>] <span class="op">+</span> (beta_1 <span class="op">+</span> trials[<span class="st">&#39;T_1j&#39;</span>]) <span class="op">*</span> trials[<span class="st">&#39;genre_i&#39;</span>] <span class="op">+</span> trials[<span class="st">&#39;e_ij&#39;</span>]</span>
+<span id="cb63-16"><a href="python.html#cb63-16" tabindex="-1"></a></span>
+<span id="cb63-17"><a href="python.html#cb63-17" tabindex="-1"></a>    <span class="cf">return</span> trials[[<span class="st">&#39;subj_id&#39;</span>, <span class="st">&#39;song_id&#39;</span>, <span class="st">&#39;category&#39;</span>, <span class="st">&#39;genre_i&#39;</span>, <span class="st">&#39;liking_ij&#39;</span>]]</span></code></pre></div>
+</div>
+<div id="power-calculation-single-run-1" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Power calculation single run<a href="python.html#power-calculation-single-run-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can wrap the data generating function and modeling code in a new function single_run() that returns a table of the analysis results for a single simulation run.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb64-1"><a href="python.html#cb64-1" tabindex="-1"></a><span class="kw">def</span> single_run(n_subj<span class="op">=</span><span class="dv">25</span>, n_pop<span class="op">=</span><span class="dv">15</span>, n_rock<span class="op">=</span><span class="dv">15</span>, beta_0<span class="op">=</span><span class="dv">60</span>, beta_1<span class="op">=</span><span class="dv">5</span>, omega_0<span class="op">=</span><span class="dv">3</span>, tau_0<span class="op">=</span><span class="dv">7</span>, tau_1<span class="op">=</span><span class="dv">4</span>, rho<span class="op">=</span><span class="fl">0.2</span>, sigma<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb64-2"><a href="python.html#cb64-2" tabindex="-1"></a>    dat_sim <span class="op">=</span> sim_data(n_subj, n_pop, n_rock, beta_0, beta_1, omega_0, tau_0, tau_1, rho, sigma)</span>
+<span id="cb64-3"><a href="python.html#cb64-3" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="python.html#cb64-4" tabindex="-1"></a>    dat_sim[<span class="st">&#39;groups&#39;</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb64-5"><a href="python.html#cb64-5" tabindex="-1"></a>    mod_sim <span class="op">=</span> smf.mixedlm(<span class="st">&#39;liking_ij ~ 1 + genre_i&#39;</span>, groups<span class="op">=</span>dat_sim[<span class="st">&#39;groups&#39;</span>],</span>
+<span id="cb64-6"><a href="python.html#cb64-6" tabindex="-1"></a>                          vc_formula<span class="op">=</span>{<span class="st">&#39;song_id&#39;</span>:<span class="st">&#39;0 + C(song_id)&#39;</span>, <span class="st">&#39;subj_id&#39;</span>:<span class="st">&#39;0 + C(subj_id)&#39;</span>, <span class="st">&#39;genre_i&#39;</span>: <span class="st">&#39;0 + C(subj_id):genre_i&#39;</span>},</span>
+<span id="cb64-7"><a href="python.html#cb64-7" tabindex="-1"></a>                          re_formula<span class="op">=</span><span class="st">&#39;0&#39;</span>, data<span class="op">=</span>dat_sim).fit()</span>
+<span id="cb64-8"><a href="python.html#cb64-8" tabindex="-1"></a></span>
+<span id="cb64-9"><a href="python.html#cb64-9" tabindex="-1"></a>    df <span class="op">=</span> mod_sim.summary().tables[<span class="dv">1</span>]</span>
+<span id="cb64-10"><a href="python.html#cb64-10" tabindex="-1"></a>    df[<span class="st">&#39;p_value&#39;</span>] <span class="op">=</span> mod_sim.pvalues</span>
+<span id="cb64-11"><a href="python.html#cb64-11" tabindex="-1"></a>    <span class="cf">return</span> df[[<span class="st">&#39;Coef.&#39;</span>, <span class="st">&#39;Std.Err.&#39;</span>, <span class="st">&#39;p_value&#39;</span>]]</span></code></pre></div>
+<p>Let’s test that our new single_run() function performs as expected.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb65-1"><a href="python.html#cb65-1" tabindex="-1"></a><span class="co"># run one model with default parameters</span></span>
+<span id="cb65-2"><a href="python.html#cb65-2" tabindex="-1"></a><span class="bu">print</span>(single_run())</span></code></pre></div>
+<pre><code>##               Coef. Std.Err.   p_value
+## Intercept    62.364    1.620  0.000000
+## genre_i       1.794    1.454  0.217012
+## genre_i Var  15.056    0.854  0.027138
+## song_id Var   8.783    0.387  0.004477
+## subj_id Var  46.691    1.848  0.001541</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb67-1"><a href="python.html#cb67-1" tabindex="-1"></a><span class="co"># run one model with new parameters</span></span>
+<span id="cb67-2"><a href="python.html#cb67-2" tabindex="-1"></a><span class="bu">print</span>(single_run(n_pop <span class="op">=</span> <span class="dv">10</span>, n_rock <span class="op">=</span> <span class="dv">50</span>, beta_1 <span class="op">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>##               Coef. Std.Err.        p_value
+## Intercept    60.065    1.635  1.824465e-295
+## genre_i       2.934    1.308   2.494009e-02
+## genre_i Var  14.922    0.811   1.634819e-02
+## song_id Var   6.946    0.230   8.011783e-05
+## subj_id Var  43.595    1.826   1.830974e-03</code></pre>
+</div>
+<div id="power-calculation-automated-1" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Power calculation automated<a href="python.html#power-calculation-automated-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed-up iterative processes.</p>
+<p>We use dask.delayed function to decorate single_run() so that it operates lazily, then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.</p>
+<p>Note: There are two differences between Python and the R:</p>
+<ol style="list-style-type: decimal">
+<li>The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;</li>
+<li>The R sets parallel computing in the setup part, while the Python uses the “dask” library for parallel computing.</li>
+</ol>
+<div class="sourceCode" id="cb69"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb69-1"><a href="python.html#cb69-1" tabindex="-1"></a>client <span class="op">=</span> Client()</span>
+<span id="cb69-2"><a href="python.html#cb69-2" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="python.html#cb69-3" tabindex="-1"></a><span class="at">@dask.delayed</span></span>
+<span id="cb69-4"><a href="python.html#cb69-4" tabindex="-1"></a><span class="kw">def</span> delayed_single_run(n_subj<span class="op">=</span><span class="dv">25</span>, n_pop<span class="op">=</span><span class="dv">15</span>, n_rock<span class="op">=</span><span class="dv">15</span>, beta_0<span class="op">=</span><span class="dv">60</span>, beta_1<span class="op">=</span><span class="dv">5</span>, omega_0<span class="op">=</span><span class="dv">3</span>, tau_0<span class="op">=</span><span class="dv">7</span>, tau_1<span class="op">=</span><span class="dv">4</span>, rho<span class="op">=</span><span class="fl">0.2</span>, sigma<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb69-5"><a href="python.html#cb69-5" tabindex="-1"></a>    df <span class="op">=</span> single_run(n_subj, n_pop, n_rock, beta_0, beta_1, omega_0, tau_0, tau_1, rho, sigma)</span>
+<span id="cb69-6"><a href="python.html#cb69-6" tabindex="-1"></a>    df <span class="op">=</span> df.assign(n_subj<span class="op">=</span>n_subj, n_pop<span class="op">=</span>n_pop, n_rock<span class="op">=</span>n_rock, beta_1<span class="op">=</span>beta_1)</span>
+<span id="cb69-7"><a href="python.html#cb69-7" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb69-8"><a href="python.html#cb69-8" tabindex="-1"></a></span>
+<span id="cb69-9"><a href="python.html#cb69-9" tabindex="-1"></a>sims <span class="op">=</span> [delayed_single_run() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(reps)]</span>
+<span id="cb69-10"><a href="python.html#cb69-10" tabindex="-1"></a>sims_result <span class="op">=</span> client.gather(client.compute(sims))</span>
+<span id="cb69-11"><a href="python.html#cb69-11" tabindex="-1"></a></span>
+<span id="cb69-12"><a href="python.html#cb69-12" tabindex="-1"></a>sims_df <span class="op">=</span> pd.concat(sims_result).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span></code></pre></div>
+<p>We can finally calculate power for our parameter of interest <span class="math inline">\(\beta_1\)</span> denoted in the model output table as the term <span class="math inline">\(genre_{i}\)</span> by filtering to keep only that term and the calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the alpha (0.05) threshold.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb70-1"><a href="python.html#cb70-1" tabindex="-1"></a>genre_i_sims <span class="op">=</span> sims_df[sims_df[<span class="st">&#39;term&#39;</span>] <span class="op">==</span> <span class="st">&#39;genre_i&#39;</span>]</span>
+<span id="cb70-2"><a href="python.html#cb70-2" tabindex="-1"></a>mean_estimate <span class="op">=</span> genre_i_sims[<span class="st">&#39;Coef.&#39;</span>].astype(<span class="bu">float</span>).mean()</span>
+<span id="cb70-3"><a href="python.html#cb70-3" tabindex="-1"></a>mean_se <span class="op">=</span> genre_i_sims[<span class="st">&#39;Std.Err.&#39;</span>].astype(<span class="bu">float</span>).mean()</span>
+<span id="cb70-4"><a href="python.html#cb70-4" tabindex="-1"></a>power <span class="op">=</span> (genre_i_sims[<span class="st">&#39;p_value&#39;</span>].astype(<span class="bu">float</span>) <span class="op">&lt;</span> alpha).mean()</span>
+<span id="cb70-5"><a href="python.html#cb70-5" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="python.html#cb70-6" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Mean estimate: </span><span class="sc">{</span>mean_estimate<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Mean estimate: 5.088766666666666</code></pre>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb72-1"><a href="python.html#cb72-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Mean standard error: </span><span class="sc">{</span>mean_se<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Mean standard error: 1.4374999999999998</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb74-1"><a href="python.html#cb74-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Power: </span><span class="sc">{</span>power<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Power: 0.9666666666666667</code></pre>
+<div id="check-false-positive-rate-1" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> Check false positive rate<a href="python.html#check-false-positive-rate-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of genre_ij (beta_1) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb76-1"><a href="python.html#cb76-1" tabindex="-1"></a>sims_fp <span class="op">=</span> [delayed_single_run(beta_1<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(reps)]</span>
+<span id="cb76-2"><a href="python.html#cb76-2" tabindex="-1"></a>sims_fp_result <span class="op">=</span> client.gather(client.compute(sims_fp))</span>
+<span id="cb76-3"><a href="python.html#cb76-3" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="python.html#cb76-4" tabindex="-1"></a>sims_fp_df <span class="op">=</span> pd.concat(sims_fp_result).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb77-1"><a href="python.html#cb77-1" tabindex="-1"></a><span class="bu">print</span>((sims_fp_df[sims_fp_df[<span class="st">&#39;term&#39;</span>] <span class="op">==</span> <span class="st">&#39;genre_i&#39;</span>][<span class="st">&#39;p_value&#39;</span>].astype(<span class="bu">float</span>) <span class="op">&lt;</span> alpha).mean())</span></code></pre></div>
+<pre><code>## 0.0</code></pre>
+<p>Ideally, the false positive rate will be equal to alpha, which we set at 0.05.</p>
+</div>
+</div>
+<div id="power-for-different-effect-sizes-1" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Power for different effect sizes<a href="python.html#power-for-different-effect-sizes-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
+<p>Note: There are two differences between Python and the R:</p>
+<ol style="list-style-type: decimal">
+<li>Python uses the “product” function to permutate and combine parameters, and then use “loop” and “dask.compute” to perform parallel computing;</li>
+<li>Python couldn’t repeatedly use parameter_search() and instead uses two layers of loop to realize multiple simulations of each permutation and combination of parameters.</li>
+</ol>
+<div class="sourceCode" id="cb79"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb79-1"><a href="python.html#cb79-1" tabindex="-1"></a> <span class="co"># grid of parameter values of interest</span></span>
+<span id="cb79-2"><a href="python.html#cb79-2" tabindex="-1"></a>params <span class="op">=</span> {</span>
+<span id="cb79-3"><a href="python.html#cb79-3" tabindex="-1"></a>    <span class="st">&#39;n_subj&#39;</span>: [<span class="dv">10</span>, <span class="dv">50</span>],</span>
+<span id="cb79-4"><a href="python.html#cb79-4" tabindex="-1"></a>    <span class="st">&#39;n_pop&#39;</span>: [<span class="dv">10</span>, <span class="dv">40</span>],</span>
+<span id="cb79-5"><a href="python.html#cb79-5" tabindex="-1"></a>    <span class="st">&#39;n_rock&#39;</span>: [<span class="dv">10</span>, <span class="dv">40</span>],</span>
+<span id="cb79-6"><a href="python.html#cb79-6" tabindex="-1"></a>    <span class="st">&#39;beta_1&#39;</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>]</span>
+<span id="cb79-7"><a href="python.html#cb79-7" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb80-1"><a href="python.html#cb80-1" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
+<span id="cb80-2"><a href="python.html#cb80-2" tabindex="-1"></a><span class="kw">def</span> parameter_search(params):</span>
+<span id="cb80-3"><a href="python.html#cb80-3" tabindex="-1"></a>    sims <span class="op">=</span> []</span>
+<span id="cb80-4"><a href="python.html#cb80-4" tabindex="-1"></a>    pgrid <span class="op">=</span> pd.DataFrame(<span class="bu">list</span>(product(<span class="op">*</span>params.values())), columns<span class="op">=</span>params.keys())</span>
+<span id="cb80-5"><a href="python.html#cb80-5" tabindex="-1"></a></span>
+<span id="cb80-6"><a href="python.html#cb80-6" tabindex="-1"></a>    <span class="co"># iterate over the grid of parameter values</span></span>
+<span id="cb80-7"><a href="python.html#cb80-7" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> pgrid.iterrows():</span>
+<span id="cb80-8"><a href="python.html#cb80-8" tabindex="-1"></a>        sims.append(delayed_single_run(</span>
+<span id="cb80-9"><a href="python.html#cb80-9" tabindex="-1"></a>            n_subj<span class="op">=</span>row[<span class="st">&#39;n_subj&#39;</span>], <span class="co"># plug each row of parameter values into single_run()</span></span>
+<span id="cb80-10"><a href="python.html#cb80-10" tabindex="-1"></a>            n_pop<span class="op">=</span>row[<span class="st">&#39;n_pop&#39;</span>],</span>
+<span id="cb80-11"><a href="python.html#cb80-11" tabindex="-1"></a>            n_rock<span class="op">=</span>row[<span class="st">&#39;n_rock&#39;</span>],</span>
+<span id="cb80-12"><a href="python.html#cb80-12" tabindex="-1"></a>            beta_1<span class="op">=</span>row[<span class="st">&#39;beta_1&#39;</span>]</span>
+<span id="cb80-13"><a href="python.html#cb80-13" tabindex="-1"></a>        ))</span>
+<span id="cb80-14"><a href="python.html#cb80-14" tabindex="-1"></a>    <span class="cf">return</span> pd.concat(client.gather(client.compute(sims))).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span></code></pre></div>
+<p>If we call parameter_search() it will return a single replication of simulations for each combination of parameter values in pgrid.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="python.html#cb81-1" tabindex="-1"></a><span class="bu">print</span>(parameter_search(params))</span></code></pre></div>
+<pre><code>##             term   Coef. Std.Err.       p_value  n_subj  n_pop  n_rock  beta_1
+## 0      Intercept  60.933    3.098  3.915640e-86      10     10      10       1
+## 1        genre_i   1.942    1.968  3.237101e-01      10     10      10       1
+## 2    genre_i Var   0.112    1.872  9.938793e-01      10     10      10       1
+## 3    song_id Var  13.211    0.889  5.688653e-02      10     10      10       1
+## 4    subj_id Var  76.660    5.020  5.042574e-02      10     10      10       1
+## ..           ...     ...      ...           ...     ...    ...     ...     ...
+## 115    Intercept  59.108    0.955  0.000000e+00      50     40      40       5
+## 116      genre_i   4.849    0.975  6.516293e-07      50     40      40       5
+## 117  genre_i Var  24.449    0.993  2.187331e-03      50     40      40       5
+## 118  song_id Var   7.927    0.167  3.763196e-09      50     40      40       5
+## 119  subj_id Var  34.079    0.789  7.738552e-08      50     40      40       5
+##
+## [120 rows x 8 columns]</code></pre>
+<p>To run multiple replication of simulations for each combination of parameter values in pgrid, we can use the for statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning, this will take some time if you have set a high number of replications!</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="python.html#cb83-1" tabindex="-1"></a>sims_params <span class="op">=</span> []</span>
+<span id="cb83-2"><a href="python.html#cb83-2" tabindex="-1"></a>pgrid <span class="op">=</span> pd.DataFrame(<span class="bu">list</span>(product(<span class="op">*</span>params.values())), columns<span class="op">=</span>params.keys())</span>
+<span id="cb83-3"><a href="python.html#cb83-3" tabindex="-1"></a></span>
+<span id="cb83-4"><a href="python.html#cb83-4" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(reps):</span>
+<span id="cb83-5"><a href="python.html#cb83-5" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> pgrid.iterrows():</span>
+<span id="cb83-6"><a href="python.html#cb83-6" tabindex="-1"></a>        sims_params.append(delayed_single_run(</span>
+<span id="cb83-7"><a href="python.html#cb83-7" tabindex="-1"></a>            n_subj<span class="op">=</span>row[<span class="st">&#39;n_subj&#39;</span>],</span>
+<span id="cb83-8"><a href="python.html#cb83-8" tabindex="-1"></a>            n_pop<span class="op">=</span>row[<span class="st">&#39;n_pop&#39;</span>],</span>
+<span id="cb83-9"><a href="python.html#cb83-9" tabindex="-1"></a>            n_rock<span class="op">=</span>row[<span class="st">&#39;n_rock&#39;</span>],</span>
+<span id="cb83-10"><a href="python.html#cb83-10" tabindex="-1"></a>            beta_1<span class="op">=</span>row[<span class="st">&#39;beta_1&#39;</span>]</span>
+<span id="cb83-11"><a href="python.html#cb83-11" tabindex="-1"></a>        ))</span>
+<span id="cb83-12"><a href="python.html#cb83-12" tabindex="-1"></a></span>
+<span id="cb83-13"><a href="python.html#cb83-13" tabindex="-1"></a>sims_params_result <span class="op">=</span> client.gather(client.compute(sims_params))</span>
+<span id="cb83-14"><a href="python.html#cb83-14" tabindex="-1"></a></span>
+<span id="cb83-15"><a href="python.html#cb83-15" tabindex="-1"></a>sims_params_df <span class="op">=</span> pd.concat(sims_params_result).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span>
+<span id="cb83-16"><a href="python.html#cb83-16" tabindex="-1"></a>client.close()</span>
+<span id="cb83-17"><a href="python.html#cb83-17" tabindex="-1"></a><span class="bu">print</span>(sims_params_df)</span></code></pre></div>
+<pre><code>##              term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
+## 0       Intercept  58.315    2.734  6.473226e-101      10     10      10       1
+## 1         genre_i  -0.293    2.034   8.856034e-01      10     10      10       1
+## 2     genre_i Var   8.074    1.220   3.787807e-01      10     10      10       1
+## 3     song_id Var  10.995    0.777   6.004767e-02      10     10      10       1
+## 4     subj_id Var  58.118    4.012   5.412366e-02      10     10      10       1
+## ...           ...     ...      ...            ...     ...    ...     ...     ...
+## 3595    Intercept  61.389    0.959   0.000000e+00      50     40      40       5
+## 3596      genre_i   4.594    1.064   1.587224e-05      50     40      40       5
+## 3597  genre_i Var  21.070    0.604   9.683006e-06      50     40      40       5
+## 3598  song_id Var  12.986    0.580   4.474574e-03      50     40      40       5
+## 3599  subj_id Var  28.159    0.662   6.675987e-08      50     40      40       5
+##
+## [3600 rows x 8 columns]</code></pre>
+<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in pgrid, so that we can get power estimates for all combinations of parameter values.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="python.html#cb85-1" tabindex="-1"></a>sims_table <span class="op">=</span> sims_params_df.query(<span class="st">&quot;term == &#39;genre_i&#39;&quot;</span>).groupby([<span class="st">&#39;term&#39;</span>, <span class="st">&#39;n_subj&#39;</span>, <span class="st">&#39;n_pop&#39;</span>, <span class="st">&#39;n_rock&#39;</span>, <span class="st">&#39;beta_1&#39;</span>]).agg(</span>
+<span id="cb85-2"><a href="python.html#cb85-2" tabindex="-1"></a>    mean_estimate<span class="op">=</span>pd.NamedAgg(column<span class="op">=</span><span class="st">&#39;Coef.&#39;</span>, aggfunc<span class="op">=</span><span class="kw">lambda</span> x: x.astype(<span class="bu">float</span>).mean()),</span>
+<span id="cb85-3"><a href="python.html#cb85-3" tabindex="-1"></a>    mean_se<span class="op">=</span>pd.NamedAgg(column<span class="op">=</span><span class="st">&#39;Std.Err.&#39;</span>, aggfunc<span class="op">=</span><span class="kw">lambda</span> x: x.astype(<span class="bu">float</span>).mean()),</span>
+<span id="cb85-4"><a href="python.html#cb85-4" tabindex="-1"></a>    power<span class="op">=</span>pd.NamedAgg(column<span class="op">=</span><span class="st">&#39;p_value&#39;</span>, aggfunc<span class="op">=</span><span class="kw">lambda</span> x: (x.astype(<span class="bu">float</span>) <span class="op">&lt;</span> alpha).mean())</span>
+<span id="cb85-5"><a href="python.html#cb85-5" tabindex="-1"></a>).reset_index()</span></code></pre></div>
+<p>Here’s a formatted table that summarizes the output from the power simulation.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="python.html#cb86-1" tabindex="-1"></a><span class="bu">print</span>(sims_table)</span></code></pre></div>
+<pre><code>##        term  n_subj  n_pop  n_rock  beta_1  mean_estimate   mean_se     power
+## 0   genre_i      10     10      10       1       0.706100  2.273733  0.033333
+## 1   genre_i      10     10      10       3       3.478033  2.218300  0.300000
+## 2   genre_i      10     10      10       5       4.425333  2.439167  0.466667
+## 3   genre_i      10     10      40       1       1.298633  2.169367  0.000000
+## 4   genre_i      10     10      40       3       3.257400  2.161167  0.300000
+## 5   genre_i      10     10      40       5       4.791733  2.391900  0.500000
+## 6   genre_i      10     40      10       1       0.884333  2.196433  0.033333
+## 7   genre_i      10     40      10       3       2.747567  2.271400  0.166667
+## 8   genre_i      10     40      10       5       5.029167  2.125300  0.733333
+## 9   genre_i      10     40      40       1       0.875433  2.046567  0.033333
+## 10  genre_i      10     40      40       3       3.249067  1.908667  0.466667
+## 11  genre_i      10     40      40       5       4.885467  2.038567  0.633333
+## 12  genre_i      50     10      10       1       1.346700  1.469967  0.200000
+## 13  genre_i      50     10      10       3       2.744800  1.549433  0.466667
+## 14  genre_i      50     10      10       5       5.177400  1.530400  0.900000
+## 15  genre_i      50     10      40       1       0.925967  1.348700  0.000000
+## 16  genre_i      50     10      40       3       3.263133  1.343733  0.666667
+## 17  genre_i      50     10      40       5       4.855067  1.355233  0.900000
+## 18  genre_i      50     40      10       1       0.883067  1.360333  0.066667
+## 19  genre_i      50     40      10       3       3.080567  1.315300  0.700000
+## 20  genre_i      50     40      10       5       4.902700  1.375100  0.900000
+## 21  genre_i      50     40      40       1       1.185467  0.980333  0.166667
+## 22  genre_i      50     40      40       3       3.144733  0.983967  0.933333
+## 23  genre_i      50     40      40       5       5.292500  0.954633  1.000000</code></pre>
+<p>Here’s a graph that visualizes the output of the power simulation.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb88-1"><a href="python.html#cb88-1" tabindex="-1"></a><span class="co"># transform data type and create labels</span></span>
+<span id="cb88-2"><a href="python.html#cb88-2" tabindex="-1"></a>sims_table[<span class="st">&#39;n_subj&#39;</span>] <span class="op">=</span> sims_table[<span class="st">&#39;n_subj&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb88-3"><a href="python.html#cb88-3" tabindex="-1"></a>sims_table[<span class="st">&#39;n_pop&#39;</span>] <span class="op">=</span> <span class="st">&#39;n_pop: &#39;</span> <span class="op">+</span> sims_table[<span class="st">&#39;n_pop&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb88-4"><a href="python.html#cb88-4" tabindex="-1"></a>sims_table[<span class="st">&#39;n_rock&#39;</span>] <span class="op">=</span> <span class="st">&#39;n_rock: &#39;</span> <span class="op">+</span> sims_table[<span class="st">&#39;n_rock&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb88-5"><a href="python.html#cb88-5" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="python.html#cb88-6" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb88-7"><a href="python.html#cb88-7" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="bu">len</span>(sims_table[<span class="st">&#39;n_pop&#39;</span>].unique()), <span class="bu">len</span>(sims_table[<span class="st">&#39;n_rock&#39;</span>].unique()), figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>), sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb88-8"><a href="python.html#cb88-8" tabindex="-1"></a>axes <span class="op">=</span> axes.flatten()</span>
+<span id="cb88-9"><a href="python.html#cb88-9" tabindex="-1"></a></span>
+<span id="cb88-10"><a href="python.html#cb88-10" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb88-11"><a href="python.html#cb88-11" tabindex="-1"></a><span class="cf">for</span> i, (pop, rock) <span class="kw">in</span> <span class="bu">enumerate</span>(sims_table.groupby([<span class="st">&#39;n_pop&#39;</span>, <span class="st">&#39;n_rock&#39;</span>])):</span>
+<span id="cb88-12"><a href="python.html#cb88-12" tabindex="-1"></a>    ax <span class="op">=</span> axes[i]</span>
+<span id="cb88-13"><a href="python.html#cb88-13" tabindex="-1"></a>    sns.lineplot(data<span class="op">=</span>rock, x<span class="op">=</span><span class="st">&#39;mean_estimate&#39;</span>, y<span class="op">=</span><span class="st">&#39;power&#39;</span>, hue<span class="op">=</span><span class="st">&#39;n_subj&#39;</span>, style<span class="op">=</span><span class="st">&#39;n_subj&#39;</span>, markers<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb88-14"><a href="python.html#cb88-14" tabindex="-1"></a>    ax.axhline(y<span class="op">=</span><span class="fl">0.8</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb88-15"><a href="python.html#cb88-15" tabindex="-1"></a>    <span class="co"># ax.set_title(f&#39;{pop} x {rock}&#39;)</span></span>
+<span id="cb88-16"><a href="python.html#cb88-16" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&#39;Effect size (rock genre - pop genre)&#39;</span>)</span>
+<span id="cb88-17"><a href="python.html#cb88-17" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&#39;Power&#39;</span>)</span>
+<span id="cb88-18"><a href="python.html#cb88-18" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb88-19"><a href="python.html#cb88-19" tabindex="-1"></a>    ax.legend(title<span class="op">=</span><span class="st">&#39;Sample size&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000014041F5B4D0&gt;
+## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
+## Text(0, 0.5, &#39;Power&#39;)
+## (0.0, 1.0)
+## &lt;matplotlib.legend.Legend object at 0x0000014010D07C10&gt;
+## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000014010EC7C10&gt;
+## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
+## Text(0, 0.5, &#39;Power&#39;)
+## (0.0, 1.0)
+## &lt;matplotlib.legend.Legend object at 0x000001404ADFFD10&gt;
+## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000014010E027D0&gt;
+## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
+## Text(0, 0.5, &#39;Power&#39;)
+## (0.0, 1.0)
+## &lt;matplotlib.legend.Legend object at 0x0000014010AA08D0&gt;
+## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000014010D566D0&gt;
+## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
+## Text(0, 0.5, &#39;Power&#39;)
+## (0.0, 1.0)
+## &lt;matplotlib.legend.Legend object at 0x0000014010D93A50&gt;</code></pre>
+<div class="sourceCode" id="cb90"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb90-1"><a href="python.html#cb90-1" tabindex="-1"></a><span class="co"># layout adjustmentS</span></span>
+<span id="cb90-2"><a href="python.html#cb90-2" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb90-3"><a href="python.html#cb90-3" tabindex="-1"></a></span>
+<span id="cb90-4"><a href="python.html#cb90-4" tabindex="-1"></a><span class="co"># show the plot</span></span>
+<span id="cb90-5"><a href="python.html#cb90-5" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="figures/unnamed-chunk-30-3.png" width="1152" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/Lips7/dss-powersim/edit/main/05_Python.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["dss-powersim.pdf", "dss-powersim.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,17 +1,3 @@
----
-output:
-  html_document:
-    toc: yes
-    keep_md: yes
-  html_notebook:
-    toc: yes
-  pdf_document:
-    includes:
-      in_header: "wrap-code.tex"
-    toc: yes
-    keep_tex: yes
----
-
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.path="figures/")
@@ -27,6 +13,7 @@ To begin with, the simulation based power analysis in Python just follows the st
 ## Setup
 
 Note: There are two differences between Python and the R language:
+
 1. R uses the p_load function to automatically install missing libraries and import libraries. Python needs to manually configure the environment. If the library is missing, you can use “! pip install [package_name]” to install;
 2. The R has set parallelism in the setup part, but Python uses the dask package to perform parallel computing in the simulation part.
 
@@ -67,6 +54,7 @@ np.random.seed(2138)
 To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see Power of What? for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. Much of the general workflow here is borrowed from DeBruine & Dale (2021) Understanding Mixed-Effects Models through Simulation. We’ll start by writing code that simulates datasets under the alternative hypothesis.
 
 Note: There are two differences between Python and the R:
+
 1. We use the package of "statsmodels" to set up the mixd effect model in Python. However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
 2. There's no "broom.mixed::tidy()" function in Python and that's why the output is incomplete.
 
@@ -211,9 +199,9 @@ genre_i is the dummy coded variable identifying whether song $i$ belongs to the 
 
 The terms in vc_formula are as follows:
 
-0 + C(song_id)  specifies a song-specific random intercept O_0i.
-0 + C(subject_id) specifies a subject-specific random intercept T_0j.
-0 + C(subject_id):genre_i specifies the subject specific random slope of the genre category T_1j.
+- 0 + C(song_id)  specifies a song-specific random intercept O_0i.
+- 0 + C(subject_id) specifies a subject-specific random intercept T_0j.
+- 0 + C(subject_id):genre_i specifies the subject specific random slope of the genre category T_1j.
 
 However, due to the inability of the function mixedlm(), the module did not indicate the correlation between subject-specific random intercept and the subject specific random slope of the genre category.
 
@@ -311,7 +299,8 @@ To get an accurate estimation of power, we need to run the simulation many times
 We use dask.delayed function to decorate single_run() so that it operates lazily, then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.
 
 Note: There are two differences between Python and the R:
-1. The R  uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;
+
+1. The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;
 2. The R sets parallel computing in the setup part, while the Python uses the “dask” library for parallel computing.
 
 ```{python}
@@ -367,7 +356,6 @@ In real life, we will not know the effect size of our quantity of interest and s
 Note: There are two differences between Python and the R:
 
 1. Python uses the “product” function to permutate and combine parameters, and then use “loop” and “dask.compute” to perform parallel computing;
-
 2. Python couldn’t repeatedly use parameter_search() and instead uses two layers of loop to realize multiple simulations of each permutation and combination of parameters.
 
 ```{python}
