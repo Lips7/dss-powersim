@@ -252,64 +252,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="setup-2" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Setup<a href="stata.html#setup-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will need several Stata packages to draw a violin plot. We can use “ssc install [package_name]” to install them.</p>
-<pre><code> . // ssc install violinplot, replace     // module to draw violin plots
-. // ssc install dstat, replace          // violinplot&#39;s dependency, module to 
-&gt; compute summary statistics
-. // ssc install moremata, replace       // violinplot&#39;s dependency, module (Ma
-&gt; ta) to provide various functions
-. // ssc install palettes, replace       // violinplot&#39;s dependency, module to 
-&gt; provide color palettes
-. // ssc install colrspace, replace      // violinplot&#39;s dependency, module pro
-&gt; viding a class-based color management system in Mata</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="stata.html#cb92-1" tabindex="-1"></a><span class="co">// ssc install violinplot, replace     // module to draw violin plots</span></span>
+<span id="cb92-2"><a href="stata.html#cb92-2" tabindex="-1"></a><span class="co">// ssc install dstat, replace          // violinplot&#39;s dependency, module to compute summary statistics</span></span>
+<span id="cb92-3"><a href="stata.html#cb92-3" tabindex="-1"></a><span class="co">// ssc install moremata, replace       // violinplot&#39;s dependency, module (Mata) to provide various functions</span></span>
+<span id="cb92-4"><a href="stata.html#cb92-4" tabindex="-1"></a><span class="co">// ssc install palettes, replace       // violinplot&#39;s dependency, module to provide color palettes</span></span>
+<span id="cb92-5"><a href="stata.html#cb92-5" tabindex="-1"></a><span class="co">// ssc install colrspace, replace      // violinplot&#39;s dependency, module providing a class-based color management system in Mata</span></span></code></pre></div>
 <p>We will also set the pseudo-random number generator seed to <code>02138</code> to make the stochastic components of our simulations reproducible (this is similar to the process in R and Python).</p>
-<pre><code> . clear all
-
-. set seed 02138</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="stata.html#cb93-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb93-2"><a href="stata.html#cb93-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 02138</span></code></pre></div>
 </div>
 <div id="data-simulation-step-by-step-2" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> Data simulation step by step<a href="stata.html#data-simulation-step-by-step-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see <a href="./power-of-what.html">Power of What?</a> for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. ### Establish the simulation parameters</p>
 <p>Before we start, let’s set some global parameters for our power simulations.</p>
-<pre><code> . // number of simulation replications for power calculation
-. global reps = 30
-
-. 
-. // specified alpha for power calculation
-. global alpha = 0.05</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="stata.html#cb94-1" tabindex="-1"></a><span class="co">// number of simulation replications for power calculation</span></span>
+<span id="cb94-2"><a href="stata.html#cb94-2" tabindex="-1"></a><span class="kw">global</span> reps = 30</span>
+<span id="cb94-3"><a href="stata.html#cb94-3" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="stata.html#cb94-4" tabindex="-1"></a><span class="co">// specified alpha for power calculation</span></span>
+<span id="cb94-5"><a href="stata.html#cb94-5" tabindex="-1"></a><span class="kw">global</span> <span class="kw">alpha</span> = 0.05</span></code></pre></div>
 <div id="establish-the-data-generating-parameters-2" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Establish the data-generating parameters<a href="stata.html#establish-the-data-generating-parameters-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the <em>data-generating process</em>, or DGP. We previously decided upon the the data-generating parameters (see <a href="./power-of-what.html">Power of What?</a>), so we just need to code them here.</p>
 <p>Note: There is a difference between Stata and R and the Python: We decrease the data-generating parameters to simplify our model, and we delete some parameters: by-song random intercept <code>omega_0</code>, by-subject random slope sd <code>tau_1</code>, and the correlation between intercept and slope <code>rho</code>.</p>
-<pre><code> . // set all data-generating parameters
-. global beta_0 = 60   // intercept; i.e., the grand mean
-
-. global beta_1 = 5    // slope; i.e., effect of category
-
-. global tau_0 = 7     // by-subject random intercept sd
-
-. global sigma = 8     // residual (error) sd</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="stata.html#cb95-1" tabindex="-1"></a><span class="co">// set all data-generating parameters</span></span>
+<span id="cb95-2"><a href="stata.html#cb95-2" tabindex="-1"></a><span class="kw">global</span> beta_0 = 60   <span class="co">// intercept; i.e., the grand mean</span></span>
+<span id="cb95-3"><a href="stata.html#cb95-3" tabindex="-1"></a><span class="kw">global</span> beta_1 = 5    <span class="co">// slope; i.e., effect of category</span></span>
+<span id="cb95-4"><a href="stata.html#cb95-4" tabindex="-1"></a><span class="kw">global</span> tau_0 = 7     <span class="co">// by-subject random intercept sd</span></span>
+<span id="cb95-5"><a href="stata.html#cb95-5" tabindex="-1"></a><span class="kw">global</span> sigma = 8     <span class="co">// residual (error) sd</span></span></code></pre></div>
 </div>
 <div id="simulate-the-sampling-process-2" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Simulate the sampling process<a href="stata.html#simulate-the-sampling-process-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, we will simulate the sampling process for the data. First, let’s define parameters related to the number of observations.</p>
-<pre><code> . // Set number of subjects and songs
-. global n_subj = 25   // number of subjects
-
-. global n_pop = 15    // number of songs in pop category
-
-. global n_rock = 15   // number of songs in rock category
-
-. global n_all = $n_pop + $n_rock</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="stata.html#cb96-1" tabindex="-1"></a><span class="co">// Set number of subjects and songs</span></span>
+<span id="cb96-2"><a href="stata.html#cb96-2" tabindex="-1"></a><span class="kw">global</span> n_subj = 25   <span class="co">// number of subjects</span></span>
+<span id="cb96-3"><a href="stata.html#cb96-3" tabindex="-1"></a><span class="kw">global</span> n_pop = 15    <span class="co">// number of songs in pop category</span></span>
+<span id="cb96-4"><a href="stata.html#cb96-4" tabindex="-1"></a><span class="kw">global</span> n_rock = 15   <span class="co">// number of songs in rock category</span></span>
+<span id="cb96-5"><a href="stata.html#cb96-5" tabindex="-1"></a><span class="kw">global</span> n_all = <span class="ot">$n_pop</span> + <span class="ot">$n_rock</span></span></code></pre></div>
 <div id="simulate-the-sampling-of-songs-2" class="section level4 hasAnchor" number="6.2.2.1">
 <h4><span class="header-section-number">6.2.2.1</span> Simulate the sampling of songs<a href="stata.html#simulate-the-sampling-of-songs-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We need to create a table listing each song <span class="math inline">\(i\)</span>, which category it is in (<code>rock</code> or <code>pop</code>).</p>
-<pre><code> . // simulate a sample of songs
-. quietly {
-
-. list in 1/10
-
-     +------------------------------------+
-     | song_id   category   genre_i   key |
+<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="stata.html#cb97-1" tabindex="-1"></a><span class="co">// simulate a sample of songs</span></span>
+<span id="cb97-2"><a href="stata.html#cb97-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb97-3"><a href="stata.html#cb97-3" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb97-4"><a href="stata.html#cb97-4" tabindex="-1"></a>  <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">$n_all</span></span>
+<span id="cb97-5"><a href="stata.html#cb97-5" tabindex="-1"></a></span>
+<span id="cb97-6"><a href="stata.html#cb97-6" tabindex="-1"></a>  <span class="co">// Generate a sequence of song ids</span></span>
+<span id="cb97-7"><a href="stata.html#cb97-7" tabindex="-1"></a>  <span class="kw">gen</span> song_id = <span class="dt">_n</span></span>
+<span id="cb97-8"><a href="stata.html#cb97-8" tabindex="-1"></a></span>
+<span id="cb97-9"><a href="stata.html#cb97-9" tabindex="-1"></a>  <span class="co">// Generate the category variable</span></span>
+<span id="cb97-10"><a href="stata.html#cb97-10" tabindex="-1"></a>  <span class="kw">gen</span> category = <span class="st">&quot;pop&quot;</span></span>
+<span id="cb97-11"><a href="stata.html#cb97-11" tabindex="-1"></a>  <span class="kw">replace</span> category = <span class="st">&quot;rock&quot;</span> <span class="kw">if</span> song_id &gt; <span class="ot">$n_pop</span></span>
+<span id="cb97-12"><a href="stata.html#cb97-12" tabindex="-1"></a></span>
+<span id="cb97-13"><a href="stata.html#cb97-13" tabindex="-1"></a>  <span class="co">// Generate the genre variable</span></span>
+<span id="cb97-14"><a href="stata.html#cb97-14" tabindex="-1"></a>  <span class="kw">gen</span> genre_i = 0</span>
+<span id="cb97-15"><a href="stata.html#cb97-15" tabindex="-1"></a>  <span class="kw">replace</span> genre_i = 1 <span class="kw">if</span> song_id &gt; <span class="ot">$n_pop</span></span>
+<span id="cb97-16"><a href="stata.html#cb97-16" tabindex="-1"></a></span>
+<span id="cb97-17"><a href="stata.html#cb97-17" tabindex="-1"></a>  <span class="kw">gen</span> key = 1</span>
+<span id="cb97-18"><a href="stata.html#cb97-18" tabindex="-1"></a></span>
+<span id="cb97-19"><a href="stata.html#cb97-19" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/songs.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb97-20"><a href="stata.html#cb97-20" tabindex="-1"></a>}</span>
+<span id="cb97-21"><a href="stata.html#cb97-21" tabindex="-1"></a><span class="ot">list</span> <span class="kw">in</span> 1/10</span></code></pre></div>
+<pre><code>     | song_id   category   genre_i   key |
      |------------------------------------|
   1. |       1        pop         0     1 |
   2. |       2        pop         0     1 |
@@ -328,13 +331,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">6.2.2.2</span> Simulate the sampling of subjects<a href="stata.html#simulate-the-sampling-of-subjects-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Now we simulate the sampling of participants, which results in table listing each individual and their random effect (a random intercept). To do this, we must sample <span class="math inline">\(t_0\)</span> from a normal distribution.</p>
 <p>We will use the function <code>rnormal</code>, which generates a simulated value from a univariate normal distribution with a mean of 0 and a standard deviations of <code>tau_0</code> of each variable.</p>
-<pre><code> . // simulate a sample of subjects
-. quietly {
-
-. list in 1 / 10
-
-     +---------------------------+
-     |        t0   subj_id   key |
+<div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="stata.html#cb99-1" tabindex="-1"></a><span class="co">// simulate a sample of subjects</span></span>
+<span id="cb99-2"><a href="stata.html#cb99-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb99-3"><a href="stata.html#cb99-3" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb99-4"><a href="stata.html#cb99-4" tabindex="-1"></a>  <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">$n_subj</span></span>
+<span id="cb99-5"><a href="stata.html#cb99-5" tabindex="-1"></a></span>
+<span id="cb99-6"><a href="stata.html#cb99-6" tabindex="-1"></a>  <span class="co">// Generate the by-subject random intercept</span></span>
+<span id="cb99-7"><a href="stata.html#cb99-7" tabindex="-1"></a>  <span class="kw">gen</span> t0 = rnormal(0, <span class="ot">$tau_0</span>)</span>
+<span id="cb99-8"><a href="stata.html#cb99-8" tabindex="-1"></a></span>
+<span id="cb99-9"><a href="stata.html#cb99-9" tabindex="-1"></a>  <span class="co">// Generate a sequence of subject ids</span></span>
+<span id="cb99-10"><a href="stata.html#cb99-10" tabindex="-1"></a>  <span class="kw">gen</span> subj_id = <span class="dt">_n</span></span>
+<span id="cb99-11"><a href="stata.html#cb99-11" tabindex="-1"></a></span>
+<span id="cb99-12"><a href="stata.html#cb99-12" tabindex="-1"></a>  <span class="kw">gen</span> key = 1</span>
+<span id="cb99-13"><a href="stata.html#cb99-13" tabindex="-1"></a></span>
+<span id="cb99-14"><a href="stata.html#cb99-14" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/subjects.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb99-15"><a href="stata.html#cb99-15" tabindex="-1"></a>}</span>
+<span id="cb99-16"><a href="stata.html#cb99-16" tabindex="-1"></a><span class="ot">list</span> <span class="kw">in</span> 1 / 10</span></code></pre></div>
+<pre><code>     |        t0   subj_id   key |
      |---------------------------|
   1. |  4.356949         1     1 |
   2. |  .0887434         2     1 |
@@ -352,21 +365,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="check-the-simulated-values-2" class="section level4 hasAnchor" number="6.2.2.3">
 <h4><span class="header-section-number">6.2.2.3</span> Check the simulated values<a href="stata.html#check-the-simulated-values-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Let’s do a quick sanity check by comparing our simulated values to the parameters we used as inputs. Because the sampling process is stochastic, we shouldn’t expect that these will exactly match for any given run of the simulation.</p>
-<pre><code> . quietly {
-
-. display &quot;tau_0, &quot; $tau_0 &quot;, &quot; tau_0_s
-tau_0, 7, 7.4337502</code></pre>
+<div class="sourceCode" id="cb101"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb101-1"><a href="stata.html#cb101-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb101-2"><a href="stata.html#cb101-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/subjects.dta&quot;</span></span>
+<span id="cb101-3"><a href="stata.html#cb101-3" tabindex="-1"></a></span>
+<span id="cb101-4"><a href="stata.html#cb101-4" tabindex="-1"></a>  <span class="kw">qui</span> <span class="kw">summarize</span> t0</span>
+<span id="cb101-5"><a href="stata.html#cb101-5" tabindex="-1"></a>  <span class="kw">egen</span> tau_0_s = <span class="fu">sd</span>(t0)</span>
+<span id="cb101-6"><a href="stata.html#cb101-6" tabindex="-1"></a>}</span>
+<span id="cb101-7"><a href="stata.html#cb101-7" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;tau_0, &quot;</span> <span class="ot">$tau_0</span> <span class="st">&quot;, &quot;</span> tau_0_s</span></code></pre></div>
+<pre><code>tau_0, 7, 7.4337502</code></pre>
 </div>
 <div id="simulate-trials-2" class="section level4 hasAnchor" number="6.2.2.4">
 <h4><span class="header-section-number">6.2.2.4</span> Simulate trials<a href="stata.html#simulate-trials-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the <code>subjects</code> and <code>songs</code> tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of <code>sigma</code>.</p>
-<pre><code> . // cross subject and song IDs; add an error term
-. quietly {
-
-. list in 1 / 10
-
-     +---------------------------------------------------------------+
-     |       t0   subj_id   song_id   category   genre_i        e_ij |
+<div class="sourceCode" id="cb103"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb103-1"><a href="stata.html#cb103-1" tabindex="-1"></a><span class="co">// cross subject and song IDs; add an error term</span></span>
+<span id="cb103-2"><a href="stata.html#cb103-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb103-3"><a href="stata.html#cb103-3" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/subjects.dta&quot;</span></span>
+<span id="cb103-4"><a href="stata.html#cb103-4" tabindex="-1"></a>  <span class="kw">cross</span> <span class="kw">using</span> <span class="st">&quot;./data/songs.dta&quot;</span></span>
+<span id="cb103-5"><a href="stata.html#cb103-5" tabindex="-1"></a>  <span class="kw">drop</span> key</span>
+<span id="cb103-6"><a href="stata.html#cb103-6" tabindex="-1"></a>  <span class="kw">sort</span> subj_id song_id</span>
+<span id="cb103-7"><a href="stata.html#cb103-7" tabindex="-1"></a></span>
+<span id="cb103-8"><a href="stata.html#cb103-8" tabindex="-1"></a>  <span class="kw">gen</span> e_ij = rnormal(0, <span class="ot">$sigma</span>)</span>
+<span id="cb103-9"><a href="stata.html#cb103-9" tabindex="-1"></a></span>
+<span id="cb103-10"><a href="stata.html#cb103-10" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/data_sim_tmp.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb103-11"><a href="stata.html#cb103-11" tabindex="-1"></a>}</span>
+<span id="cb103-12"><a href="stata.html#cb103-12" tabindex="-1"></a><span class="ot">list</span> <span class="kw">in</span> 1 / 10</span></code></pre></div>
+<pre><code>     |       t0   subj_id   song_id   category   genre_i        e_ij |
      |---------------------------------------------------------------|
   1. | 4.356949         1         1        pop         0    4.979371 |
   2. | 4.356949         1         2        pop         0    .1014211 |
@@ -384,12 +407,16 @@ tau_0, 7, 7.4337502</code></pre>
 <div id="calculate-response-values-2" class="section level4 hasAnchor" number="6.2.2.5">
 <h4><span class="header-section-number">6.2.2.5</span> Calculate response values<a href="stata.html#calculate-response-values-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>With this resulting <code>trials</code> table, in combination with the constants <code>beta_0</code> and <code>beta_1</code>, we have the full set of values that we need to compute the response variable <code>liking_ij</code> according the linear model we defined previously (see <a href="./power-of-what.html">Power of What?</a>).</p>
-<pre><code> . quietly {
-
-. list in 1 / 10
-
-     +---------------------------------------------------+
-     | subj_id   song_id   category   genre_i   liking~j |
+<div class="sourceCode" id="cb105"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb105-1"><a href="stata.html#cb105-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb105-2"><a href="stata.html#cb105-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/data_sim_tmp.dta&quot;</span></span>
+<span id="cb105-3"><a href="stata.html#cb105-3" tabindex="-1"></a></span>
+<span id="cb105-4"><a href="stata.html#cb105-4" tabindex="-1"></a>  <span class="kw">gen</span> liking_ij = <span class="ot">$beta_0</span> + t0 +  <span class="ot">$beta_1</span>  * genre_i + e_ij</span>
+<span id="cb105-5"><a href="stata.html#cb105-5" tabindex="-1"></a>  <span class="kw">keep</span> subj_id song_id category genre_i liking_ij</span>
+<span id="cb105-6"><a href="stata.html#cb105-6" tabindex="-1"></a></span>
+<span id="cb105-7"><a href="stata.html#cb105-7" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/data_sim.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb105-8"><a href="stata.html#cb105-8" tabindex="-1"></a>}</span>
+<span id="cb105-9"><a href="stata.html#cb105-9" tabindex="-1"></a><span class="ot">list</span> <span class="kw">in</span> 1 / 10</span></code></pre></div>
+<pre><code>     | subj_id   song_id   category   genre_i   liking~j |
      |---------------------------------------------------|
   1. |       1         1        pop         0   69.33632 |
   2. |       1         2        pop         0   64.45837 |
@@ -407,17 +434,26 @@ tau_0, 7, 7.4337502</code></pre>
 <div id="plot-the-data-2" class="section level4 hasAnchor" number="6.2.2.6">
 <h4><span class="header-section-number">6.2.2.6</span> Plot the data<a href="stata.html#plot-the-data-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Let’s visualize the distribution of the response variable for each of the two song genres and superimpose the simulated parameter estimates for the means of these two groups.</p>
-<pre><code> . quietly {</code></pre>
+<div class="sourceCode" id="cb107"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb107-1"><a href="stata.html#cb107-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb107-2"><a href="stata.html#cb107-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/data_sim.dta&quot;</span></span>
+<span id="cb107-3"><a href="stata.html#cb107-3" tabindex="-1"></a></span>
+<span id="cb107-4"><a href="stata.html#cb107-4" tabindex="-1"></a>  <span class="co">// Set the palette colors</span></span>
+<span id="cb107-5"><a href="stata.html#cb107-5" tabindex="-1"></a>  <span class="kw">local</span> <span class="kw">palette</span> <span class="st">&quot;orange dodgerblue&quot;</span></span>
+<span id="cb107-6"><a href="stata.html#cb107-6" tabindex="-1"></a></span>
+<span id="cb107-7"><a href="stata.html#cb107-7" tabindex="-1"></a>  <span class="co">// Create a violin plot for actual data</span></span>
+<span id="cb107-8"><a href="stata.html#cb107-8" tabindex="-1"></a>  violinplot liking_ij, <span class="bn">over</span>(category) colors(<span class="ot">`palette&#39;</span>) vertical <span class="kw">mean</span>(<span class="dv">type</span>(<span class="kw">line</span>) lp(<span class="kw">dash</span>) stat(<span class="kw">mean</span>)) <span class="bn">title</span>(<span class="st">&quot;Predicted versus simulated values&quot;</span>)</span>
+<span id="cb107-9"><a href="stata.html#cb107-9" tabindex="-1"></a>  <span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;./figures/violin.png&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb107-10"><a href="stata.html#cb107-10" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="figures/violin.png" /></p>
 </div>
 </div>
 <div id="analyze-the-simulated-data-2" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Analyze the simulated data<a href="stata.html#analyze-the-simulated-data-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now we can analyze our simulated data in a linear mixed effects model using the function <code>mixed</code>. The model formula in <code>mixed</code> maps onto how we calculated our <code>liking_ij</code> outcome variable above.</p>
-<pre><code> . quietly use &quot;./data/data_sim_tmp.dta&quot;
-
-. mixed liking_ij genre_i || subj_id:
-variable liking_ij not found
+<div class="sourceCode" id="cb108"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb108-1"><a href="stata.html#cb108-1" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">use</span> <span class="st">&quot;./data/data_sim_tmp.dta&quot;</span></span>
+<span id="cb108-2"><a href="stata.html#cb108-2" tabindex="-1"></a>mixed liking_ij genre_i || subj_id:</span>
+<span id="cb108-3"><a href="stata.html#cb108-3" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">estimates</span> <span class="kw">save</span> <span class="st">&quot;./data/data_sim_estimates.ster&quot;</span>, <span class="kw">replace</span></span></code></pre></div>
+<pre><code>variable liking_ij not found
 r(111);
 
 end of do-file
@@ -429,13 +465,10 @@ r(111);</code></pre>
 <li><code>|| subj_id</code> specified a subject-specific random intercept (<code>t0</code>)</li>
 </ul>
 <p>Now we can estimate the model.</p>
-<pre><code> . quietly estimates use &quot;./data/data_sim_estimates.ster&quot;
-
-. quietly matrix b = e(b)
-
-. matrix list b
-
-b[1,4]
+<div class="sourceCode" id="cb110"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb110-1"><a href="stata.html#cb110-1" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">estimates</span> <span class="kw">use</span> <span class="st">&quot;./data/data_sim_estimates.ster&quot;</span></span>
+<span id="cb110-2"><a href="stata.html#cb110-2" tabindex="-1"></a><span class="kw">quietly</span> <span class="fu">matrix</span> b = <span class="fu">e</span>(b)</span>
+<span id="cb110-3"><a href="stata.html#cb110-3" tabindex="-1"></a><span class="fu">matrix</span> <span class="ot">list</span> b</span></code></pre></div>
+<pre><code>b[1,4]
      liking_ij:  liking_ij:   lns1_1_1:    lnsig_e:
        genre_i       _cons       _cons       _cons
 y1   5.1710617   60.229571   2.0205456   2.0902013</code></pre>
@@ -444,85 +477,80 @@ y1   5.1710617   60.229571   2.0205456   2.0902013</code></pre>
 <div id="data-simulation-automated-2" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Data simulation automated<a href="stata.html#data-simulation-automated-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
-<pre><code> . capture program drop sim_data
-
-. program define sim_data
-  1.         args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
-  2. 
-.   // simulate a sample of songs
-.         clear
-  3.         local n_all = `n_pop&#39; + `n_rock&#39;
-  4.         set obs `n_all&#39;
-  5.         gen song_id = _n
-  6.         gen category = &quot;pop&quot;
-  7.         replace category = &quot;rock&quot; if song_id &gt; `n_pop&#39;
-  8.         gen genre_i = 0
-  9.         replace genre_i = 1 if song_id &gt; `n_pop&#39;
- 10.         gen key = 1
- 11.         save &quot;./data/songs.dta&quot;, replace
- 12. 
-.   // simulate a sample of subjects
-.         clear
- 13.         set obs `n_subj&#39;
- 14. 
-.         gen t0 = rnormal(0, `tau_0&#39;)
- 15.         gen subj_id = _n
- 16.         gen key = 1
- 17.         save &quot;./data/subjects.dta&quot;, replace
- 18. 
-.   // cross subject and song IDs
-.         use &quot;./data/subjects.dta&quot;
- 19.         cross using &quot;./data/songs.dta&quot;
- 20.         drop key
- 21.         sort subj_id song_id
- 22.         gen e_ij = rnormal(0, `sigma&#39;)
- 23. 
-.         gen liking_ij = `beta_0&#39; + t0 + `beta_1&#39; * genre_i + e_ij
- 24.         keep subj_id song_id category genre_i liking_ij
- 25. end</code></pre>
+<div class="sourceCode" id="cb112"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb112-1"><a href="stata.html#cb112-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> sim_data</span>
+<span id="cb112-2"><a href="stata.html#cb112-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> sim_data</span>
+<span id="cb112-3"><a href="stata.html#cb112-3" tabindex="-1"></a>    <span class="kw">args</span> n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma</span>
+<span id="cb112-4"><a href="stata.html#cb112-4" tabindex="-1"></a></span>
+<span id="cb112-5"><a href="stata.html#cb112-5" tabindex="-1"></a>  <span class="co">// simulate a sample of songs</span></span>
+<span id="cb112-6"><a href="stata.html#cb112-6" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb112-7"><a href="stata.html#cb112-7" tabindex="-1"></a>    <span class="kw">local</span> n_all = <span class="ot">`n_pop&#39;</span> + <span class="ot">`n_rock&#39;</span></span>
+<span id="cb112-8"><a href="stata.html#cb112-8" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n_all&#39;</span></span>
+<span id="cb112-9"><a href="stata.html#cb112-9" tabindex="-1"></a>    <span class="kw">gen</span> song_id = <span class="dt">_n</span></span>
+<span id="cb112-10"><a href="stata.html#cb112-10" tabindex="-1"></a>    <span class="kw">gen</span> category = <span class="st">&quot;pop&quot;</span></span>
+<span id="cb112-11"><a href="stata.html#cb112-11" tabindex="-1"></a>    <span class="kw">replace</span> category = <span class="st">&quot;rock&quot;</span> <span class="kw">if</span> song_id &gt; <span class="ot">`n_pop&#39;</span></span>
+<span id="cb112-12"><a href="stata.html#cb112-12" tabindex="-1"></a>    <span class="kw">gen</span> genre_i = 0</span>
+<span id="cb112-13"><a href="stata.html#cb112-13" tabindex="-1"></a>    <span class="kw">replace</span> genre_i = 1 <span class="kw">if</span> song_id &gt; <span class="ot">`n_pop&#39;</span></span>
+<span id="cb112-14"><a href="stata.html#cb112-14" tabindex="-1"></a>    <span class="kw">gen</span> key = 1</span>
+<span id="cb112-15"><a href="stata.html#cb112-15" tabindex="-1"></a>    <span class="kw">save</span> <span class="st">&quot;./data/songs.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb112-16"><a href="stata.html#cb112-16" tabindex="-1"></a></span>
+<span id="cb112-17"><a href="stata.html#cb112-17" tabindex="-1"></a>  <span class="co">// simulate a sample of subjects</span></span>
+<span id="cb112-18"><a href="stata.html#cb112-18" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb112-19"><a href="stata.html#cb112-19" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n_subj&#39;</span></span>
+<span id="cb112-20"><a href="stata.html#cb112-20" tabindex="-1"></a></span>
+<span id="cb112-21"><a href="stata.html#cb112-21" tabindex="-1"></a>    <span class="kw">gen</span> t0 = rnormal(0, <span class="ot">`tau_0&#39;</span>)</span>
+<span id="cb112-22"><a href="stata.html#cb112-22" tabindex="-1"></a>    <span class="kw">gen</span> subj_id = <span class="dt">_n</span></span>
+<span id="cb112-23"><a href="stata.html#cb112-23" tabindex="-1"></a>    <span class="kw">gen</span> key = 1</span>
+<span id="cb112-24"><a href="stata.html#cb112-24" tabindex="-1"></a>    <span class="kw">save</span> <span class="st">&quot;./data/subjects.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb112-25"><a href="stata.html#cb112-25" tabindex="-1"></a></span>
+<span id="cb112-26"><a href="stata.html#cb112-26" tabindex="-1"></a>  <span class="co">// cross subject and song IDs</span></span>
+<span id="cb112-27"><a href="stata.html#cb112-27" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">&quot;./data/subjects.dta&quot;</span></span>
+<span id="cb112-28"><a href="stata.html#cb112-28" tabindex="-1"></a>    <span class="kw">cross</span> <span class="kw">using</span> <span class="st">&quot;./data/songs.dta&quot;</span></span>
+<span id="cb112-29"><a href="stata.html#cb112-29" tabindex="-1"></a>    <span class="kw">drop</span> key</span>
+<span id="cb112-30"><a href="stata.html#cb112-30" tabindex="-1"></a>    <span class="kw">sort</span> subj_id song_id</span>
+<span id="cb112-31"><a href="stata.html#cb112-31" tabindex="-1"></a>    <span class="kw">gen</span> e_ij = rnormal(0, <span class="ot">`sigma&#39;</span>)</span>
+<span id="cb112-32"><a href="stata.html#cb112-32" tabindex="-1"></a></span>
+<span id="cb112-33"><a href="stata.html#cb112-33" tabindex="-1"></a>    <span class="kw">gen</span> liking_ij = <span class="ot">`beta_0&#39;</span> + t0 + <span class="ot">`beta_1&#39;</span> * genre_i + e_ij</span>
+<span id="cb112-34"><a href="stata.html#cb112-34" tabindex="-1"></a>    <span class="kw">keep</span> subj_id song_id category genre_i liking_ij</span>
+<span id="cb112-35"><a href="stata.html#cb112-35" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div id="power-calculation-single-run-2" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Power calculation single run<a href="stata.html#power-calculation-single-run-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can wrap the data generating function and modeling code in a new function <code>single_run()</code> that returns the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.</p>
-<pre><code> . capture program drop single_run
-
-. program define single_run, rclass
-  1.         args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
-  2. 
-.         clear
-  3.         sim_data `n_subj&#39; `n_pop&#39; `n_rock&#39; `beta_0&#39; `beta_1&#39; `tau_0&#39; `sigm
-&gt; a&#39;
-  4.         mixed liking_ij genre_i || subj_id:, noretable nofetable noheader 
+<div class="sourceCode" id="cb113"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb113-1"><a href="stata.html#cb113-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> single_run</span>
+<span id="cb113-2"><a href="stata.html#cb113-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> single_run, rclass</span>
+<span id="cb113-3"><a href="stata.html#cb113-3" tabindex="-1"></a>    <span class="kw">args</span> n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma</span>
+<span id="cb113-4"><a href="stata.html#cb113-4" tabindex="-1"></a></span>
+<span id="cb113-5"><a href="stata.html#cb113-5" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb113-6"><a href="stata.html#cb113-6" tabindex="-1"></a>    sim_data <span class="ot">`n_subj&#39;</span> <span class="ot">`n_pop&#39;</span> <span class="ot">`n_rock&#39;</span> <span class="ot">`beta_0&#39;</span> <span class="ot">`beta_1&#39;</span> <span class="ot">`tau_0&#39;</span> <span class="ot">`sigma&#39;</span></span>
+<span id="cb113-7"><a href="stata.html#cb113-7" tabindex="-1"></a>    mixed liking_ij genre_i || subj_id:, <span class="kw">noretable</span> <span class="kw">nofetable</span> <span class="kw">noheader</span> <span class="kw">nogroup</span></span>
+<span id="cb113-8"><a href="stata.html#cb113-8" tabindex="-1"></a></span>
+<span id="cb113-9"><a href="stata.html#cb113-9" tabindex="-1"></a>  <span class="kw">estimates</span> <span class="kw">clear</span></span>
+<span id="cb113-10"><a href="stata.html#cb113-10" tabindex="-1"></a>    <span class="kw">estimates</span> <span class="kw">store</span> model_results</span>
+<span id="cb113-11"><a href="stata.html#cb113-11" tabindex="-1"></a></span>
+<span id="cb113-12"><a href="stata.html#cb113-12" tabindex="-1"></a>  <span class="co">// calculate analysis results</span></span>
+<span id="cb113-13"><a href="stata.html#cb113-13" tabindex="-1"></a>    <span class="fu">matrix</span> coefficients = <span class="fu">e</span>(b)</span>
+<span id="cb113-14"><a href="stata.html#cb113-14" tabindex="-1"></a>    <span class="fu">matrix</span> std_errors = <span class="fu">e</span>(<span class="kw">V</span>)</span>
+<span id="cb113-15"><a href="stata.html#cb113-15" tabindex="-1"></a>    <span class="fu">matrix</span> p_values = <span class="fu">e</span>(<span class="kw">p</span>)</span>
+<span id="cb113-16"><a href="stata.html#cb113-16" tabindex="-1"></a></span>
+<span id="cb113-17"><a href="stata.html#cb113-17" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> coef = coefficients[1, 1]</span>
+<span id="cb113-18"><a href="stata.html#cb113-18" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> std_err = std_errors[1, 1]</span>
+<span id="cb113-19"><a href="stata.html#cb113-19" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> p_value = p_values[1, 1]</span>
+<span id="cb113-20"><a href="stata.html#cb113-20" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<pre><code>  4.         mixed liking_ij genre_i || subj_id:, noretable nofetable noheader 
 &gt; nogroup
-  5. 
-.   estimates clear
-  6.         estimates store model_results
-  7. 
-.   // calculate analysis results
-.         matrix coefficients = e(b)
-  8.         matrix std_errors = e(V)
-  9.         matrix p_values = e(p)
- 10. 
-.         return scalar coef = coefficients[1, 1]
- 11.         return scalar std_err = std_errors[1, 1]
- 12.         return scalar p_value = p_values[1, 1]
- 13. end</code></pre>
+  5. </code></pre>
 <p>Let’s test that our new <code>single_run()</code> function performs as expected.</p>
-<pre><code> . // run one model with default parameters
-. quietly single_run 25 15 15 60 5 7 8
-
-. return list
-
-scalars:
+<div class="sourceCode" id="cb115"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb115-1"><a href="stata.html#cb115-1" tabindex="-1"></a><span class="co">// run one model with default parameters</span></span>
+<span id="cb115-2"><a href="stata.html#cb115-2" tabindex="-1"></a><span class="kw">quietly</span> single_run 25 15 15 60 5 7 8</span>
+<span id="cb115-3"><a href="stata.html#cb115-3" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span></code></pre></div>
+<pre><code>scalars:
             r(p_value) =  6.15504528649e-25
             r(std_err) =  .3467247369073159
                r(coef) =  6.072637593587305</code></pre>
-<pre><code> . // run one model with new parameters
-. quietly single_run 25 10 50 60 2 7 8
-
-. return list
-
-scalars:
+<div class="sourceCode" id="cb117"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb117-1"><a href="stata.html#cb117-1" tabindex="-1"></a><span class="co">// run one model with new parameters</span></span>
+<span id="cb117-2"><a href="stata.html#cb117-2" tabindex="-1"></a><span class="kw">quietly</span> single_run 25 10 50 60 2 7 8</span>
+<span id="cb117-3"><a href="stata.html#cb117-3" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span></code></pre></div>
+<pre><code>scalars:
             r(p_value) =  .0005213058910955
             r(std_err) =  .3180056524570669
                r(coef) =  1.956555587768618</code></pre>
@@ -531,93 +559,114 @@ scalars:
 <h2><span class="header-section-number">6.5</span> Power calculation automated<a href="stata.html#power-calculation-automated-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To get an accurate estimation of power, we need to run the simulation many times. Here we use a matrix <code>results</code> to store the analysis results of each run.</p>
 <p>We can finally calculate power for our parameter of interest <code>beta_1</code> by filtering to keep only that term and the calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the <code>alpha</code> threshold.</p>
-<pre><code> . quietly {
+<div class="sourceCode" id="cb119"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb119-1"><a href="stata.html#cb119-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb119-2"><a href="stata.html#cb119-2" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb119-3"><a href="stata.html#cb119-3" tabindex="-1"></a>  <span class="fu">matrix</span> results = <span class="fu">J</span>(<span class="ot">$reps</span>, 3, .)</span>
+<span id="cb119-4"><a href="stata.html#cb119-4" tabindex="-1"></a>  forval i = 1/<span class="ot">$reps</span> {</span>
+<span id="cb119-5"><a href="stata.html#cb119-5" tabindex="-1"></a>    <span class="kw">quietly</span> single_run 25 15 15 60 5 7 8</span>
+<span id="cb119-6"><a href="stata.html#cb119-6" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 1] = <span class="fu">r</span>(coef)</span>
+<span id="cb119-7"><a href="stata.html#cb119-7" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 2] = <span class="fu">r</span>(std_err)</span>
+<span id="cb119-8"><a href="stata.html#cb119-8" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 3] = <span class="fu">r</span>(p_value)</span>
+<span id="cb119-9"><a href="stata.html#cb119-9" tabindex="-1"></a>  }</span>
+<span id="cb119-10"><a href="stata.html#cb119-10" tabindex="-1"></a></span>
+<span id="cb119-11"><a href="stata.html#cb119-11" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb119-12"><a href="stata.html#cb119-12" tabindex="-1"></a>  <span class="kw">svmat</span> results, names(x)</span>
+<span id="cb119-13"><a href="stata.html#cb119-13" tabindex="-1"></a></span>
+<span id="cb119-14"><a href="stata.html#cb119-14" tabindex="-1"></a>  <span class="co">// calculate mean estimates and power for specified alpha</span></span>
+<span id="cb119-15"><a href="stata.html#cb119-15" tabindex="-1"></a>  <span class="kw">gen</span> power = 0</span>
+<span id="cb119-16"><a href="stata.html#cb119-16" tabindex="-1"></a>  <span class="kw">replace</span> power = 1 <span class="kw">if</span> x3 &lt; <span class="ot">$alpha</span></span>
+<span id="cb119-17"><a href="stata.html#cb119-17" tabindex="-1"></a></span>
+<span id="cb119-18"><a href="stata.html#cb119-18" tabindex="-1"></a>  <span class="kw">egen</span> coef_mean = <span class="kw">mean</span>(x1)</span>
+<span id="cb119-19"><a href="stata.html#cb119-19" tabindex="-1"></a>  <span class="kw">egen</span> std_err_mean = <span class="kw">mean</span>(<span class="kw">x2</span>)</span>
+<span id="cb119-20"><a href="stata.html#cb119-20" tabindex="-1"></a>  <span class="kw">egen</span> power_mean = <span class="kw">mean</span>(power)</span>
+<span id="cb119-21"><a href="stata.html#cb119-21" tabindex="-1"></a>}</span>
+<span id="cb119-22"><a href="stata.html#cb119-22" tabindex="-1"></a></span>
+<span id="cb119-23"><a href="stata.html#cb119-23" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Coef. Mean: &quot;</span> coef_mean</span>
+<span id="cb119-24"><a href="stata.html#cb119-24" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Std.Err. Mean: &quot;</span> std_err_mean</span>
+<span id="cb119-25"><a href="stata.html#cb119-25" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Power Mean: &quot;</span> power_mean</span></code></pre></div>
+<pre><code>Coef. Mean: 5.1327767
 
-. 
-. di &quot;Coef. Mean: &quot; coef_mean
-Coef. Mean: 5.1327767
-
-. di &quot;Std.Err. Mean: &quot; std_err_mean
 Std.Err. Mean: .34294486
 
-. di &quot;Power Mean: &quot; power_mean
 Power Mean: 1</code></pre>
 <div id="check-false-positive-rate-2" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Check false positive rate<a href="stata.html#check-false-positive-rate-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
-<pre><code> . // run simulations and calculate the false positive rate
-. quietly {
-
-. 
-. di &quot;Power Mean: &quot; power_mean
-Power Mean: .03333334</code></pre>
+<div class="sourceCode" id="cb121"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb121-1"><a href="stata.html#cb121-1" tabindex="-1"></a><span class="co">// run simulations and calculate the false positive rate</span></span>
+<span id="cb121-2"><a href="stata.html#cb121-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb121-3"><a href="stata.html#cb121-3" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb121-4"><a href="stata.html#cb121-4" tabindex="-1"></a>  <span class="fu">matrix</span> results = <span class="fu">J</span>(<span class="ot">$reps</span>, 3, .)</span>
+<span id="cb121-5"><a href="stata.html#cb121-5" tabindex="-1"></a>  forval i = 1/<span class="ot">$reps</span> {</span>
+<span id="cb121-6"><a href="stata.html#cb121-6" tabindex="-1"></a>    <span class="kw">quietly</span> single_run 25 15 15 60 0 7 8</span>
+<span id="cb121-7"><a href="stata.html#cb121-7" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 1] = <span class="fu">r</span>(coef)</span>
+<span id="cb121-8"><a href="stata.html#cb121-8" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 2] = <span class="fu">r</span>(std_err)</span>
+<span id="cb121-9"><a href="stata.html#cb121-9" tabindex="-1"></a>    <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 3] = <span class="fu">r</span>(p_value)</span>
+<span id="cb121-10"><a href="stata.html#cb121-10" tabindex="-1"></a>  }</span>
+<span id="cb121-11"><a href="stata.html#cb121-11" tabindex="-1"></a></span>
+<span id="cb121-12"><a href="stata.html#cb121-12" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb121-13"><a href="stata.html#cb121-13" tabindex="-1"></a>  <span class="kw">svmat</span> results, names(x)</span>
+<span id="cb121-14"><a href="stata.html#cb121-14" tabindex="-1"></a></span>
+<span id="cb121-15"><a href="stata.html#cb121-15" tabindex="-1"></a>  <span class="co">// calculate power for specified alpha</span></span>
+<span id="cb121-16"><a href="stata.html#cb121-16" tabindex="-1"></a>  <span class="kw">gen</span> power = 0</span>
+<span id="cb121-17"><a href="stata.html#cb121-17" tabindex="-1"></a>  <span class="kw">replace</span> power = 1 <span class="kw">if</span> x3 &lt; <span class="ot">$alpha</span></span>
+<span id="cb121-18"><a href="stata.html#cb121-18" tabindex="-1"></a></span>
+<span id="cb121-19"><a href="stata.html#cb121-19" tabindex="-1"></a>  <span class="kw">egen</span> power_mean = <span class="kw">mean</span>(power)</span>
+<span id="cb121-20"><a href="stata.html#cb121-20" tabindex="-1"></a>}</span>
+<span id="cb121-21"><a href="stata.html#cb121-21" tabindex="-1"></a></span>
+<span id="cb121-22"><a href="stata.html#cb121-22" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Power Mean: &quot;</span> power_mean</span></code></pre></div>
+<pre><code>Power Mean: .03333334</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set at 0.05.</p>
 </div>
 </div>
 <div id="power-for-different-effect-sizes-2" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Power for different effect sizes<a href="stata.html#power-for-different-effect-sizes-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
-<pre><code> . // grid of parameter values of interest
-. quietly matrix define params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3
-&gt;  \ 10, 10, 10, 4 \ 10, 10, 10, 5 ///
-&gt; \ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40,
-&gt;  5 ///
-&gt; \ 10, 40, 10, 1 \ 10, 40, 10, 2 \ 10, 40, 10, 3 \ 10, 40, 10, 4 \ 10, 40, 10,
-&gt;  5 ///
-&gt; \ 10, 40, 40, 1 \ 10, 40, 40, 2 \ 10, 40, 40, 3 \ 10, 40, 40, 4 \ 10, 40, 40,
-&gt;  5 ///
-&gt; \ 25, 10, 10, 1 \ 25, 10, 10, 2 \ 25, 10, 10, 3 \ 25, 10, 10, 4 \ 25, 10, 10,
-&gt;  5 ///
-&gt; \ 25, 10, 40, 1 \ 25, 10, 40, 2 \ 25, 10, 40, 3 \ 25, 10, 40, 4 \ 25, 10, 40,
-&gt;  5 ///
-&gt; \ 25, 40, 10, 1 \ 25, 40, 10, 2 \ 25, 40, 10, 3 \ 25, 40, 10, 4 \ 25, 40, 10,
-&gt;  5 ///
-&gt; \ 25, 40, 40, 1 \ 25, 40, 40, 2 \ 25, 40, 40, 3 \ 25, 40, 40, 4 \ 25, 40, 40,
-&gt;  5 ///
-&gt; \ 50, 10, 10, 1 \ 50, 10, 10, 2 \ 50, 10, 10, 3 \ 50, 10, 10, 4 \ 50, 10, 10,
-&gt;  5 ///
-&gt; \ 50, 10, 40, 1 \ 50, 10, 40, 2 \ 50, 10, 40, 3 \ 50, 10, 40, 4 \ 50, 10, 40,
-&gt;  5 ///
-&gt; \ 50, 40, 10, 1 \ 50, 40, 10, 2 \ 50, 40, 10, 3 \ 50, 40, 10, 4 \ 50, 40, 10,
-&gt;  5 ///
-&gt; \ 50, 40, 40, 1 \ 50, 40, 40, 2 \ 50, 40, 40, 3 \ 50, 40, 40, 4 \ 50, 40, 40,
-&gt;  5)</code></pre>
+<div class="sourceCode" id="cb123"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb123-1"><a href="stata.html#cb123-1" tabindex="-1"></a><span class="co">// grid of parameter values of interest</span></span>
+<span id="cb123-2"><a href="stata.html#cb123-2" tabindex="-1"></a><span class="kw">quietly</span> <span class="fu">matrix</span> <span class="kw">define</span> params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3 \ 10, 10, 10, 4 \ 10, 10, 10, 5 <span class="co">///</span></span>
+<span id="cb123-3"><a href="stata.html#cb123-3" tabindex="-1"></a>\ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40, 5 <span class="co">///</span></span>
+<span id="cb123-4"><a href="stata.html#cb123-4" tabindex="-1"></a>\ 10, 40, 10, 1 \ 10, 40, 10, 2 \ 10, 40, 10, 3 \ 10, 40, 10, 4 \ 10, 40, 10, 5 <span class="co">///</span></span>
+<span id="cb123-5"><a href="stata.html#cb123-5" tabindex="-1"></a>\ 10, 40, 40, 1 \ 10, 40, 40, 2 \ 10, 40, 40, 3 \ 10, 40, 40, 4 \ 10, 40, 40, 5 <span class="co">///</span></span>
+<span id="cb123-6"><a href="stata.html#cb123-6" tabindex="-1"></a>\ 25, 10, 10, 1 \ 25, 10, 10, 2 \ 25, 10, 10, 3 \ 25, 10, 10, 4 \ 25, 10, 10, 5 <span class="co">///</span></span>
+<span id="cb123-7"><a href="stata.html#cb123-7" tabindex="-1"></a>\ 25, 10, 40, 1 \ 25, 10, 40, 2 \ 25, 10, 40, 3 \ 25, 10, 40, 4 \ 25, 10, 40, 5 <span class="co">///</span></span>
+<span id="cb123-8"><a href="stata.html#cb123-8" tabindex="-1"></a>\ 25, 40, 10, 1 \ 25, 40, 10, 2 \ 25, 40, 10, 3 \ 25, 40, 10, 4 \ 25, 40, 10, 5 <span class="co">///</span></span>
+<span id="cb123-9"><a href="stata.html#cb123-9" tabindex="-1"></a>\ 25, 40, 40, 1 \ 25, 40, 40, 2 \ 25, 40, 40, 3 \ 25, 40, 40, 4 \ 25, 40, 40, 5 <span class="co">///</span></span>
+<span id="cb123-10"><a href="stata.html#cb123-10" tabindex="-1"></a>\ 50, 10, 10, 1 \ 50, 10, 10, 2 \ 50, 10, 10, 3 \ 50, 10, 10, 4 \ 50, 10, 10, 5 <span class="co">///</span></span>
+<span id="cb123-11"><a href="stata.html#cb123-11" tabindex="-1"></a>\ 50, 10, 40, 1 \ 50, 10, 40, 2 \ 50, 10, 40, 3 \ 50, 10, 40, 4 \ 50, 10, 40, 5 <span class="co">///</span></span>
+<span id="cb123-12"><a href="stata.html#cb123-12" tabindex="-1"></a>\ 50, 40, 10, 1 \ 50, 40, 10, 2 \ 50, 40, 10, 3 \ 50, 40, 10, 4 \ 50, 40, 10, 5 <span class="co">///</span></span>
+<span id="cb123-13"><a href="stata.html#cb123-13" tabindex="-1"></a>\ 50, 40, 40, 1 \ 50, 40, 40, 2 \ 50, 40, 40, 3 \ 50, 40, 40, 4 \ 50, 40, 40, 5)</span></code></pre></div>
 <p>We can now wrap our <code>single_run()</code> function within a more general function <code>parameter_search()</code> that takes the grid of parameter values as input and uses a matrix <code>results</code> to store analysis results of each <code>single_run()</code>.</p>
-<pre><code> . capture program drop parameter_search
-
-. program define parameter_search, rclass
-  1.         args params
-  2. 
-.         local rows = rowsof(params)
-  3.         matrix results = J(`rows&#39;, 7, .)
-  4. 
-.         forval i = 1/`rows&#39; {
-  5.                 local n_subj = params[`i&#39;, 1]
-  6.                 local n_pop = params[`i&#39;, 2]
-  7.                 local n_rock = params[`i&#39;, 3]
-  8.                 local beta_1 = params[`i&#39;, 4]
-  9. 
-.                 single_run `n_subj&#39; `n_pop&#39; `n_rock&#39; 60 `beta_1&#39; 7 8
- 10.                 matrix results[`i&#39;, 1] = `n_subj&#39;
- 11.                 matrix results[`i&#39;, 2] = `n_pop&#39;
- 12.                 matrix results[`i&#39;, 3] = `n_rock&#39;
- 13.                 matrix results[`i&#39;, 4] = `beta_1&#39;
- 14.                 matrix results[`i&#39;, 5] = r(coef)
- 15.                 matrix results[`i&#39;, 6] = r(std_err)
- 16.                 matrix results[`i&#39;, 7] = r(p_value)
- 17.         }
- 18. 
-.         return matrix RE results
- 19. end</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb124-1"><a href="stata.html#cb124-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> parameter_search</span>
+<span id="cb124-2"><a href="stata.html#cb124-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> parameter_search, rclass</span>
+<span id="cb124-3"><a href="stata.html#cb124-3" tabindex="-1"></a>    <span class="kw">args</span> params</span>
+<span id="cb124-4"><a href="stata.html#cb124-4" tabindex="-1"></a></span>
+<span id="cb124-5"><a href="stata.html#cb124-5" tabindex="-1"></a>    <span class="kw">local</span> <span class="bn">rows</span> = <span class="fu">rowsof</span>(params)</span>
+<span id="cb124-6"><a href="stata.html#cb124-6" tabindex="-1"></a>    <span class="fu">matrix</span> results = <span class="fu">J</span>(<span class="ot">`rows&#39;</span>, 7, .)</span>
+<span id="cb124-7"><a href="stata.html#cb124-7" tabindex="-1"></a></span>
+<span id="cb124-8"><a href="stata.html#cb124-8" tabindex="-1"></a>    forval i = 1/<span class="ot">`rows&#39;</span> {</span>
+<span id="cb124-9"><a href="stata.html#cb124-9" tabindex="-1"></a>        <span class="kw">local</span> n_subj = params[<span class="ot">`i&#39;</span>, 1]</span>
+<span id="cb124-10"><a href="stata.html#cb124-10" tabindex="-1"></a>        <span class="kw">local</span> n_pop = params[<span class="ot">`i&#39;</span>, 2]</span>
+<span id="cb124-11"><a href="stata.html#cb124-11" tabindex="-1"></a>        <span class="kw">local</span> n_rock = params[<span class="ot">`i&#39;</span>, 3]</span>
+<span id="cb124-12"><a href="stata.html#cb124-12" tabindex="-1"></a>        <span class="kw">local</span> beta_1 = params[<span class="ot">`i&#39;</span>, 4]</span>
+<span id="cb124-13"><a href="stata.html#cb124-13" tabindex="-1"></a></span>
+<span id="cb124-14"><a href="stata.html#cb124-14" tabindex="-1"></a>        single_run <span class="ot">`n_subj&#39;</span> <span class="ot">`n_pop&#39;</span> <span class="ot">`n_rock&#39;</span> 60 <span class="ot">`beta_1&#39;</span> 7 8</span>
+<span id="cb124-15"><a href="stata.html#cb124-15" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 1] = <span class="ot">`n_subj&#39;</span></span>
+<span id="cb124-16"><a href="stata.html#cb124-16" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 2] = <span class="ot">`n_pop&#39;</span></span>
+<span id="cb124-17"><a href="stata.html#cb124-17" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 3] = <span class="ot">`n_rock&#39;</span></span>
+<span id="cb124-18"><a href="stata.html#cb124-18" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 4] = <span class="ot">`beta_1&#39;</span></span>
+<span id="cb124-19"><a href="stata.html#cb124-19" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 5] = <span class="fu">r</span>(coef)</span>
+<span id="cb124-20"><a href="stata.html#cb124-20" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 6] = <span class="fu">r</span>(std_err)</span>
+<span id="cb124-21"><a href="stata.html#cb124-21" tabindex="-1"></a>        <span class="fu">matrix</span> results[<span class="ot">`i&#39;</span>, 7] = <span class="fu">r</span>(p_value)</span>
+<span id="cb124-22"><a href="stata.html#cb124-22" tabindex="-1"></a>    }</span>
+<span id="cb124-23"><a href="stata.html#cb124-23" tabindex="-1"></a></span>
+<span id="cb124-24"><a href="stata.html#cb124-24" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">matrix</span> RE results</span>
+<span id="cb124-25"><a href="stata.html#cb124-25" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>If we call <code>parameter_search()</code> it will return a single replication of simulations for each combination of parameter values in <code>params</code>.</p>
-<pre><code> . quietly parameter_search params
-
-. return list
-
-matrices:
+<div class="sourceCode" id="cb125"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb125-1"><a href="stata.html#cb125-1" tabindex="-1"></a><span class="kw">quietly</span> parameter_search params</span>
+<span id="cb125-2"><a href="stata.html#cb125-2" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span>
+<span id="cb125-3"><a href="stata.html#cb125-3" tabindex="-1"></a><span class="fu">matrix</span> <span class="ot">list</span> <span class="fu">r</span>(RE)</span></code></pre></div>
+<pre><code>matrices:
                  r(RE) :  60 x 7
 
-. matrix list r(RE)
 
 r(RE)[60,7]
             c1         c2         c3         c4         c5         c6
@@ -744,15 +793,45 @@ r58  7.385e-27
 r59  1.906e-50
 r60  1.506e-82</code></pre>
 <p>Then we just repeatedly call <code>parameter_search()</code> for the number of times specified by <code>reps</code> and store the result in a matrix <code>final_results</code>. Fair warning, this will take some time if you have set a high number of replications!</p>
-<pre><code> . // replicate the parameter search many times
-. quietly {</code></pre>
+<div class="sourceCode" id="cb127"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb127-1"><a href="stata.html#cb127-1" tabindex="-1"></a><span class="co">// replicate the parameter search many times</span></span>
+<span id="cb127-2"><a href="stata.html#cb127-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb127-3"><a href="stata.html#cb127-3" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb127-4"><a href="stata.html#cb127-4" tabindex="-1"></a>  <span class="fu">matrix</span> final_results = <span class="fu">J</span>(1, 7, .)</span>
+<span id="cb127-5"><a href="stata.html#cb127-5" tabindex="-1"></a>  forval i = 1/<span class="ot">$reps</span> {</span>
+<span id="cb127-6"><a href="stata.html#cb127-6" tabindex="-1"></a>    <span class="kw">quietly</span> parameter_search params</span>
+<span id="cb127-7"><a href="stata.html#cb127-7" tabindex="-1"></a></span>
+<span id="cb127-8"><a href="stata.html#cb127-8" tabindex="-1"></a>    <span class="fu">matrix</span> final_results = final_results \ <span class="fu">r</span>(RE)</span>
+<span id="cb127-9"><a href="stata.html#cb127-9" tabindex="-1"></a>  }</span>
+<span id="cb127-10"><a href="stata.html#cb127-10" tabindex="-1"></a></span>
+<span id="cb127-11"><a href="stata.html#cb127-11" tabindex="-1"></a>  <span class="co">// rename the columns</span></span>
+<span id="cb127-12"><a href="stata.html#cb127-12" tabindex="-1"></a>  <span class="kw">clear</span></span>
+<span id="cb127-13"><a href="stata.html#cb127-13" tabindex="-1"></a>  <span class="kw">svmat</span> final_results, names(final_results)</span>
+<span id="cb127-14"><a href="stata.html#cb127-14" tabindex="-1"></a>  <span class="kw">rename</span> final_results1 n_subj</span>
+<span id="cb127-15"><a href="stata.html#cb127-15" tabindex="-1"></a>  <span class="kw">rename</span> final_results2 n_pop</span>
+<span id="cb127-16"><a href="stata.html#cb127-16" tabindex="-1"></a>  <span class="kw">rename</span> final_results3 n_rock</span>
+<span id="cb127-17"><a href="stata.html#cb127-17" tabindex="-1"></a>  <span class="kw">rename</span> final_results4 beta_1</span>
+<span id="cb127-18"><a href="stata.html#cb127-18" tabindex="-1"></a>  <span class="kw">rename</span> final_results5 mean_estimate</span>
+<span id="cb127-19"><a href="stata.html#cb127-19" tabindex="-1"></a>  <span class="kw">rename</span> final_results6 mean_se</span>
+<span id="cb127-20"><a href="stata.html#cb127-20" tabindex="-1"></a>  <span class="kw">rename</span> final_results7 p_value</span>
+<span id="cb127-21"><a href="stata.html#cb127-21" tabindex="-1"></a>  <span class="kw">drop</span> <span class="kw">in</span> 1</span>
+<span id="cb127-22"><a href="stata.html#cb127-22" tabindex="-1"></a></span>
+<span id="cb127-23"><a href="stata.html#cb127-23" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/final_results.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb127-24"><a href="stata.html#cb127-24" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in <code>pgrid</code>, so that we can get power estimates for all combinations of parameter values.</p>
-<pre><code> . quietly {
-
-. list
-
-     +-------------------------------------------------------------------+
-     | n_subj   n_pop   n_rock   beta_1   mean_e~e    mean_se      power |
+<div class="sourceCode" id="cb128"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb128-1"><a href="stata.html#cb128-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb128-2"><a href="stata.html#cb128-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/final_results.dta&quot;</span></span>
+<span id="cb128-3"><a href="stata.html#cb128-3" tabindex="-1"></a></span>
+<span id="cb128-4"><a href="stata.html#cb128-4" tabindex="-1"></a>  <span class="kw">gen</span> power = 0</span>
+<span id="cb128-5"><a href="stata.html#cb128-5" tabindex="-1"></a>  <span class="kw">replace</span> power = 1 <span class="kw">if</span> p_value &lt; <span class="ot">$alpha</span></span>
+<span id="cb128-6"><a href="stata.html#cb128-6" tabindex="-1"></a></span>
+<span id="cb128-7"><a href="stata.html#cb128-7" tabindex="-1"></a>  <span class="kw">drop</span> p_value</span>
+<span id="cb128-8"><a href="stata.html#cb128-8" tabindex="-1"></a></span>
+<span id="cb128-9"><a href="stata.html#cb128-9" tabindex="-1"></a>  <span class="kw">collapse</span> (<span class="kw">mean</span>) mean_estimate mean_se power, <span class="kw">by</span>(n_subj n_pop n_rock beta_1)</span>
+<span id="cb128-10"><a href="stata.html#cb128-10" tabindex="-1"></a></span>
+<span id="cb128-11"><a href="stata.html#cb128-11" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/sims_table.dta&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb128-12"><a href="stata.html#cb128-12" tabindex="-1"></a>}</span>
+<span id="cb128-13"><a href="stata.html#cb128-13" tabindex="-1"></a><span class="ot">list</span></span></code></pre></div>
+<pre><code>     | n_subj   n_pop   n_rock   beta_1   mean_e~e    mean_se      power |
      |-------------------------------------------------------------------|
   1. |     10      10       10        1   1.268973   1.238123   .2333333 |
   2. |     10      10       10        2   1.889742   1.235582         .4 |
@@ -827,7 +906,13 @@ r60  1.506e-82</code></pre>
  60. |     50      40       40        5   5.028903   .0638838          1 |
      +-------------------------------------------------------------------+</code></pre>
 <p>Here’s a graph that visualizes the output of the power simulation.</p>
-<pre><code> . quietly {</code></pre>
+<div class="sourceCode" id="cb130"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb130-1"><a href="stata.html#cb130-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb130-2"><a href="stata.html#cb130-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/sims_table.dta&quot;</span></span>
+<span id="cb130-3"><a href="stata.html#cb130-3" tabindex="-1"></a></span>
+<span id="cb130-4"><a href="stata.html#cb130-4" tabindex="-1"></a>  <span class="kw">twoway</span> (connected power beta_1 <span class="kw">if</span> n_subj == 10, <span class="kw">sort</span>) (connected power beta_1 <span class="kw">if</span> n_subj == 25, <span class="kw">sort</span>) (connected power beta_1 <span class="kw">if</span> n_subj == 50, <span class="kw">sort</span>), <span class="dv">scheme</span>(s2color) <span class="kw">by</span>(n_pop n_rock) <span class="bn">legend</span>(lab(1 <span class="st">&quot;sample_size = 10&quot;</span>) lab(2 <span class="st">&quot;sample_size = 25&quot;</span>) lab(3 <span class="st">&quot;sample_size = 50&quot;</span>))</span>
+<span id="cb130-5"><a href="stata.html#cb130-5" tabindex="-1"></a></span>
+<span id="cb130-6"><a href="stata.html#cb130-6" tabindex="-1"></a>  <span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;./figures/twoway.png&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb130-7"><a href="stata.html#cb130-7" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="figures/twoway.png" /></p>
 
 </div>

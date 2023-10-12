@@ -1,10 +1,9 @@
 ```{r setup, include=FALSE}
 require(knitr)
-knitr::opts_chunk$set(eval = TRUE, results = TRUE, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.path = "figures/")
 
 # https://users.ssc.wisc.edu/~hemken/Stataworkshops/Statamarkdown/stata-and-r-markdown.html
 library(Statamarkdown)
-knitr::opts_chunk$set(engine="stata", comment="", engine.path=list(stata="C:/Program Files/Stata17/StataMP-64.exe"), cleanlog=FALSE)
+knitr::opts_chunk$set(engine.path=list(stata="C:/Program Files/Stata17/StataMP-64.exe"))
 ```
 
 # Stata
