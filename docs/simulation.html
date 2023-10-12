@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | dss-powersim</title>
+  <title>2 Simulation | dss-powersim</title>
   <meta name="description" content="This is a tutorial for power simulation" />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | dss-powersim" />
+  <meta property="og:title" content="2 Simulation | dss-powersim" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
   <meta name="github-repo" content="Lips7/dss-powersim" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | dss-powersim" />
+  <meta name="twitter:title" content="2 Simulation | dss-powersim" />
   
   <meta name="twitter:description" content="This is a tutorial for power simulation" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="power-analysis.html"/>
+<link rel="next" href="power-of-what.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -247,19 +247,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="simulation" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Simulation<a href="simulation.html#simulation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="customization" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Customization<a href="simulation.html#customization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Formulas often do not exist to calculate power for the effect of interest and therefore canned functions/programs/macros may not be available. For some studies, such as those involving complex study designs or those using mixed effects models for inference, we must therefore rely on simulation to provide a means of generating estimates of power that are customized for our current situation.</p>
+<p>The basic idea is to simulate running our study many times and calculate the proportion of times we reject the null hypothesis. This proportion provides an estimate of power. Generating a dataset and running an analysis for the hypothesis test is part of the simulation. Randomness is introduced into the process during dataset generation.</p>
+<p>For example, say the desired power level is 90%, and you want to calculate the sample size required to obtain this level of power. We could use the “guess sample size and check power” method. Firstly, choose a sample size <span class="math inline">\(n_1\)</span> and run the simulation to estimate power. If power is estimated to be lower than 90%, select a new value <span class="math inline">\(n_2\)</span> that is larger than <span class="math inline">\(n_1\)</span> and run the simulation again. Simulation runs are repeated until the estimated power is roughly 90%.</p>
 </div>
+<div id="step-by-step-1" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Step by step<a href="simulation.html#step-by-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are two broad steps involved in conducting simulation-based power analysis: 1) thinking and, 2) implementing.</p>
+<ul>
+<li>Think
+<ol style="list-style-type: decimal">
+<li><strong>Model specification:</strong> Write down the regression model, including all variables and parameters of interest.</li>
+<li><strong>Variable composition:</strong> Specify the form of the explanatory variables, such as the range of age or BMI, proportion of females/males, or the coding scheme used for categorical terms.</li>
+<li><strong>Parameter composition:</strong> Establish reasonable values for the data-generating parameters in your model.</li>
+</ol></li>
+<li>Implement
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Simulate:</strong> Simulate the sampling process for a single dataset, assuming the alternative hypothesis, and fit the model of interest.</li>
+<li><strong>Automate:</strong> Write a function/program/macro to automate the process of creating datasets, fitting models, testing the hypothesis of interest, and calculating power for that test - the number of significant simulations out of the total number of simulations. The function/program/macro should be flexible enough to allow for iterating power calculations over a grid of different parameter values.</li>
+<li><strong>Summarize:</strong> Summarize the relationships between power, sample size, and effect size in tables and figures.</li>
+</ol></li>
+</ul>
+<p>The implementation phase can be summarized by the following graphic:</p>
+<p><img src="images/powersim.png" /></p>
+
+</div>
+</div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="power-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="power-of-what.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -290,7 +317,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Lips7/dss-powersim/edit/main/%s",
+"link": "https://github.com/Lips7/dss-powersim/edit/main/02_simulation.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -5,9 +5,15 @@ output_dir: docs
 repo: https://github.com/Lips7/dss-powersim
 
 rmd_files:
+  - "index.Rmd"
+  - "01_canned.Rmd"
+  - "02_simulation.Rmd"
+  - "03_power_of_what.Rmd"
   - "04_R.Rmd"
   - "05_Python.Rmd"
   - "06_Stata.Rmd"
+  - "07_software_comparison.Rmd"
+  - "08_resources.Rmd"
 
 delete_merged_file: true
 

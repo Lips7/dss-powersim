@@ -1,3 +1,17 @@
+tab:param-def
+tab:param-all
+power-analysis
+canned-routines
+step-by-step
+simulation
+customization
+step-by-step-1
+power-of-what
+study-design
+mixed-effects-model
+step-1-model-specification
+step-2-variable-composition
+step-3-parameter-composition
 r
 setup
 data-simulation-step-by-step
@@ -51,3 +65,4 @@ power-calculation-single-run-2
 power-calculation-automated-2
 check-false-positive-rate-2
 power-for-different-effect-sizes-2
+software-comparison

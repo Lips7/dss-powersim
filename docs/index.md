@@ -1,7 +1,7 @@
 ---
 title: ""
 author: ""
-date: "`r format(Sys.Date(), '%B %Y')`"
+date: "October 2023"
 description: "This is a tutorial for power simulation"
 github-repo: "Lips7/dss-powersim"
 site: "bookdown::bookdown_site"

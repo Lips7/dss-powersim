@@ -7,10 +7,26 @@
 We will need several Stata packages to draw a violin plot. We can use "ssc install [package_name]" to install them.
 
 
+```
+ . // ssc install violinplot, replace     // module to draw violin plots
+. // ssc install dstat, replace          // violinplot's dependency, module to 
+> compute summary statistics
+. // ssc install moremata, replace       // violinplot's dependency, module (Ma
+> ta) to provide various functions
+. // ssc install palettes, replace       // violinplot's dependency, module to 
+> provide color palettes
+. // ssc install colrspace, replace      // violinplot's dependency, module pro
+> viding a class-based color management system in Mata
+```
 
 We will also set the pseudo-random number generator seed to `02138` to make the stochastic components of our simulations reproducible (this is similar to the process in R and Python).
 
 
+```
+ . clear all
+
+. set seed 02138
+```
 
 ## Data simulation step by step
 
@@ -19,6 +35,14 @@ To give an overview of the power simulation task, we will simulate data from a d
 Before we start, let's set some global parameters for our power simulations.
 
 
+```
+ . // number of simulation replications for power calculation
+. global reps = 30
+
+. 
+. // specified alpha for power calculation
+. global alpha = 0.05
+```
 
 ### Establish the data-generating parameters
 
@@ -27,12 +51,32 @@ The first thing to do is to set up the parameters that govern the process we ass
 Note: There is a difference between Stata and R and the Python: We decrease the data-generating parameters to simplify our model, and we delete some parameters: by-song random intercept `omega_0`, by-subject random slope sd `tau_1`, and the correlation between intercept and slope `rho`.
 
 
+```
+ . // set all data-generating parameters
+. global beta_0 = 60   // intercept; i.e., the grand mean
+
+. global beta_1 = 5    // slope; i.e., effect of category
+
+. global tau_0 = 7     // by-subject random intercept sd
+
+. global sigma = 8     // residual (error) sd
+```
 
 ### Simulate the sampling process
 
 Next, we will simulate the sampling process for the data. First, let's define parameters related to the number of observations.
 
 
+```
+ . // Set number of subjects and songs
+. global n_subj = 25   // number of subjects
+
+. global n_pop = 15    // number of songs in pop category
+
+. global n_rock = 15   // number of songs in rock category
+
+. global n_all = $n_pop + $n_rock
+```
 
 #### Simulate the sampling of songs
 
@@ -40,6 +84,12 @@ We need to create a table listing each song $i$, which category it is in (`rock`
 
 
 ```
+ . // simulate a sample of songs
+. quietly {
+
+. list in 1/10
+
+     +------------------------------------+
      | song_id   category   genre_i   key |
      |------------------------------------|
   1. |       1        pop         0     1 |
@@ -64,6 +114,12 @@ We will use the function `rnormal`, which generates a simulated value from a uni
 
 
 ```
+ . // simulate a sample of subjects
+. quietly {
+
+. list in 1 / 10
+
+     +---------------------------+
      |        t0   subj_id   key |
      |---------------------------|
   1. |  4.356949         1     1 |
@@ -86,6 +142,9 @@ Let's do a quick sanity check by comparing our simulated values to the parameter
 
 
 ```
+ . quietly {
+
+. display "tau_0, " $tau_0 ", " tau_0_s
 tau_0, 7, 7.4337502
 ```
 
@@ -95,6 +154,12 @@ Since all subjects rate all songs (i.e., the design is fully crossed) we can set
 
 
 ```
+ . // cross subject and song IDs; add an error term
+. quietly {
+
+. list in 1 / 10
+
+     +---------------------------------------------------------------+
      |       t0   subj_id   song_id   category   genre_i        e_ij |
      |---------------------------------------------------------------|
   1. | 4.356949         1         1        pop         0    4.979371 |
@@ -117,6 +182,11 @@ With this resulting `trials` table, in combination with the constants `beta_0` a
 
 
 ```
+ . quietly {
+
+. list in 1 / 10
+
+     +---------------------------------------------------+
      | subj_id   song_id   category   genre_i   liking~j |
      |---------------------------------------------------|
   1. |       1         1        pop         0   69.33632 |
@@ -138,6 +208,9 @@ With this resulting `trials` table, in combination with the constants `beta_0` a
 Let's visualize the distribution of the response variable for each of the two song genres and superimpose the simulated parameter estimates for the means of these two groups.
 
 
+```
+ . quietly {
+```
 
 ![](./figures/violin.png)
 
@@ -147,6 +220,9 @@ Now we can analyze our simulated data in a linear mixed effects model using the 
 
 
 ```
+ . quietly use "./data/data_sim_tmp.dta"
+
+. mixed liking_ij genre_i || subj_id:
 variable liking_ij not found
 r(111);
 
@@ -164,6 +240,12 @@ Now we can estimate the model.
 
 
 ```
+ . quietly estimates use "./data/data_sim_estimates.ster"
+
+. quietly matrix b = e(b)
+
+. matrix list b
+
 b[1,4]
      liking_ij:  liking_ij:   lns1_1_1:    lnsig_e:
        genre_i       _cons       _cons       _cons
@@ -175,6 +257,44 @@ y1   5.1710617   60.229571   2.0205456   2.0902013
 Now that we've tested the data generating code, we can put it into a function so that it's easy to run it repeatedly.
 
 
+```
+ . capture program drop sim_data
+
+. program define sim_data
+  1.         args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
+  2. 
+.   // simulate a sample of songs
+.         clear
+  3.         local n_all = `n_pop' + `n_rock'
+  4.         set obs `n_all'
+  5.         gen song_id = _n
+  6.         gen category = "pop"
+  7.         replace category = "rock" if song_id > `n_pop'
+  8.         gen genre_i = 0
+  9.         replace genre_i = 1 if song_id > `n_pop'
+ 10.         gen key = 1
+ 11.         save "./data/songs.dta", replace
+ 12. 
+.   // simulate a sample of subjects
+.         clear
+ 13.         set obs `n_subj'
+ 14. 
+.         gen t0 = rnormal(0, `tau_0')
+ 15.         gen subj_id = _n
+ 16.         gen key = 1
+ 17.         save "./data/subjects.dta", replace
+ 18. 
+.   // cross subject and song IDs
+.         use "./data/subjects.dta"
+ 19.         cross using "./data/songs.dta"
+ 20.         drop key
+ 21.         sort subj_id song_id
+ 22.         gen e_ij = rnormal(0, `sigma')
+ 23. 
+.         gen liking_ij = `beta_0' + t0 + `beta_1' * genre_i + e_ij
+ 24.         keep subj_id song_id category genre_i liking_ij
+ 25. end
+```
 
 ## Power calculation single run
 
@@ -182,15 +302,40 @@ We can wrap the data generating function and modeling code in a new function `si
 
 
 ```
+ . capture program drop single_run
+
+. program define single_run, rclass
+  1.         args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
+  2. 
+.         clear
+  3.         sim_data `n_subj' `n_pop' `n_rock' `beta_0' `beta_1' `tau_0' `sigm
+> a'
   4.         mixed liking_ij genre_i || subj_id:, noretable nofetable noheader 
 > nogroup
   5. 
+.   estimates clear
+  6.         estimates store model_results
+  7. 
+.   // calculate analysis results
+.         matrix coefficients = e(b)
+  8.         matrix std_errors = e(V)
+  9.         matrix p_values = e(p)
+ 10. 
+.         return scalar coef = coefficients[1, 1]
+ 11.         return scalar std_err = std_errors[1, 1]
+ 12.         return scalar p_value = p_values[1, 1]
+ 13. end
 ```
 
 Let's test that our new `single_run()` function performs as expected.
 
 
 ```
+ . // run one model with default parameters
+. quietly single_run 25 15 15 60 5 7 8
+
+. return list
+
 scalars:
             r(p_value) =  6.15504528649e-25
             r(std_err) =  .3467247369073159
@@ -199,6 +344,11 @@ scalars:
 
 
 ```
+ . // run one model with new parameters
+. quietly single_run 25 10 50 60 2 7 8
+
+. return list
+
 scalars:
             r(p_value) =  .0005213058910955
             r(std_err) =  .3180056524570669
@@ -213,10 +363,16 @@ We can finally calculate power for our parameter of interest `beta_1` by filteri
 
 
 ```
+ . quietly {
+
+. 
+. di "Coef. Mean: " coef_mean
 Coef. Mean: 5.1327767
 
+. di "Std.Err. Mean: " std_err_mean
 Std.Err. Mean: .34294486
 
+. di "Power Mean: " power_mean
 Power Mean: 1
 ```
 
@@ -226,6 +382,11 @@ We can do a sanity check to see if our simulation is performing as expected by c
 
 
 ```
+ . // run simulations and calculate the false positive rate
+. quietly {
+
+. 
+. di "Power Mean: " power_mean
 Power Mean: .03333334
 ```
 
@@ -236,18 +397,78 @@ Ideally, the false positive rate will be equal to `alpha`, which we set at 0.05.
 In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.
 
 
+```
+ . // grid of parameter values of interest
+. quietly matrix define params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3
+>  \ 10, 10, 10, 4 \ 10, 10, 10, 5 ///
+> \ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40,
+>  5 ///
+> \ 10, 40, 10, 1 \ 10, 40, 10, 2 \ 10, 40, 10, 3 \ 10, 40, 10, 4 \ 10, 40, 10,
+>  5 ///
+> \ 10, 40, 40, 1 \ 10, 40, 40, 2 \ 10, 40, 40, 3 \ 10, 40, 40, 4 \ 10, 40, 40,
+>  5 ///
+> \ 25, 10, 10, 1 \ 25, 10, 10, 2 \ 25, 10, 10, 3 \ 25, 10, 10, 4 \ 25, 10, 10,
+>  5 ///
+> \ 25, 10, 40, 1 \ 25, 10, 40, 2 \ 25, 10, 40, 3 \ 25, 10, 40, 4 \ 25, 10, 40,
+>  5 ///
+> \ 25, 40, 10, 1 \ 25, 40, 10, 2 \ 25, 40, 10, 3 \ 25, 40, 10, 4 \ 25, 40, 10,
+>  5 ///
+> \ 25, 40, 40, 1 \ 25, 40, 40, 2 \ 25, 40, 40, 3 \ 25, 40, 40, 4 \ 25, 40, 40,
+>  5 ///
+> \ 50, 10, 10, 1 \ 50, 10, 10, 2 \ 50, 10, 10, 3 \ 50, 10, 10, 4 \ 50, 10, 10,
+>  5 ///
+> \ 50, 10, 40, 1 \ 50, 10, 40, 2 \ 50, 10, 40, 3 \ 50, 10, 40, 4 \ 50, 10, 40,
+>  5 ///
+> \ 50, 40, 10, 1 \ 50, 40, 10, 2 \ 50, 40, 10, 3 \ 50, 40, 10, 4 \ 50, 40, 10,
+>  5 ///
+> \ 50, 40, 40, 1 \ 50, 40, 40, 2 \ 50, 40, 40, 3 \ 50, 40, 40, 4 \ 50, 40, 40,
+>  5)
+```
 
 We can now wrap our `single_run()` function within a more general function `parameter_search()` that takes the grid of parameter values as input and uses a matrix `results` to store analysis results of each `single_run()`.
 
 
+```
+ . capture program drop parameter_search
+
+. program define parameter_search, rclass
+  1.         args params
+  2. 
+.         local rows = rowsof(params)
+  3.         matrix results = J(`rows', 7, .)
+  4. 
+.         forval i = 1/`rows' {
+  5.                 local n_subj = params[`i', 1]
+  6.                 local n_pop = params[`i', 2]
+  7.                 local n_rock = params[`i', 3]
+  8.                 local beta_1 = params[`i', 4]
+  9. 
+.                 single_run `n_subj' `n_pop' `n_rock' 60 `beta_1' 7 8
+ 10.                 matrix results[`i', 1] = `n_subj'
+ 11.                 matrix results[`i', 2] = `n_pop'
+ 12.                 matrix results[`i', 3] = `n_rock'
+ 13.                 matrix results[`i', 4] = `beta_1'
+ 14.                 matrix results[`i', 5] = r(coef)
+ 15.                 matrix results[`i', 6] = r(std_err)
+ 16.                 matrix results[`i', 7] = r(p_value)
+ 17.         }
+ 18. 
+.         return matrix RE results
+ 19. end
+```
 
 If we call `parameter_search()` it will return a single replication of simulations for each combination of parameter values in `params`.
 
 
 ```
+ . quietly parameter_search params
+
+. return list
+
 matrices:
                  r(RE) :  60 x 7
 
+. matrix list r(RE)
 
 r(RE)[60,7]
             c1         c2         c3         c4         c5         c6
@@ -378,11 +599,20 @@ r60  1.506e-82
 Then we just repeatedly call `parameter_search()` for the number of times specified by `reps` and store the result in a matrix `final_results`. Fair warning, this will take some time if you have set a high number of replications!
 
 
+```
+ . // replicate the parameter search many times
+. quietly {
+```
 
 Now, as before, we can calculate power. But this time we'll group by all of the parameters we manipulated in `pgrid`, so that we can get power estimates for all combinations of parameter values.
 
 
 ```
+ . quietly {
+
+. list
+
+     +-------------------------------------------------------------------+
      | n_subj   n_pop   n_rock   beta_1   mean_e~e    mean_se      power |
      |-------------------------------------------------------------------|
   1. |     10      10       10        1   1.268973   1.238123   .2333333 |
@@ -462,5 +692,8 @@ Now, as before, we can calculate power. But this time we'll group by all of the 
 Here's a graph that visualizes the output of the power simulation.
 
 
+```
+ . quietly {
+```
 
 ![](./figures/twoway.png)

@@ -4,7 +4,7 @@ knitr::opts_chunk$set(eval = TRUE, results = TRUE, echo = FALSE, message = FALSE
 
 # https://users.ssc.wisc.edu/~hemken/Stataworkshops/Statamarkdown/stata-and-r-markdown.html
 library(Statamarkdown)
-knitr::opts_chunk$set(engine="stata", comment="", engine.path=list(stata="C:/Program Files/Stata17/StataMP-64.exe"))
+knitr::opts_chunk$set(engine="stata", comment="", engine.path=list(stata="C:/Program Files/Stata17/StataMP-64.exe"), cleanlog=FALSE)
 ```
 
 # Stata
@@ -14,7 +14,6 @@ knitr::opts_chunk$set(engine="stata", comment="", engine.path=list(stata="C:/Pro
 We will need several Stata packages to draw a violin plot. We can use "ssc install [package_name]" to install them.
 
 ```{stata}
-clear all
 // ssc install violinplot, replace     // module to draw violin plots
 // ssc install dstat, replace          // violinplot's dependency, module to compute summary statistics
 // ssc install moremata, replace       // violinplot's dependency, module (Mata) to provide various functions
@@ -25,6 +24,7 @@ clear all
 We will also set the pseudo-random number generator seed to `02138` to make the stochastic components of our simulations reproducible (this is similar to the process in R and Python).
 
 ```{stata, collectcode=TRUE}
+clear all
 set seed 02138
 ```
 

@@ -1,4 +1,4 @@
-set a new github repository
+set a new github repository and setup github pages
 git init
 
 r: install.packages("bookdown")

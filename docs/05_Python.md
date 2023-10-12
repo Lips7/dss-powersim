@@ -7,6 +7,7 @@ To begin with, the simulation based power analysis in Python just follows the st
 ## Setup
 
 Note: There are two differences between Python and the R language:
+
 1. R uses the p_load function to automatically install missing libraries and import libraries. Python needs to manually configure the environment. If the library is missing, you can use “! pip install [package_name]” to install;
 2. The R has set parallelism in the setup part, but Python uses the dask package to perform parallel computing in the simulation part.
 
@@ -29,11 +30,6 @@ from dask.distributed import Client
 from itertools import product
 
 matplotlib.use("Agg")
-dask.config.set(scheduler = "processes")
-```
-
-```
-## <dask.config.set object at 0x0000014041902450>
 ```
 We will also set the pseudo-random number generator seed to 2138 to make the stochastic components of our simulations reproducible.
 
@@ -47,6 +43,7 @@ np.random.seed(2138)
 To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see Power of What? for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. Much of the general workflow here is borrowed from DeBruine & Dale (2021) Understanding Mixed-Effects Models through Simulation. We’ll start by writing code that simulates datasets under the alternative hypothesis.
 
 Note: There are two differences between Python and the R:
+
 1. We use the package of "statsmodels" to set up the mixd effect model in Python. However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
 2. There's no "broom.mixed::tidy()" function in Python and that's why the output is incomplete.
 
@@ -295,20 +292,20 @@ print(mod_sim.summary())
 ```
 ##          Mixed Linear Model Regression Results
 ## ========================================================
-## Model:            MixedLM Dependent Variable: liking_ij
-## No. Observations: 750     Method:             REML
-## No. Groups:       1       Scale:              66.4110
+## Model:            MixedLM Dependent Variable: liking_ij 
+## No. Observations: 750     Method:             REML      
+## No. Groups:       1       Scale:              66.4110   
 ## Min. group size:  750     Log-Likelihood:     -2708.1155
-## Max. group size:  750     Converged:          Yes
-## Mean group size:  750.0
+## Max. group size:  750     Converged:          Yes       
+## Mean group size:  750.0                                 
 ## --------------------------------------------------------
 ##               Coef.  Std.Err.   z    P>|z| [0.025 0.975]
 ## --------------------------------------------------------
 ## Intercept     58.078    1.494 38.873 0.000 55.150 61.007
 ## genre_i        5.505    1.631  3.376 0.001  2.309  8.701
-## genre_i Var   22.355    1.106
-## song_id Var   10.578    0.443
-## subj_id Var   33.748    1.353
+## genre_i Var   22.355    1.106                           
+## song_id Var   10.578    0.443                           
+## subj_id Var   33.748    1.353                           
 ## ========================================================
 ```
 
@@ -331,10 +328,10 @@ print(formatted_sim_result)
 ##         term parameter  value  simulated
 ## 0  Intercept    beta_0   60.0  58.078342
 ## 1    genre_i    beta_1    5.0   5.504843
-## 2              omega_0    3.0
-## 3                tau_0    7.0
-## 4                  rho    0.2
-## 5                tau_1    4.0
+## 2              omega_0    3.0           
+## 3                tau_0    7.0           
+## 4                  rho    0.2           
+## 5                tau_1    4.0           
 ## 6                sigma    8.0
 ```
 
@@ -423,7 +420,7 @@ We use dask.delayed function to decorate single_run() so that it operates lazily
 
 Note: There are two differences between Python and the R:
 
-1. The R  uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;
+1. The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;
 2. The R sets parallel computing in the setup part, while the Python uses the “dask” library for parallel computing.
 
 
@@ -454,7 +451,7 @@ print(f"Mean estimate: {mean_estimate}")
 ```
 
 ```
-## Mean estimate: 5.088766666666666
+## Mean estimate: 4.623866666666668
 ```
 
 ```python
@@ -462,7 +459,7 @@ print(f"Mean standard error: {mean_se}")
 ```
 
 ```
-## Mean standard error: 1.4374999999999998
+## Mean standard error: 1.5304333333333335
 ```
 
 ```python
@@ -470,7 +467,7 @@ print(f"Power: {power}")
 ```
 
 ```
-## Power: 0.9666666666666667
+## Power: 0.8333333333333334
 ```
 
 ### Check false positive rate
@@ -492,7 +489,7 @@ print((sims_fp_df[sims_fp_df['term'] == 'genre_i']['p_value'].astype(float) < al
 ```
 
 ```
-## 0.0
+## 0.16666666666666666
 ```
 
 Ideally, the false positive rate will be equal to alpha, which we set at 0.05.
@@ -546,19 +543,19 @@ print(parameter_search(params))
 ```
 
 ```
-##             term   Coef. Std.Err.       p_value  n_subj  n_pop  n_rock  beta_1
-## 0      Intercept  60.933    3.098  3.915640e-86      10     10      10       1
-## 1        genre_i   1.942    1.968  3.237101e-01      10     10      10       1
-## 2    genre_i Var   0.112    1.872  9.938793e-01      10     10      10       1
-## 3    song_id Var  13.211    0.889  5.688653e-02      10     10      10       1
-## 4    subj_id Var  76.660    5.020  5.042574e-02      10     10      10       1
-## ..           ...     ...      ...           ...     ...    ...     ...     ...
-## 115    Intercept  59.108    0.955  0.000000e+00      50     40      40       5
-## 116      genre_i   4.849    0.975  6.516293e-07      50     40      40       5
-## 117  genre_i Var  24.449    0.993  2.187331e-03      50     40      40       5
-## 118  song_id Var   7.927    0.167  3.763196e-09      50     40      40       5
-## 119  subj_id Var  34.079    0.789  7.738552e-08      50     40      40       5
-##
+##             term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
+## 0      Intercept  62.786    2.153  6.694159e-187      10     10      10       1
+## 1        genre_i   1.538    2.104   4.647072e-01      10     10      10       1
+## 2    genre_i Var   0.003    1.138   9.997792e-01      10     10      10       1
+## 3    song_id Var  15.654    0.966   4.385616e-02      10     10      10       1
+## 4    subj_id Var  24.244    1.749   8.487813e-02      10     10      10       1
+## ..           ...     ...      ...            ...     ...    ...     ...     ...
+## 115    Intercept  60.510    1.276   0.000000e+00      50     40      40       5
+## 116      genre_i   4.124    0.991   3.176649e-05      50     40      40       5
+## 117  genre_i Var  19.066    0.566   2.427370e-05      50     40      40       5
+## 118  song_id Var  10.752    0.244   3.264228e-08      50     40      40       5
+## 119  subj_id Var  66.366    1.728   1.525047e-06      50     40      40       5
+## 
 ## [120 rows x 8 columns]
 ```
 
@@ -586,19 +583,19 @@ print(sims_params_df)
 ```
 
 ```
-##              term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
-## 0       Intercept  58.315    2.734  6.473226e-101      10     10      10       1
-## 1         genre_i  -0.293    2.034   8.856034e-01      10     10      10       1
-## 2     genre_i Var   8.074    1.220   3.787807e-01      10     10      10       1
-## 3     song_id Var  10.995    0.777   6.004767e-02      10     10      10       1
-## 4     subj_id Var  58.118    4.012   5.412366e-02      10     10      10       1
-## ...           ...     ...      ...            ...     ...    ...     ...     ...
-## 3595    Intercept  61.389    0.959   0.000000e+00      50     40      40       5
-## 3596      genre_i   4.594    1.064   1.587224e-05      50     40      40       5
-## 3597  genre_i Var  21.070    0.604   9.683006e-06      50     40      40       5
-## 3598  song_id Var  12.986    0.580   4.474574e-03      50     40      40       5
-## 3599  subj_id Var  28.159    0.662   6.675987e-08      50     40      40       5
-##
+##              term    Coef. Std.Err.       p_value  n_subj  n_pop  n_rock  beta_1
+## 0       Intercept   59.925    3.418  8.490526e-69      10     10      10       1
+## 1         genre_i    1.883    2.018  3.508039e-01      10     10      10       1
+## 2     genre_i Var   12.666    1.520  2.809547e-01      10     10      10       1
+## 3     song_id Var    8.065    0.638  1.019027e-01      10     10      10       1
+## 4     subj_id Var  102.825    6.723  4.774178e-02      10     10      10       1
+## ...           ...      ...      ...           ...     ...    ...     ...     ...
+## 3595    Intercept   60.600    1.177  0.000000e+00      50     40      40       5
+## 3596      genre_i    4.566    0.992  4.137703e-06      50     40      40       5
+## 3597  genre_i Var   17.273    0.347  2.844326e-10      50     40      40       5
+## 3598  song_id Var   11.516    0.654  2.568345e-02      50     40      40       5
+## 3599  subj_id Var   53.336    1.314  2.656379e-07      50     40      40       5
+## 
 ## [3600 rows x 8 columns]
 ```
 
@@ -621,30 +618,30 @@ print(sims_table)
 
 ```
 ##        term  n_subj  n_pop  n_rock  beta_1  mean_estimate   mean_se     power
-## 0   genre_i      10     10      10       1       0.706100  2.273733  0.033333
-## 1   genre_i      10     10      10       3       3.478033  2.218300  0.300000
-## 2   genre_i      10     10      10       5       4.425333  2.439167  0.466667
-## 3   genre_i      10     10      40       1       1.298633  2.169367  0.000000
-## 4   genre_i      10     10      40       3       3.257400  2.161167  0.300000
-## 5   genre_i      10     10      40       5       4.791733  2.391900  0.500000
-## 6   genre_i      10     40      10       1       0.884333  2.196433  0.033333
-## 7   genre_i      10     40      10       3       2.747567  2.271400  0.166667
-## 8   genre_i      10     40      10       5       5.029167  2.125300  0.733333
-## 9   genre_i      10     40      40       1       0.875433  2.046567  0.033333
-## 10  genre_i      10     40      40       3       3.249067  1.908667  0.466667
-## 11  genre_i      10     40      40       5       4.885467  2.038567  0.633333
-## 12  genre_i      50     10      10       1       1.346700  1.469967  0.200000
-## 13  genre_i      50     10      10       3       2.744800  1.549433  0.466667
-## 14  genre_i      50     10      10       5       5.177400  1.530400  0.900000
-## 15  genre_i      50     10      40       1       0.925967  1.348700  0.000000
-## 16  genre_i      50     10      40       3       3.263133  1.343733  0.666667
-## 17  genre_i      50     10      40       5       4.855067  1.355233  0.900000
-## 18  genre_i      50     40      10       1       0.883067  1.360333  0.066667
-## 19  genre_i      50     40      10       3       3.080567  1.315300  0.700000
-## 20  genre_i      50     40      10       5       4.902700  1.375100  0.900000
-## 21  genre_i      50     40      40       1       1.185467  0.980333  0.166667
-## 22  genre_i      50     40      40       3       3.144733  0.983967  0.933333
-## 23  genre_i      50     40      40       5       5.292500  0.954633  1.000000
+## 0   genre_i      10     10      10       1       0.590033  2.348433  0.033333
+## 1   genre_i      10     10      10       3       3.168867  2.326633  0.266667
+## 2   genre_i      10     10      10       5       4.586000  2.255233  0.533333
+## 3   genre_i      10     10      40       1       1.071700  2.176500  0.066667
+## 4   genre_i      10     10      40       3       2.413900  2.226900  0.100000
+## 5   genre_i      10     10      40       5       4.832267  2.217000  0.533333
+## 6   genre_i      10     40      10       1       1.261100  2.386533  0.000000
+## 7   genre_i      10     40      10       3       3.333967  2.112867  0.266667
+## 8   genre_i      10     40      10       5       4.470767  2.255700  0.566667
+## 9   genre_i      10     40      40       1       0.876533  2.078367  0.000000
+## 10  genre_i      10     40      40       3       2.360767  2.030233  0.166667
+## 11  genre_i      10     40      40       5       5.149233  1.982433  0.766667
+## 12  genre_i      50     10      10       1       0.818333  1.613133  0.033333
+## 13  genre_i      50     10      10       3       3.493067  1.569533  0.566667
+## 14  genre_i      50     10      10       5       4.554233  1.520367  0.900000
+## 15  genre_i      50     10      40       1       0.537133  1.421733  0.033333
+## 16  genre_i      50     10      40       3       2.934933  1.428833  0.533333
+## 17  genre_i      50     10      40       5       4.790667  1.389667  0.933333
+## 18  genre_i      50     40      10       1       0.947133  1.372733  0.066667
+## 19  genre_i      50     40      10       3       3.009400  1.350267  0.466667
+## 20  genre_i      50     40      10       5       4.908533  1.269700  1.000000
+## 21  genre_i      50     40      40       1       0.722500  0.996833  0.066667
+## 22  genre_i      50     40      40       3       3.101400  0.979867  0.833333
+## 23  genre_i      50     40      40       5       4.512900  0.965767  1.000000
 ```
 
 Here’s a graph that visualizes the output of the power simulation.
@@ -674,29 +671,29 @@ for i, (pop, rock) in enumerate(sims_table.groupby(['n_pop', 'n_rock'])):
 
 ```
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000014041F5B4D0>
+## <matplotlib.lines.Line2D object at 0x0000027A937A5DD0>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000014010D07C10>
+## <matplotlib.legend.Legend object at 0x0000027A9425B950>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000014010EC7C10>
+## <matplotlib.lines.Line2D object at 0x0000027A90313110>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x000001404ADFFD10>
+## <matplotlib.legend.Legend object at 0x0000027A9552C850>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000014010E027D0>
+## <matplotlib.lines.Line2D object at 0x0000027A954AD2D0>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000014010AA08D0>
+## <matplotlib.legend.Legend object at 0x0000027A954A4850>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000014010D566D0>
+## <matplotlib.lines.Line2D object at 0x0000027A93C78210>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000014010D93A50>
+## <matplotlib.legend.Legend object at 0x0000027A955526D0>
 ```
 
 ```python

@@ -41,7 +41,6 @@ from dask.distributed import Client
 from itertools import product
 
 matplotlib.use("Agg")
-dask.config.set(scheduler = "processes")
 ```
 We will also set the pseudo-random number generator seed to 2138 to make the stochastic components of our simulations reproducible.
 

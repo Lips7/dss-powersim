@@ -1,0 +1,75 @@
+
+
+
+# (PART) Preparation {-}
+
+# Power of What?
+
+The initial steps of power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps, there is an even more fundamental issue to be addressed - the power of what?
+
+What quantity within our model do we wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that we must answer the question: "power of what?"
+
+## Study design
+
+The study design we will use as an example throughout this tutorial comes from Julian Quandt's blogpost (<https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>). He describes this as:
+
+> A new hypothetical research question focused on music preference. The overarching research goal will be to find out whether Rock or Pop music is better. Of course, we could just ask people what they prefer, but we want a more objective measure of what is Rock and Pop (people might have different ideas about the genres). Therefore, we will have participants listen to a bunch of different songs that are either from a Spotify "best-of-pop" or "best-of-rock" playlist and have them rate each song on an evaluation scale from 0-100 points. 
+
+## Mixed effects model
+
+Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, for generalized linear mixed effects models (GLMMs) we must rely on simulation. We will walk through the process of simulating data for a GLMM in a step-by-step manner, which will serve as scaffolding to build intuition about how to conduct power simulation. Once we have the workflow down, we can automate the simulation process using functions. 
+
+While the outcome in this example is bounded on the interval [0, 100], we will not concern ourselves with the issue of using a linear model with such an outcome. 
+
+
+### Step 1: model specification
+
+The first step in simulation-based power analysis is to write down the regression model of interest, including all variables and parameters:
+
+$$
+\textrm{liking}_{ij} = \beta_0 + T_{0j} + O_{0i} + (\beta_1 + T_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+$$
+
+where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $T_{0j} \sim \mathcal{N}(0, \tau_0)$, $T_{1j} \sim \mathcal{N}(0, \tau_1)$, $O_{0i} \sim \mathcal{N}(0, \omega_0)$, and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model. 
+
+Table: (\#tab:param-def) Variables in the data-generating model and associated code-based names.
+
+
+model                    code                   description                                                     
+-----------------------  ---------------------  ----------------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking_ij}$   rating of song $i$ for participant $j$ on the interval [0, 100] 
+$\textrm{genre}_i$       $\texttt{genre_i}$     genre of song $i$ (0='pop', 1='rock')                           
+$\beta_0$                $\texttt{beta_0}$      intercept; mean of liking rating for 'pop' genre                
+$\beta_1$                $\texttt{beta_1}$      slope; mean difference btw 'pop' and 'rock' song ratings        
+$\tau_0$                 $\texttt{tau_0}$       standard deviation of by-subject random intercepts              
+$\tau_1$                 $\texttt{tau_1}$       standard deviation of by-subject random slopes                  
+$\rho$                   $\texttt{rho}$         correlation between by-subject random intercepts and slopes     
+$\omega_0$               $\texttt{omega_0}$     standard deviation of by-song random intercepts                 
+$\sigma$                 $\texttt{sigma}$       standard deviation of residuals                                 
+$T_{0j}$                 $\texttt{T_0j}$        random intercept for subject $j$                                
+$T_{1j}$                 $\texttt{T_1j}$        random slope for subject $j$                                    
+$O_{0i}$                 $\texttt{O_0i}$        random intercept for song $i$                                   
+$e_{ij}$                 $\texttt{e_ij}$        residual of song $i$ for participant $j$                        
+
+### Step 2: Variable composition
+
+Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding, zero sum coding, or something else. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres. 
+
+In many other situations, we might include variables such as age and sex in the model. In which case we would need to determine reasonable settings for the range of age and the proportion of females to males. For example, the range of age might encompass the full possible range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females to males could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].
+
+### Step 3: Parameter composition
+
+Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try using some alternative values and compare power for each.
+
+Table: (\#tab:param-all) Settings for all data-generating parameters.
+
+
+code                 value   description                                                   
+-------------------  ------  --------------------------------------------------------------
+$\texttt{beta_0}$    60      intercept; i.e., mean of liking rating for 'pop' genre        
+$\texttt{beta_1}$    5       slope; i.e, mean difference btw 'pop' and 'rock' song ratings 
+$\texttt{tau_0}$     7       by-subject random intercept sd                                
+$\texttt{tau_1}$     4       by-subject random slope sd                                    
+$\texttt{rho}$       0.2     correlation between intercept and slope                       
+$\texttt{omega_0}$   3       by-song random intercept sd                                   
+$\texttt{sigma}$     8       residual (error) sd                                           

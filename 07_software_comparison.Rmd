@@ -1,0 +1,11 @@
+
+```{r setup, include=FALSE, echo=FALSE}
+require(knitr)
+knitr::opts_chunk$set(eval=FALSE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
+# knitr::opts_knit$set(root.dir="R/Rinstall")
+```
+
+# (PART) Appendix {-}
+
+# Software Comparison 
+

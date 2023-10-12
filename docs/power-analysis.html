@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | dss-powersim</title>
+  <title>1 Power Analysis | dss-powersim</title>
   <meta name="description" content="This is a tutorial for power simulation" />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | dss-powersim" />
+  <meta property="og:title" content="1 Power Analysis | dss-powersim" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
   <meta name="github-repo" content="Lips7/dss-powersim" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | dss-powersim" />
+  <meta name="twitter:title" content="1 Power Analysis | dss-powersim" />
   
   <meta name="twitter:description" content="This is a tutorial for power simulation" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="index.html"/>
+<link rel="next" href="simulation.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -247,19 +247,87 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="power-analysis" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Power Analysis<a href="power-analysis.html#power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="alert alert-success">
+<p>Statistical power is the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists.</p>
+</div>
+<div id="canned-routines" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Canned routines<a href="power-analysis.html#canned-routines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For some studies, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists.</p>
+<p><span class="math display">\[
+\begin{align}
+\textrm{Power} &amp;= \textrm{Pr}(\textrm{reject} \, H_0 \, | \, H_0 \, \textrm{is false}) \\
+               &amp;= 1 - \textrm{Pr}(\textrm{fail to reject} \, H_0 \, | \, H_0 \, \textrm{is false}) \\
+               &amp;= 1 - \beta
+\end{align}
+\]</span></p>
+<p>We want <span class="math inline">\(\beta\)</span> (Type II error) to be small and power to be large. When designing a study, rather than calculating power when sample size and effect size are fixed, researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size.</p>
+<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the cholesterol levels of people in two populations, one with a diet comprising low oat consumption and the other with high oat consumption, we could specify the following null and alternative hypotheses, respectively:</p>
+<p><span class="math display">\[
+\begin{align}
+\textrm{H}_0 : \mu_1 - \mu_2 &amp;= 0 \\
+\textrm{H}_1 : \mu_1 - \mu_2 &amp;\neq 0
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean cholesterol levels in the two populations being compared. We can use a formula to determine the sample sizes required so that the test has a specific power. We will need the following inputs to the formula:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\alpha\)</span> (Type I error / significance level): typically, this is set to <span class="math inline">\(0.05\)</span> in most studies.</li>
+<li><span class="math inline">\(1 - \beta\)</span> (power): often this is set to <span class="math inline">\(0.8\)</span> or <span class="math inline">\(0.9\)</span>.</li>
+<li><span class="math inline">\(\sigma\)</span> (population standard deviation): we need to estimate/guess this.</li>
+<li><span class="math inline">\(\delta\)</span> (alternative hypothesis): ideally the smallest difference <span class="math inline">\(\delta = \mu_1 - \mu_2\)</span> that has scientific or clinical importance.</li>
+</ol>
+<p>Given <span class="math inline">\(\alpha\)</span>, <span class="math inline">\((1 - \beta)\)</span>, <span class="math inline">\(\sigma\)</span>, and <span class="math inline">\(\delta\)</span>, we can calculate <span class="math inline">\(n_g\)</span> the sample size in each group to reject <span class="math inline">\(\textrm{H}_0\)</span> with probability <span class="math inline">\((1 - \beta)\)</span>. To simplify things a little, we will use the normal distribution as an approximation to the <span class="math inline">\(t\)</span> distribution (which should be fine when <span class="math inline">\(n_g \geq 30\)</span>). Here is the formula for this approximate two-sample <span class="math inline">\(t\)</span>-test:</p>
+<p><span class="math display">\[
+n_g \approx 2(z_{\alpha / 2} + z_\beta)^2 \left( \frac{\sigma}{\delta} \right)^2
+\]</span></p>
+<p>where <span class="math inline">\(n_g\)</span> is the sample size required in each group, <span class="math inline">\(z_{\alpha/2}\)</span> is the value from the standard normal distribution holding half the selected <span class="math inline">\(\alpha\)</span> level below it (because this is a two-tailed test), <span class="math inline">\(z_\beta\)</span> is the value from the standard normal distribution holding the <span class="math inline">\(\beta\)</span> level below it, <span class="math inline">\(\delta\)</span> is the effect size (the difference in population averages <span class="math inline">\(\mu_1 - \mu_2\)</span> of cholesterol), and <span class="math inline">\(\sigma\)</span> is the pooled population standard deviation (during study planning we usually assume equal variances in the two groups). Typically, we would set <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> to the following values and rely on previous studies or pilot data to obtain reasonable values for <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\delta\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\alpha = 0.05\)</span>, so <span class="math inline">\(z_{\alpha / 2} = 1.960\)</span>.</li>
+<li><span class="math inline">\(1 - \beta = 0.8\)</span>, so <span class="math inline">\(\beta = 0.2\)</span>, so <span class="math inline">\(z_\beta = 0.8416\)</span>.</li>
+<li><span class="math inline">\(\sigma = 1\)</span>; this could be our best guess based on previous studies.</li>
+<li><span class="math inline">\(\delta = 0.7\)</span>, our best guess based on previous studies could be that mean differences of 0.7 mmol/L or greater should be considered biologically important.</li>
+</ol>
+<p>We can then plug these input values into our formula:</p>
+<p><span class="math display">\[
+n_g \approx 2(1.960 + 0.8416)^2 \left( \frac{1}{0.7} \right)^2 = 32.036
+\]</span></p>
+<p>We always round up to a whole number for sample size, so for this study we need 33 subjects per group, or <span class="math inline">\(n=66\)</span> in total.</p>
+<p>In practice, we will often rely on software to perform the above calculation for us. In R we can use the <code>power.t.test()</code> function from the built-in <code>{stats}</code> package to calculate the sample size needed to reject the null hypothesis that <span class="math inline">\(\textrm{H}_0 : \mu_1 - \mu_2 = 0\)</span>. We just need to pass the <span class="math inline">\(n\)</span> parameter as <code>NULL</code> to tell R that we’d like to calculate sample size based on the values of the other parameters:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="power-analysis.html#cb1-1" tabindex="-1"></a><span class="fu">power.t.test</span>(<span class="at">n=</span><span class="cn">NULL</span>, <span class="at">delta=</span><span class="fl">0.7</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.8</span>, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 33.02467
+##           delta = 0.7
+##              sd = 1
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+</div>
+<div id="step-by-step" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Step by step<a href="power-analysis.html#step-by-step" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here are the general set of steps required to implement a power analysis for most study designs:</p>
+<p><strong>1. Specify a hypothesis test.</strong></p>
+<p>Make explicit a null and alternative hypothesis.</p>
+<p><strong>2. Specify Type I and Type II error levels for the test.</strong></p>
+<p>Typically, the Type I error level (significance level / false positive level) is set to <span class="math inline">\(\alpha=0.05\)</span> and Type II error level (false negative level) <span class="math inline">\(\beta=0.2\)</span>, which yields a power level of <span class="math inline">\(1 - \beta = 0.8\)</span>, but other values could be substituted instead.</p>
+<p><strong>3. Specify the estimated effect size level for the test.</strong></p>
+<p>To solve for sample size <span class="math inline">\(n\)</span>, we need an estimate of effect size (<span class="math inline">\(\delta = \mu_1 - \mu_2\)</span>) that has scientific meaning. Sometimes we need to use a pilot dataset or look to previous studies to get this value.</p>
+<p><strong>4. Calculate the sample size required to obtain the power level desired.</strong></p>
+<p>This can either be done by pugging and chugging values into the relevant formula, or by using a software-based implementation of said formula.</p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simulation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -290,7 +358,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Lips7/dss-powersim/edit/main/%s",
+"link": "https://github.com/Lips7/dss-powersim/edit/main/01_canned.Rmd",
 "text": "Edit"
 },
 "history": {
