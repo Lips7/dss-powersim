@@ -30,6 +30,10 @@ We are always grateful for any feedback you are willing to provide about our tut
 7. [Software Comparison](./software-comparison.html)
 8. [Resources](./resources.html)
 
+\
+
+![](images/Ultimate_Power_Vol_1_5_Textless.png)
+
 ## Contributors {-}
 
 The contents of these workshops are the result of a collaborative effort from members of the [Data Science Services](http://dss.iq.harvard.edu) team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.
