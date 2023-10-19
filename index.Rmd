@@ -3,7 +3,7 @@ title: ""
 author: ""
 date: "`r format(Sys.Date(), '%B %Y')`"
 description: "This is a tutorial for power simulation"
-github-repo: "Lips7/dss-powersim"
+github-repo: "hlmshtj-dan/Simulation-Power"
 site: "bookdown::bookdown_site"
 documentclass: book
 geometry: "margin=1.5in"
@@ -29,8 +29,6 @@ We are always grateful for any feedback you are willing to provide about our tut
 6. [Stata Examples](./stata.html)
 7. [Software Comparison](./software-comparison.html)
 8. [Resources](./resources.html)
-
-\
 
 ![](images/Ultimate_Power_Vol_1_5_Textless.png)
 

@@ -12,7 +12,7 @@
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
-  <meta name="github-repo" content="Lips7/dss-powersim" />
+  <meta name="github-repo" content="hlmshtj-dan/Simulation-Power" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="4 R | dss-powersim" />
@@ -729,7 +729,7 @@ of times the <span class="math inline">\(p\)</span>-value is below the <code>alp
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          5.10    1.47  0.94</code></pre>
+## 1 genre_i          5.03    1.46   0.9</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as
@@ -747,7 +747,7 @@ there is no actual effect in the population.</p>
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.07</code></pre>
+## 1  0.04</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set
 at 0.05.</p>
 </div>
@@ -1369,7 +1369,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
 <td headers="mean_estimate" class="gt_row gt_right">0.7216763</td>
-<td headers="mean_se" class="gt_row gt_right">1.8288694</td>
+<td headers="mean_se" class="gt_row gt_right">1.8288711</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #FA3900; color: #FFFFFF;">0.06</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1377,7 +1377,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
 <td headers="mean_estimate" class="gt_row gt_right">1.7059291</td>
-<td headers="mean_se" class="gt_row gt_right">1.8322483</td>
+<td headers="mean_se" class="gt_row gt_right">1.8322452</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1385,7 +1385,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
 <td headers="mean_estimate" class="gt_row gt_right">2.6756674</td>
-<td headers="mean_se" class="gt_row gt_right">1.8421360</td>
+<td headers="mean_se" class="gt_row gt_right">1.8421349</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1393,7 +1393,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
 <td headers="mean_estimate" class="gt_row gt_right">3.7319609</td>
-<td headers="mean_se" class="gt_row gt_right">1.8460881</td>
+<td headers="mean_se" class="gt_row gt_right">1.8460865</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #CCA700; color: #000000;">0.48</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1401,7 +1401,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
 <td headers="mean_estimate" class="gt_row gt_right">4.7424011</td>
-<td headers="mean_se" class="gt_row gt_right">1.8396722</td>
+<td headers="mean_se" class="gt_row gt_right">1.8396710</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1449,7 +1449,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
 <td headers="mean_estimate" class="gt_row gt_right">1.1213453</td>
-<td headers="mean_se" class="gt_row gt_right">1.4790160</td>
+<td headers="mean_se" class="gt_row gt_right">1.4790176</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1457,7 +1457,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
 <td headers="mean_estimate" class="gt_row gt_right">2.1427686</td>
-<td headers="mean_se" class="gt_row gt_right">1.4853961</td>
+<td headers="mean_se" class="gt_row gt_right">1.4853952</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E77900; color: #FFFFFF;">0.26</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1465,7 +1465,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
 <td headers="mean_estimate" class="gt_row gt_right">3.1372541</td>
-<td headers="mean_se" class="gt_row gt_right">1.4847807</td>
+<td headers="mean_se" class="gt_row gt_right">1.4847813</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1473,7 +1473,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
 <td headers="mean_estimate" class="gt_row gt_right">4.1692116</td>
-<td headers="mean_se" class="gt_row gt_right">1.4875178</td>
+<td headers="mean_se" class="gt_row gt_right">1.4875177</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #98D700; color: #000000;">0.75</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
@@ -1481,7 +1481,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
 <td headers="mean_estimate" class="gt_row gt_right">5.1915115</td>
-<td headers="mean_se" class="gt_row gt_right">1.4906051</td>
+<td headers="mean_se" class="gt_row gt_right">1.4906063</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #6EEC00; color: #000000;">0.88</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1529,7 +1529,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
 <td headers="mean_estimate" class="gt_row gt_right">0.9055907</td>
-<td headers="mean_se" class="gt_row gt_right">1.4495978</td>
+<td headers="mean_se" class="gt_row gt_right">1.4495971</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1537,7 +1537,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
 <td headers="mean_estimate" class="gt_row gt_right">1.8898537</td>
-<td headers="mean_se" class="gt_row gt_right">1.4482418</td>
+<td headers="mean_se" class="gt_row gt_right">1.4482416</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #EC6C00; color: #FFFFFF;">0.21</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1545,7 +1545,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
 <td headers="mean_estimate" class="gt_row gt_right">2.8874405</td>
-<td headers="mean_se" class="gt_row gt_right">1.4451119</td>
+<td headers="mean_se" class="gt_row gt_right">1.4451125</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #C9AB00; color: #000000;">0.50</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1553,7 +1553,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
 <td headers="mean_estimate" class="gt_row gt_right">3.9016062</td>
-<td headers="mean_se" class="gt_row gt_right">1.4461332</td>
+<td headers="mean_se" class="gt_row gt_right">1.4461336</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #95D800; color: #000000;">0.76</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1561,7 +1561,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
 <td headers="mean_estimate" class="gt_row gt_right">4.8689765</td>
-<td headers="mean_se" class="gt_row gt_right">1.4454747</td>
+<td headers="mean_se" class="gt_row gt_right">1.4454748</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1609,7 +1609,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
 <td headers="mean_estimate" class="gt_row gt_right">0.9529641</td>
-<td headers="mean_se" class="gt_row gt_right">1.0960441</td>
+<td headers="mean_se" class="gt_row gt_right">1.0960452</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F06100; color: #FFFFFF;">0.17</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1617,7 +1617,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
 <td headers="mean_estimate" class="gt_row gt_right">1.9357289</td>
-<td headers="mean_se" class="gt_row gt_right">1.0964076</td>
+<td headers="mean_se" class="gt_row gt_right">1.0964069</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #D49C00; color: #000000;">0.42</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1625,7 +1625,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
 <td headers="mean_estimate" class="gt_row gt_right">2.9554635</td>
-<td headers="mean_se" class="gt_row gt_right">1.0980181</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980189</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1633,7 +1633,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
 <td headers="mean_estimate" class="gt_row gt_right">3.9530592</td>
-<td headers="mean_se" class="gt_row gt_right">1.0980978</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980972</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
@@ -1641,7 +1641,7 @@ power simulation.</p>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
 <td headers="mean_estimate" class="gt_row gt_right">4.9797585</td>
-<td headers="mean_se" class="gt_row gt_right">1.0980005</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980008</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #1FFD00; color: #000000;">0.99</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
@@ -1848,7 +1848,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Lips7/dss-powersim/edit/main/04_R.Rmd",
+"link": "https://github.com/hlmshtj-dan/Simulation-Power/edit/main/04_R.Rmd",
 "text": "Edit"
 },
 "history": {

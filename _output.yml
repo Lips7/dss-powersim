@@ -10,7 +10,7 @@ bookdown::gitbook:
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
     download: ["pdf", "epub"]
-    edit: https://github.com/Lips7/dss-powersim/edit/main/%s
+    edit: https://github.com/hlmshtj-dan/Simulation-Power/edit/main/%s
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex, wrap-code.tex

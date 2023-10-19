@@ -3,7 +3,7 @@ title: ""
 author: ""
 date: "October 2023"
 description: "This is a tutorial for power simulation"
-github-repo: "Lips7/dss-powersim"
+github-repo: "hlmshtj-dan/Simulation-Power"
 site: "bookdown::bookdown_site"
 documentclass: book
 geometry: "margin=1.5in"

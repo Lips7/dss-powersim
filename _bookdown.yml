@@ -2,7 +2,7 @@ book_filename: 'dss-powersim'
 
 output_dir: docs
 
-repo: https://github.com/Lips7/dss-powersim
+repo: https://github.com/hlmshtj-dan/Simulation-Power
 
 rmd_files:
   - "index.Rmd"

@@ -12,7 +12,7 @@
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
-  <meta name="github-repo" content="Lips7/dss-powersim" />
+  <meta name="github-repo" content="hlmshtj-dan/Simulation-Power" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="6 Stata | dss-powersim" />
@@ -272,8 +272,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb94-5"><a href="stata.html#cb94-5" tabindex="-1"></a><span class="kw">global</span> <span class="kw">alpha</span> = 0.05</span></code></pre></div>
 <div id="establish-the-data-generating-parameters-2" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Establish the data-generating parameters<a href="stata.html#establish-the-data-generating-parameters-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the <em>data-generating process</em>, or DGP. We previously decided upon the the data-generating parameters (see <a href="./power-of-what.html">Power of What?</a>), so we just need to code them here.</p>
-<p>Note: There is a difference between Stata and R and the Python: We decrease the data-generating parameters to simplify our model, and we delete some parameters: by-song random intercept <code>omega_0</code>, by-subject random slope sd <code>tau_1</code>, and the correlation between intercept and slope <code>rho</code>.</p>
+<p>The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the <em>data-generating process</em>, or DGP. We previously decided upon the data-generating parameters (see <a href="./power-of-what.html">Power of What?</a>), so we just need to code them here.</p>
+<p>Note: There is a difference between Stata and R and Python: We decrease the data-generating parameters to simplify our model, and we delete some parameters: by-song random intercept <code>omega_0</code>, by-subject random slope sd <code>tau_1</code>, and the correlation between intercept and slope <code>rho</code>.</p>
 <div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="stata.html#cb95-1" tabindex="-1"></a><span class="co">// set all data-generating parameters</span></span>
 <span id="cb95-2"><a href="stata.html#cb95-2" tabindex="-1"></a><span class="kw">global</span> beta_0 = 60   <span class="co">// intercept; i.e., the grand mean</span></span>
 <span id="cb95-3"><a href="stata.html#cb95-3" tabindex="-1"></a><span class="kw">global</span> beta_1 = 5    <span class="co">// slope; i.e., effect of category</span></span>
@@ -329,7 +329,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="simulate-the-sampling-of-subjects-2" class="section level4 hasAnchor" number="6.2.2.2">
 <h4><span class="header-section-number">6.2.2.2</span> Simulate the sampling of subjects<a href="stata.html#simulate-the-sampling-of-subjects-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Now we simulate the sampling of participants, which results in table listing each individual and their random effect (a random intercept). To do this, we must sample <span class="math inline">\(t_0\)</span> from a normal distribution.</p>
+<p>Now, we simulate the sampling of participants, which results in a table listing each individual and their random effect (a random intercept). To do this, we must sample <span class="math inline">\(t_0\)</span> from a normal distribution.</p>
 <p>We will use the function <code>rnormal</code>, which generates a simulated value from a univariate normal distribution with a mean of 0 and a standard deviations of <code>tau_0</code> of each variable.</p>
 <div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="stata.html#cb99-1" tabindex="-1"></a><span class="co">// simulate a sample of subjects</span></span>
 <span id="cb99-2"><a href="stata.html#cb99-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
@@ -376,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="simulate-trials-2" class="section level4 hasAnchor" number="6.2.2.4">
 <h4><span class="header-section-number">6.2.2.4</span> Simulate trials<a href="stata.html#simulate-trials-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the <code>subjects</code> and <code>songs</code> tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of <code>sigma</code>.</p>
+<p>Since all subjects rate all songs (i.e., the design is fully crossed), we can set up a table of trials by including every possible combination of the rows in the <code>subjects</code> and <code>songs</code> tables. Each test has a random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of <code>sigma</code>.</p>
 <div class="sourceCode" id="cb103"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb103-1"><a href="stata.html#cb103-1" tabindex="-1"></a><span class="co">// cross subject and song IDs; add an error term</span></span>
 <span id="cb103-2"><a href="stata.html#cb103-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
 <span id="cb103-3"><a href="stata.html#cb103-3" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/subjects.dta&quot;</span></span>
@@ -406,7 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="calculate-response-values-2" class="section level4 hasAnchor" number="6.2.2.5">
 <h4><span class="header-section-number">6.2.2.5</span> Calculate response values<a href="stata.html#calculate-response-values-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>With this resulting <code>trials</code> table, in combination with the constants <code>beta_0</code> and <code>beta_1</code>, we have the full set of values that we need to compute the response variable <code>liking_ij</code> according the linear model we defined previously (see <a href="./power-of-what.html">Power of What?</a>).</p>
+<p>With this resulting <code>trials</code> table, in combination with the constants <code>beta_0</code> and <code>beta_1</code>, we have the full set of values that we need to compute the response variable <code>liking_ij</code> according to the linear model we defined previously (see <a href="./power-of-what.html">Power of What?</a>).</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb105-1"><a href="stata.html#cb105-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
 <span id="cb105-2"><a href="stata.html#cb105-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/data_sim_tmp.dta&quot;</span></span>
 <span id="cb105-3"><a href="stata.html#cb105-3" tabindex="-1"></a></span>
@@ -449,7 +449,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="analyze-the-simulated-data-2" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Analyze the simulated data<a href="stata.html#analyze-the-simulated-data-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Now we can analyze our simulated data in a linear mixed effects model using the function <code>mixed</code>. The model formula in <code>mixed</code> maps onto how we calculated our <code>liking_ij</code> outcome variable above.</p>
+<p>Now we can analyze our simulated data in a linear mixed effects model using the function <code>mixed</code>. The model formula in <code>mixed</code> maps how we calculated our <code>liking_ij</code> outcome variable above.</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb108-1"><a href="stata.html#cb108-1" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">use</span> <span class="st">&quot;./data/data_sim_tmp.dta&quot;</span></span>
 <span id="cb108-2"><a href="stata.html#cb108-2" tabindex="-1"></a>mixed liking_ij genre_i || subj_id:</span>
 <span id="cb108-3"><a href="stata.html#cb108-3" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">estimates</span> <span class="kw">save</span> <span class="st">&quot;./data/data_sim_estimates.ster&quot;</span>, <span class="kw">replace</span></span></code></pre></div>
@@ -458,7 +458,7 @@ r(111);
 
 end of do-file
 r(111);</code></pre>
-<p>The terms in formula are as follows:</p>
+<p>The terms in the formula are as follows:</p>
 <ul>
 <li><code>liking_ij</code> is the response.</li>
 <li><code>genre_i</code> is the dummy coded variable identifying whether song <span class="math inline">\(i\)</span> belongs to the pop or rock genre.</li>
@@ -476,7 +476,7 @@ y1   5.1710617   60.229571   2.0205456   2.0902013</code></pre>
 </div>
 <div id="data-simulation-automated-2" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Data simulation automated<a href="stata.html#data-simulation-automated-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
+<p>Now that we’ve tested the data-generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb112-1"><a href="stata.html#cb112-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> sim_data</span>
 <span id="cb112-2"><a href="stata.html#cb112-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> sim_data</span>
 <span id="cb112-3"><a href="stata.html#cb112-3" tabindex="-1"></a>    <span class="kw">args</span> n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma</span>
@@ -515,7 +515,7 @@ y1   5.1710617   60.229571   2.0205456   2.0902013</code></pre>
 </div>
 <div id="power-calculation-single-run-2" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Power calculation single run<a href="stata.html#power-calculation-single-run-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We can wrap the data generating function and modeling code in a new function <code>single_run()</code> that returns the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.</p>
+<p>We can wrap the data-generating function and modeling code in a new function <code>single_run()</code> that returns the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extremely realized values for parameters.</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb113-1"><a href="stata.html#cb113-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> single_run</span>
 <span id="cb113-2"><a href="stata.html#cb113-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> single_run, rclass</span>
 <span id="cb113-3"><a href="stata.html#cb113-3" tabindex="-1"></a>    <span class="kw">args</span> n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma</span>
@@ -544,21 +544,21 @@ y1   5.1710617   60.229571   2.0205456   2.0902013</code></pre>
 <span id="cb115-2"><a href="stata.html#cb115-2" tabindex="-1"></a><span class="kw">quietly</span> single_run 25 15 15 60 5 7 8</span>
 <span id="cb115-3"><a href="stata.html#cb115-3" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span></code></pre></div>
 <pre><code>scalars:
-            r(p_value) =  6.15504528649e-25
-            r(std_err) =  .3467247369073159
-               r(coef) =  6.072637593587305</code></pre>
+            r(p_value) =  6.15504528650e-25
+            r(std_err) =  .3467247369073205
+               r(coef) =  6.072637593587212</code></pre>
 <div class="sourceCode" id="cb117"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb117-1"><a href="stata.html#cb117-1" tabindex="-1"></a><span class="co">// run one model with new parameters</span></span>
 <span id="cb117-2"><a href="stata.html#cb117-2" tabindex="-1"></a><span class="kw">quietly</span> single_run 25 10 50 60 2 7 8</span>
 <span id="cb117-3"><a href="stata.html#cb117-3" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span></code></pre></div>
 <pre><code>scalars:
-            r(p_value) =  .0005213058910955
-            r(std_err) =  .3180056524570669
-               r(coef) =  1.956555587768618</code></pre>
+            r(p_value) =  .000521305877981
+            r(std_err) =  .318005651218237
+               r(coef) =  1.956555587768456</code></pre>
 </div>
 <div id="power-calculation-automated-2" class="section level2 hasAnchor" number="6.5">
 <h2><span class="header-section-number">6.5</span> Power calculation automated<a href="stata.html#power-calculation-automated-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To get an accurate estimation of power, we need to run the simulation many times. Here we use a matrix <code>results</code> to store the analysis results of each run.</p>
-<p>We can finally calculate power for our parameter of interest <code>beta_1</code> by filtering to keep only that term and the calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the <code>alpha</code> threshold.</p>
+<p>To get an accurate estimation of power, we need to run the simulation many times. Here, we use a matrix <code>results</code> to store the analysis results of each run.</p>
+<p>We can finally calculate power for our parameter of interest <code>beta_1</code> by filtering to keep only that term and calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the <code>alpha</code> threshold.</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb119-1"><a href="stata.html#cb119-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
 <span id="cb119-2"><a href="stata.html#cb119-2" tabindex="-1"></a>  <span class="kw">clear</span></span>
 <span id="cb119-3"><a href="stata.html#cb119-3" tabindex="-1"></a>  <span class="fu">matrix</span> results = <span class="fu">J</span>(<span class="ot">$reps</span>, 3, .)</span>
@@ -620,7 +620,7 @@ Power Mean: 1</code></pre>
 </div>
 <div id="power-for-different-effect-sizes-2" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Power for different effect sizes<a href="stata.html#power-for-different-effect-sizes-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
+<p>In real life, we will not know the effect size of our quantity of interest, and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb123-1"><a href="stata.html#cb123-1" tabindex="-1"></a><span class="co">// grid of parameter values of interest</span></span>
 <span id="cb123-2"><a href="stata.html#cb123-2" tabindex="-1"></a><span class="kw">quietly</span> <span class="fu">matrix</span> <span class="kw">define</span> params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3 \ 10, 10, 10, 4 \ 10, 10, 10, 5 <span class="co">///</span></span>
 <span id="cb123-3"><a href="stata.html#cb123-3" tabindex="-1"></a>\ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40, 5 <span class="co">///</span></span>
@@ -634,7 +634,7 @@ Power Mean: 1</code></pre>
 <span id="cb123-11"><a href="stata.html#cb123-11" tabindex="-1"></a>\ 50, 10, 40, 1 \ 50, 10, 40, 2 \ 50, 10, 40, 3 \ 50, 10, 40, 4 \ 50, 10, 40, 5 <span class="co">///</span></span>
 <span id="cb123-12"><a href="stata.html#cb123-12" tabindex="-1"></a>\ 50, 40, 10, 1 \ 50, 40, 10, 2 \ 50, 40, 10, 3 \ 50, 40, 10, 4 \ 50, 40, 10, 5 <span class="co">///</span></span>
 <span id="cb123-13"><a href="stata.html#cb123-13" tabindex="-1"></a>\ 50, 40, 40, 1 \ 50, 40, 40, 2 \ 50, 40, 40, 3 \ 50, 40, 40, 4 \ 50, 40, 40, 5)</span></code></pre></div>
-<p>We can now wrap our <code>single_run()</code> function within a more general function <code>parameter_search()</code> that takes the grid of parameter values as input and uses a matrix <code>results</code> to store analysis results of each <code>single_run()</code>.</p>
+<p>We can now wrap our <code>single_run()</code> function within a more general function <code>parameter_search()</code> that takes the grid of parameter values as input and uses a matrix <code>results</code> to store the analysis results of each <code>single_run()</code>.</p>
 <div class="sourceCode" id="cb124"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb124-1"><a href="stata.html#cb124-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> parameter_search</span>
 <span id="cb124-2"><a href="stata.html#cb124-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> parameter_search, rclass</span>
 <span id="cb124-3"><a href="stata.html#cb124-3" tabindex="-1"></a>    <span class="kw">args</span> params</span>
@@ -678,7 +678,7 @@ r(RE)[60,7]
  r6         10         10         40          1  1.5987428  .83724974
  r7         10         10         40          2  2.6229231  .79420778
  r8         10         10         40          3  3.1869321   .7857458
- r9         10         10         40          4  3.6704681   .7473238
+ r9         10         10         40          4  3.6704681  .74732381
 r10         10         10         40          5  5.4704365  .77949362
 r11         10         40         10          1  2.2633134  .89868119
 r12         10         40         10          2  2.6807894  .84989613
@@ -701,7 +701,7 @@ r28         25         10         40          3  2.6370676  .31890292
 r29         25         10         40          4  4.8110402   .3149082
 r30         25         10         40          5  4.8646795  .32617716
 r31         25         40         10          1  .62202797  .30721533
-r32         25         40         10          2  2.4312455  .33297659
+r32         25         40         10          2  2.4312455  .33297658
 r33         25         40         10          3  3.0815587  .31753019
 r34         25         40         10          4   4.358412  .32801022
 r35         25         40         10          5  4.7545508  .31512113
@@ -747,7 +747,7 @@ r12  .00363862
 r13  2.715e-07
 r14  6.376e-06
 r15  4.828e-08
-r16  .17073231
+r16   .1707323
 r17  .00553657
 r18  2.850e-08
 r19  4.059e-16
@@ -792,7 +792,7 @@ r57  2.419e-16
 r58  7.385e-27
 r59  1.906e-50
 r60  1.506e-82</code></pre>
-<p>Then we just repeatedly call <code>parameter_search()</code> for the number of times specified by <code>reps</code> and store the result in a matrix <code>final_results</code>. Fair warning, this will take some time if you have set a high number of replications!</p>
+<p>Then we just repeatedly call <code>parameter_search()</code> for the number of times specified by <code>reps</code> and store the result in a matrix <code>final_results</code>. Fair warning: this will take some time if you have set a high number of replications!</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb127-1"><a href="stata.html#cb127-1" tabindex="-1"></a><span class="co">// replicate the parameter search many times</span></span>
 <span id="cb127-2"><a href="stata.html#cb127-2" tabindex="-1"></a><span class="kw">quietly</span> {</span>
 <span id="cb127-3"><a href="stata.html#cb127-3" tabindex="-1"></a>  <span class="kw">clear</span></span>
@@ -817,7 +817,7 @@ r60  1.506e-82</code></pre>
 <span id="cb127-22"><a href="stata.html#cb127-22" tabindex="-1"></a></span>
 <span id="cb127-23"><a href="stata.html#cb127-23" tabindex="-1"></a>  <span class="kw">save</span> <span class="st">&quot;./data/final_results.dta&quot;</span>, <span class="kw">replace</span></span>
 <span id="cb127-24"><a href="stata.html#cb127-24" tabindex="-1"></a>}</span></code></pre></div>
-<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in <code>pgrid</code>, so that we can get power estimates for all combinations of parameter values.</p>
+<p>Now, as before, we can calculate power. But this time, we’ll group by all of the parameters we manipulated in <code>pgrid</code>, so that we can get power estimates for all combinations of parameter values.</p>
 <div class="sourceCode" id="cb128"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb128-1"><a href="stata.html#cb128-1" tabindex="-1"></a><span class="kw">quietly</span> {</span>
 <span id="cb128-2"><a href="stata.html#cb128-2" tabindex="-1"></a>  <span class="kw">use</span> <span class="st">&quot;./data/final_results.dta&quot;</span></span>
 <span id="cb128-3"><a href="stata.html#cb128-3" tabindex="-1"></a></span>
@@ -957,7 +957,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Lips7/dss-powersim/edit/main/06_Stata.Rmd",
+"link": "https://github.com/hlmshtj-dan/Simulation-Power/edit/main/06_Stata.Rmd",
 "text": "Edit"
 },
 "history": {

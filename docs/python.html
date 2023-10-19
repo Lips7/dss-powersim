@@ -12,7 +12,7 @@
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
-  <meta name="github-repo" content="Lips7/dss-powersim" />
+  <meta name="github-repo" content="hlmshtj-dan/Simulation-Power" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="5 Python | dss-powersim" />
@@ -249,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="python" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Python<a href="python.html#python" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>To begin with, the simulation based power analysis in Python just follows the structure in the last section in R, and there are repetitions in the texts to describe the method. However, there are differences between the two languages and we will specify those discrepancy in the following “note” parts.</p>
+<p>To begin with, the simulation-based power analysis in Python follows the structure in the last section in R, and there are repetitions in the text to describe the method. However, there are differences between the two languages; we will specify those discrepancies in the following “note” parts.</p>
 <div id="setup-1" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Setup<a href="python.html#setup-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Note: There are two differences between Python and the R language:</p>
@@ -552,12 +552,12 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 </div>
 <div id="power-calculation-automated-1" class="section level2 hasAnchor" number="5.5">
 <h2><span class="header-section-number">5.5</span> Power calculation automated<a href="python.html#power-calculation-automated-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed-up iterative processes.</p>
+<p>To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed up iterative processes.</p>
 <p>We use dask.delayed function to decorate single_run() so that it operates lazily, then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.</p>
 <p>Note: There are two differences between Python and the R:</p>
 <ol style="list-style-type: decimal">
-<li>The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;</li>
-<li>The R sets parallel computing in the setup part, while the Python uses the “dask” library for parallel computing.</li>
+<li>The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses the “for” structure to do a loop;</li>
+<li>The R sets parallel computing in the setup part, while Python uses the “dask” library for parallel computing.</li>
 </ol>
 <div class="sourceCode" id="cb70"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb70-1"><a href="python.html#cb70-1" tabindex="-1"></a>client <span class="op">=</span> Client()</span>
 <span id="cb70-2"><a href="python.html#cb70-2" tabindex="-1"></a></span>
@@ -578,11 +578,11 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb71-4"><a href="python.html#cb71-4" tabindex="-1"></a>power <span class="op">=</span> (genre_i_sims[<span class="st">&#39;p_value&#39;</span>].astype(<span class="bu">float</span>) <span class="op">&lt;</span> alpha).mean()</span>
 <span id="cb71-5"><a href="python.html#cb71-5" tabindex="-1"></a></span>
 <span id="cb71-6"><a href="python.html#cb71-6" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Mean estimate: </span><span class="sc">{</span>mean_estimate<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>## Mean estimate: 5.1752666666666665</code></pre>
+<pre><code>## Mean estimate: 4.938033333333333</code></pre>
 <div class="sourceCode" id="cb73"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb73-1"><a href="python.html#cb73-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Mean standard error: </span><span class="sc">{</span>mean_se<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>## Mean standard error: 1.4590666666666663</code></pre>
+<pre><code>## Mean standard error: 1.5021</code></pre>
 <div class="sourceCode" id="cb75"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb75-1"><a href="python.html#cb75-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Power: </span><span class="sc">{</span>power<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>## Power: 0.9666666666666667</code></pre>
+<pre><code>## Power: 0.8666666666666667</code></pre>
 <div id="check-false-positive-rate-1" class="section level3 hasAnchor" number="5.5.1">
 <h3><span class="header-section-number">5.5.1</span> Check false positive rate<a href="python.html#check-false-positive-rate-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of genre_ij (beta_1) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
@@ -591,7 +591,7 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb77-3"><a href="python.html#cb77-3" tabindex="-1"></a></span>
 <span id="cb77-4"><a href="python.html#cb77-4" tabindex="-1"></a>sims_fp_df <span class="op">=</span> pd.concat(sims_fp_result).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span></code></pre></div>
 <div class="sourceCode" id="cb78"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb78-1"><a href="python.html#cb78-1" tabindex="-1"></a><span class="bu">print</span>((sims_fp_df[sims_fp_df[<span class="st">&#39;term&#39;</span>] <span class="op">==</span> <span class="st">&#39;genre_i&#39;</span>][<span class="st">&#39;p_value&#39;</span>].astype(<span class="bu">float</span>) <span class="op">&lt;</span> alpha).mean())</span></code></pre></div>
-<pre><code>## 0.0</code></pre>
+<pre><code>## 0.06666666666666667</code></pre>
 <p>Ideally, the false positive rate will be equal to alpha, which we set at 0.05.</p>
 </div>
 </div>
@@ -600,8 +600,8 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
 <p>Note: There are two differences between Python and the R:</p>
 <ol style="list-style-type: decimal">
-<li>Python uses the “product” function to permutate and combine parameters, and then use “loop” and “dask.compute” to perform parallel computing;</li>
-<li>Python couldn’t repeatedly use parameter_search() and instead uses two layers of loop to realize multiple simulations of each permutation and combination of parameters.</li>
+<li>Python uses the “product” function to permutate and combine parameters and then uses “loop” and “dask.compute” to perform parallel computing;</li>
+<li>Python couldn’t repeatedly use parameter_search() and instead uses two layers of the loop to realize multiple simulations of each permutation and combination of parameters.</li>
 </ol>
 <div class="sourceCode" id="cb80"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb80-1"><a href="python.html#cb80-1" tabindex="-1"></a> <span class="co"># grid of parameter values of interest</span></span>
 <span id="cb80-2"><a href="python.html#cb80-2" tabindex="-1"></a>params <span class="op">=</span> {</span>
@@ -610,7 +610,7 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb80-5"><a href="python.html#cb80-5" tabindex="-1"></a>    <span class="st">&#39;n_rock&#39;</span>: [<span class="dv">10</span>, <span class="dv">40</span>],</span>
 <span id="cb80-6"><a href="python.html#cb80-6" tabindex="-1"></a>    <span class="st">&#39;beta_1&#39;</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>]</span>
 <span id="cb80-7"><a href="python.html#cb80-7" tabindex="-1"></a>}</span></code></pre></div>
-<p>We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().</p>
+<p>We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for a statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="python.html#cb81-1" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
 <span id="cb81-2"><a href="python.html#cb81-2" tabindex="-1"></a><span class="kw">def</span> parameter_search(params):</span>
 <span id="cb81-3"><a href="python.html#cb81-3" tabindex="-1"></a>    sims <span class="op">=</span> []</span>
@@ -625,23 +625,23 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb81-12"><a href="python.html#cb81-12" tabindex="-1"></a>            beta_1<span class="op">=</span>row[<span class="st">&#39;beta_1&#39;</span>]</span>
 <span id="cb81-13"><a href="python.html#cb81-13" tabindex="-1"></a>        ))</span>
 <span id="cb81-14"><a href="python.html#cb81-14" tabindex="-1"></a>    <span class="cf">return</span> pd.concat(client.gather(client.compute(sims))).reset_index().rename(columns<span class="op">=</span>{<span class="st">&#39;index&#39;</span>:<span class="st">&#39;term&#39;</span>})</span></code></pre></div>
-<p>If we call parameter_search() it will return a single replication of simulations for each combination of parameter values in pgrid.</p>
+<p>If we call parameter_search(), it will return a single replication of simulations for each combination of parameter values in pgrid.</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb82-1"><a href="python.html#cb82-1" tabindex="-1"></a><span class="bu">print</span>(parameter_search(params))</span></code></pre></div>
 <pre><code>##             term   Coef. Std.Err.       p_value  n_subj  n_pop  n_rock  beta_1
-## 0      Intercept  59.602    1.442  0.000000e+00      10     10      10       1
-## 1        genre_i   0.248    1.946  8.984129e-01      10     10      10       1
-## 2    genre_i Var  14.549    3.250  5.802123e-01      10     10      10       1
-## 3    song_id Var   5.108    0.397  1.121989e-01      10     10      10       1
-## 4    subj_id Var   9.124    0.983  2.513832e-01      10     10      10       1
+## 0      Intercept  55.450    3.105  2.415190e-71      10     10      10       1
+## 1        genre_i   1.199    2.658  6.519669e-01      10     10      10       1
+## 2    genre_i Var  38.828    3.184  1.316875e-01      10     10      10       1
+## 3    song_id Var   9.359    0.769  1.323369e-01      10     10      10       1
+## 4    subj_id Var  80.488    5.086  5.045800e-02      10     10      10       1
 ## ..           ...     ...      ...           ...     ...    ...     ...     ...
-## 115    Intercept  59.806    1.049  0.000000e+00      50     40      40       5
-## 116      genre_i   5.104    1.048  1.110341e-06      50     40      40       5
-## 117  genre_i Var  16.926    0.545  1.238175e-04      50     40      40       5
-## 118  song_id Var  13.879    0.655  8.824751e-03      50     40      40       5
-## 119  subj_id Var  35.989    0.783  1.332278e-08      50     40      40       5
+## 115    Intercept  60.039    1.181  0.000000e+00      50     40      40       5
+## 116      genre_i   3.434    0.925  2.068133e-04      50     40      40       5
+## 117  genre_i Var  14.046    0.441  5.421090e-05      50     40      40       5
+## 118  song_id Var  10.264    0.236  3.523060e-08      50     40      40       5
+## 119  subj_id Var  55.393    1.463  1.625316e-06      50     40      40       5
 ## 
 ## [120 rows x 8 columns]</code></pre>
-<p>To run multiple replication of simulations for each combination of parameter values in pgrid, we can use the for statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning, this will take some time if you have set a high number of replications!</p>
+<p>To run multiple replications of simulations for each combination of parameter values in pgrid, we can use the for a statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning: this will take some time if you have set a high number of replications!</p>
 <div class="sourceCode" id="cb84"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb84-1"><a href="python.html#cb84-1" tabindex="-1"></a>sims_params <span class="op">=</span> []</span>
 <span id="cb84-2"><a href="python.html#cb84-2" tabindex="-1"></a>pgrid <span class="op">=</span> pd.DataFrame(<span class="bu">list</span>(product(<span class="op">*</span>params.values())), columns<span class="op">=</span>params.keys())</span>
 <span id="cb84-3"><a href="python.html#cb84-3" tabindex="-1"></a></span>
@@ -660,20 +660,20 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb84-16"><a href="python.html#cb84-16" tabindex="-1"></a>client.close()</span>
 <span id="cb84-17"><a href="python.html#cb84-17" tabindex="-1"></a><span class="bu">print</span>(sims_params_df)</span></code></pre></div>
 <pre><code>##              term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
-## 0       Intercept  60.728    2.719  1.660815e-110      10     10      10       1
-## 1         genre_i   3.421    1.976   8.340043e-02      10     10      10       1
-## 2     genre_i Var   9.088    1.781   5.211035e-01      10     10      10       1
-## 3     song_id Var   8.656    0.754   1.488890e-01      10     10      10       1
-## 4     subj_id Var  58.946    4.307   8.520353e-02      10     10      10       1
+## 0       Intercept  58.836    2.384  1.957545e-134      10     10      10       1
+## 1         genre_i  -0.142    2.622   9.569227e-01      10     10      10       1
+## 2     genre_i Var  34.504    2.802   1.332714e-01      10     10      10       1
+## 3     song_id Var  10.387    0.734   8.431281e-02      10     10      10       1
+## 4     subj_id Var  39.737    2.714   7.433111e-02      10     10      10       1
 ## ...           ...     ...      ...            ...     ...    ...     ...     ...
-## 3595    Intercept  60.797    1.269   0.000000e+00      50     40      40       5
-## 3596      genre_i   5.909    0.897   4.406661e-11      50     40      40       5
-## 3597  genre_i Var  13.278    0.418   7.102715e-05      50     40      40       5
-## 3598  song_id Var   9.488    0.218   5.127222e-08      50     40      40       5
-## 3599  subj_id Var  67.105    1.741   1.463377e-06      50     40      40       5
+## 3595    Intercept  60.399    1.127   0.000000e+00      50     40      40       5
+## 3596      genre_i   5.691    0.977   5.622933e-09      50     40      40       5
+## 3597  genre_i Var  20.372    0.593   2.174159e-05      50     40      40       5
+## 3598  song_id Var   9.615    0.218   5.265133e-08      50     40      40       5
+## 3599  subj_id Var  49.879    1.292   1.824855e-06      50     40      40       5
 ## 
 ## [3600 rows x 8 columns]</code></pre>
-<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in pgrid, so that we can get power estimates for all combinations of parameter values.</p>
+<p>Now, as before, we can calculate power. But this time, we’ll group by all of the parameters we manipulated in pgrid, so we can get power estimates for all combinations of parameter values.</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="python.html#cb86-1" tabindex="-1"></a>sims_table <span class="op">=</span> sims_params_df.query(<span class="st">&quot;term == &#39;genre_i&#39;&quot;</span>).groupby([<span class="st">&#39;term&#39;</span>, <span class="st">&#39;n_subj&#39;</span>, <span class="st">&#39;n_pop&#39;</span>, <span class="st">&#39;n_rock&#39;</span>, <span class="st">&#39;beta_1&#39;</span>]).agg(</span>
 <span id="cb86-2"><a href="python.html#cb86-2" tabindex="-1"></a>    mean_estimate<span class="op">=</span>pd.NamedAgg(column<span class="op">=</span><span class="st">&#39;Coef.&#39;</span>, aggfunc<span class="op">=</span><span class="kw">lambda</span> x: x.astype(<span class="bu">float</span>).mean()),</span>
 <span id="cb86-3"><a href="python.html#cb86-3" tabindex="-1"></a>    mean_se<span class="op">=</span>pd.NamedAgg(column<span class="op">=</span><span class="st">&#39;Std.Err.&#39;</span>, aggfunc<span class="op">=</span><span class="kw">lambda</span> x: x.astype(<span class="bu">float</span>).mean()),</span>
@@ -682,30 +682,30 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <p>Here’s a formatted table that summarizes the output from the power simulation.</p>
 <div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="python.html#cb87-1" tabindex="-1"></a><span class="bu">print</span>(sims_table)</span></code></pre></div>
 <pre><code>##        term  n_subj  n_pop  n_rock  beta_1  mean_estimate   mean_se     power
-## 0   genre_i      10     10      10       1       1.203400  2.243833  0.133333
-## 1   genre_i      10     10      10       3       3.048600  2.214933  0.300000
-## 2   genre_i      10     10      10       5       5.812333  2.256933  0.733333
-## 3   genre_i      10     10      40       1       0.975533  2.233233  0.000000
-## 4   genre_i      10     10      40       3       3.352133  2.334967  0.333333
-## 5   genre_i      10     10      40       5       5.523333  2.241700  0.700000
-## 6   genre_i      10     40      10       1       1.688033  2.277067  0.133333
-## 7   genre_i      10     40      10       3       3.227900  2.106500  0.266667
-## 8   genre_i      10     40      10       5       5.042500  2.211833  0.600000
-## 9   genre_i      10     40      40       1       0.573600  2.063567  0.033333
-## 10  genre_i      10     40      40       3       3.024333  1.901367  0.333333
-## 11  genre_i      10     40      40       5       5.070633  1.976233  0.733333
-## 12  genre_i      50     10      10       1       0.670867  1.524333  0.033333
-## 13  genre_i      50     10      10       3       2.908200  1.502000  0.433333
-## 14  genre_i      50     10      10       5       4.883867  1.557400  0.900000
-## 15  genre_i      50     10      40       1       0.936700  1.322900  0.066667
-## 16  genre_i      50     10      40       3       2.883133  1.346700  0.600000
-## 17  genre_i      50     10      40       5       5.239967  1.429500  0.933333
-## 18  genre_i      50     40      10       1       0.624500  1.456533  0.033333
-## 19  genre_i      50     40      10       3       2.991500  1.395400  0.633333
-## 20  genre_i      50     40      10       5       4.793000  1.325200  0.966667
-## 21  genre_i      50     40      40       1       0.935700  0.977867  0.066667
-## 22  genre_i      50     40      40       3       3.276167  0.990167  0.900000
-## 23  genre_i      50     40      40       5       4.806467  0.987367  1.000000</code></pre>
+## 0   genre_i      10     10      10       1       1.065900  2.359100  0.000000
+## 1   genre_i      10     10      10       3       2.626333  2.305933  0.233333
+## 2   genre_i      10     10      10       5       5.062433  2.415333  0.566667
+## 3   genre_i      10     10      40       1       1.226067  2.181600  0.133333
+## 4   genre_i      10     10      40       3       2.586967  2.284667  0.100000
+## 5   genre_i      10     10      40       5       5.116967  2.095067  0.733333
+## 6   genre_i      10     40      10       1       1.192433  2.265033  0.000000
+## 7   genre_i      10     40      10       3       3.118600  2.243900  0.233333
+## 8   genre_i      10     40      10       5       4.767500  2.289600  0.566667
+## 9   genre_i      10     40      40       1       0.601267  2.067200  0.000000
+## 10  genre_i      10     40      40       3       2.358067  1.928533  0.133333
+## 11  genre_i      10     40      40       5       4.865067  1.952967  0.733333
+## 12  genre_i      50     10      10       1       1.604467  1.589900  0.166667
+## 13  genre_i      50     10      10       3       3.071600  1.554867  0.500000
+## 14  genre_i      50     10      10       5       4.744967  1.471667  0.966667
+## 15  genre_i      50     10      40       1       0.921800  1.336967  0.166667
+## 16  genre_i      50     10      40       3       3.069933  1.327233  0.533333
+## 17  genre_i      50     10      40       5       4.898767  1.349433  0.933333
+## 18  genre_i      50     40      10       1       0.722300  1.387900  0.066667
+## 19  genre_i      50     40      10       3       3.230600  1.338833  0.666667
+## 20  genre_i      50     40      10       5       4.988400  1.354067  1.000000
+## 21  genre_i      50     40      40       1       0.938633  0.988300  0.166667
+## 22  genre_i      50     40      40       3       2.681433  0.981200  0.866667
+## 23  genre_i      50     40      40       5       5.402067  0.969400  1.000000</code></pre>
 <p>Here’s a graph that visualizes the output of the power simulation.</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="python.html#cb89-1" tabindex="-1"></a><span class="co"># transform data type and create labels</span></span>
 <span id="cb89-2"><a href="python.html#cb89-2" tabindex="-1"></a>sims_table[<span class="st">&#39;n_subj&#39;</span>] <span class="op">=</span> sims_table[<span class="st">&#39;n_subj&#39;</span>].astype(<span class="bu">str</span>)</span>
@@ -727,29 +727,29 @@ genre_i is the dummy coded variable identifying whether song <span class="math i
 <span id="cb89-18"><a href="python.html#cb89-18" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb89-19"><a href="python.html#cb89-19" tabindex="-1"></a>    ax.legend(title<span class="op">=</span><span class="st">&#39;Sample size&#39;</span>)</span></code></pre></div>
 <pre><code>## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
-## &lt;matplotlib.lines.Line2D object at 0x0000023FAEDF3290&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000024F99EA3ED0&gt;
 ## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
 ## Text(0, 0.5, &#39;Power&#39;)
 ## (0.0, 1.0)
-## &lt;matplotlib.legend.Legend object at 0x0000023FAFA7CC90&gt;
+## &lt;matplotlib.legend.Legend object at 0x0000024F9A657C10&gt;
 ## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
-## &lt;matplotlib.lines.Line2D object at 0x0000023FAF04C990&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000024F9A0D2510&gt;
 ## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
 ## Text(0, 0.5, &#39;Power&#39;)
 ## (0.0, 1.0)
-## &lt;matplotlib.legend.Legend object at 0x0000023FA8A05790&gt;
+## &lt;matplotlib.legend.Legend object at 0x0000024F9A444E10&gt;
 ## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
-## &lt;matplotlib.lines.Line2D object at 0x0000023FB0A83010&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000024F9A2ECE50&gt;
 ## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
 ## Text(0, 0.5, &#39;Power&#39;)
 ## (0.0, 1.0)
-## &lt;matplotlib.legend.Legend object at 0x0000023FB0C9A2D0&gt;
+## &lt;matplotlib.legend.Legend object at 0x0000024F99EBD750&gt;
 ## &lt;Axes: xlabel=&#39;mean_estimate&#39;, ylabel=&#39;power&#39;&gt;
-## &lt;matplotlib.lines.Line2D object at 0x0000023FB0E7F0D0&gt;
+## &lt;matplotlib.lines.Line2D object at 0x0000024F9A6FAA50&gt;
 ## Text(0.5, 0, &#39;Effect size (rock genre - pop genre)&#39;)
 ## Text(0, 0.5, &#39;Power&#39;)
 ## (0.0, 1.0)
-## &lt;matplotlib.legend.Legend object at 0x0000023FAF04D4D0&gt;</code></pre>
+## &lt;matplotlib.legend.Legend object at 0x0000024F9A884890&gt;</code></pre>
 <div class="sourceCode" id="cb91"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb91-1"><a href="python.html#cb91-1" tabindex="-1"></a><span class="co"># layout adjustmentS</span></span>
 <span id="cb91-2"><a href="python.html#cb91-2" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb91-3"><a href="python.html#cb91-3" tabindex="-1"></a></span>
@@ -796,7 +796,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Lips7/dss-powersim/edit/main/05_Python.Rmd",
+"link": "https://github.com/hlmshtj-dan/Simulation-Power/edit/main/05_Python.Rmd",
 "text": "Edit"
 },
 "history": {

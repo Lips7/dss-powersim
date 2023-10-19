@@ -3,12 +3,13 @@ require(knitr)
 knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.path="figures/")
 
 require(reticulate)
-Sys.setenv(RETICULATE_PYTHON = "C:\\Users\\Lips Apple\\scoop\\shims\\python3.exe")
+# Sys.setenv(RETICULATE_PYTHON = "C:\\Users\\danyu\\anaconda3\\python.exe")
+Sys.setenv(RETICULATE_PYTHON = "/home/lipps/miniforge3/bin/python3")
 ```
 
 # Python
 
-To begin with, the simulation based power analysis in Python just follows the structure in the last section in R, and there are repetitions in the texts to describe the method. However, there are differences between the two languages and we will specify those discrepancy in the following "note" parts.
+To begin with, the simulation-based power analysis in Python follows the structure in the last section in R, and there are repetitions in the text to describe the method. However, there are differences between the two languages; we will specify those discrepancies  in the following "note" parts.
 
 ## Setup
 
@@ -293,14 +294,14 @@ print(single_run(n_pop = 10, n_rock = 50, beta_1 = 2))
 
 ## Power calculation automated
 
-To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed-up iterative processes.
+To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed up iterative processes.
 
 We use dask.delayed function to decorate single_run() so that it operates lazily, then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.
 
 Note: There are two differences between Python and the R:
 
-1. The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses “for” structure to do loop;
-2. The R sets parallel computing in the setup part, while the Python uses the “dask” library for parallel computing.
+1. The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses the “for” structure to do a loop;
+2. The R sets parallel computing in the setup part, while Python uses the “dask” library for parallel computing.
 
 ```{python}
 client = Client()
@@ -354,8 +355,8 @@ In real life, we will not know the effect size of our quantity of interest and s
 
 Note: There are two differences between Python and the R:
 
-1. Python uses the “product” function to permutate and combine parameters, and then use “loop” and “dask.compute” to perform parallel computing;
-2. Python couldn’t repeatedly use parameter_search() and instead uses two layers of loop to realize multiple simulations of each permutation and combination of parameters.
+1. Python uses the “product” function to permutate and combine parameters and then uses “loop” and “dask.compute” to perform parallel computing;
+2. Python couldn’t repeatedly use parameter_search() and instead uses two layers of the loop to realize multiple simulations of each permutation and combination of parameters.
 
 ```{python}
  # grid of parameter values of interest
@@ -367,7 +368,7 @@ params = {
 }
 ```
 
-We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().
+We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for a statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().
 
 ```{python}
 # fit the models over the parameters
@@ -386,13 +387,13 @@ def parameter_search(params):
     return pd.concat(client.gather(client.compute(sims))).reset_index().rename(columns={'index':'term'})
 ```
 
-If we call parameter_search() it will return a single replication of simulations for each combination of parameter values in pgrid.
+If we call parameter_search(), it will return a single replication of simulations for each combination of parameter values in pgrid.
 
 ```{python}
 print(parameter_search(params))
 ```
 
-To run multiple replication of simulations for each combination of parameter values in pgrid, we can use the for statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning, this will take some time if you have set a high number of replications!
+To run multiple replications of simulations for each combination of parameter values in pgrid, we can use the for a statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning: this will take some time if you have set a high number of replications!
 
 ```{python}
 sims_params = []
@@ -414,7 +415,7 @@ client.close()
 print(sims_params_df)
 ```
 
-Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in pgrid, so that we can get power estimates for all combinations of parameter values.
+Now, as before, we can calculate power. But this time, we’ll group by all of the parameters we manipulated in pgrid, so we can get power estimates for all combinations of parameter values.
 
 ```{python}
 sims_table = sims_params_df.query("term == 'genre_i'").groupby(['term', 'n_subj', 'n_pop', 'n_rock', 'beta_1']).agg(
