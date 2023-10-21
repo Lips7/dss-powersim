@@ -28,7 +28,7 @@ pacman::p_load(
   broom.mixed,  # extracting tidy data from model fits
   tidyverse,    # data wrangling and visualisation
   gt            # nice tables
-  )
+)
 
 faux_options(verbose = FALSE)
 ```
@@ -123,7 +123,7 @@ songs <- tibble(
   O_0i = rnorm(n = n_pop + n_rock, mean = 0, sd = omega_0)
 )
 
-print(songs, n=10)
+print(songs, n = 10)
 ```
 
 #### Simulate the sampling of subjects
@@ -146,16 +146,16 @@ values in the upper right triangle of the correlation matrix.
 
 # sample from a multivariate normal distribution
 subjects <- faux::rnorm_multi(
-    n = n_subj,
-    mu = 0, # means for random effects are always 0
-    sd = c(tau_0, tau_1), # set SDs
-    r = rho, # set correlation
-    varnames = c("T_0j", "T_1j")
-  ) |>
+  n = n_subj,
+  mu = 0, # means for random effects are always 0
+  sd = c(tau_0, tau_1), # set SDs
+  r = rho, # set correlation
+  varnames = c("T_0j", "T_1j")
+) |>
   mutate(subj_id = seq_len(n_subj)) |> # add subject IDs
   as_tibble()
 
-print(subjects, n=10)
+print(subjects, n = 10)
 ```
 
 #### Check the simulated values
@@ -193,7 +193,7 @@ deviation of `sigma`.
 trials <- crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma))
 
-print(trials, n=10)
+print(trials, n = 10)
 ```
 
 #### Calculate response values
@@ -208,7 +208,7 @@ dat_sim <- trials |>
   mutate(liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) %>%
   select(subj_id, song_id, category, genre_i, liking_ij)
 
-print(dat_sim, n=10)
+print(dat_sim, n = 10)
 ```
 
 #### Plot the data
@@ -221,13 +221,13 @@ for the means of these two groups.
 dat_sim |>
 ggplot(aes(category, liking_ij, color = category)) +
   # predicted means
-  geom_hline(yintercept = (beta_0 + 0*beta_1),
+  geom_hline(yintercept = (beta_0 + 0 * beta_1),
              color = "orange", linetype = "dashed", linewidth = 1) +
-  geom_hline(yintercept = (beta_0 + 1*beta_1),
+  geom_hline(yintercept = (beta_0 + 1 * beta_1),
              color = "dodgerblue", linetype = "dashed", linewidth = 1) +
   # actual data
   geom_violin(alpha = 0.5, show.legend = FALSE, fill = "grey65") +
-  stat_summary(fun = mean, geom="crossbar", show.legend = FALSE) +
+  stat_summary(fun = mean, geom = "crossbar", show.legend = FALSE) +
   scale_color_manual(values = c("orange", "dodgerblue")) +
   ggtitle("Predicted versus simulated values") +
   theme_bw()
@@ -303,8 +303,7 @@ sim_data <- function(
   tau_1      =   4,   # by-subject random slope sd
   rho        =   0.2, # correlation between intercept and slope
   sigma      =   8    # residual (standard deviation)
-  )
-{
+) {
   # simulate a sample of songs
   songs <- tibble(
     song_id = seq_len(n_pop + n_rock),
@@ -323,9 +322,9 @@ sim_data <- function(
   ) |>
   mutate(subj_id = seq_len(n_subj))
 
-# cross subject and song IDs
-crossing(subjects, songs) |>
-  mutate(e_ij = rnorm(n(), mean = 0, sd = sigma),
+  # cross subject and song IDs
+  crossing(subjects, songs) |>
+    mutate(e_ij = rnorm(n(), mean = 0, sd = sigma),
          liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) |>
   select(subj_id, song_id, category, genre_i, liking_ij)
 }
@@ -440,15 +439,15 @@ of parameter values in `pgrid` and feed them into `single_run()`.
 
 ```{r}
 # fit the models over the parameters
-parameter_search <- function(params = pgrid){
+parameter_search <- function(params = pgrid) {
   future_pmap_dfr(
     .l = params, # iterate over the grid of parameter values
     .f = ~ single_run(
-             n_subj = ..1, # plug each row of parameter values into single_run()
-             n_pop  = ..2,
-             n_rock = ..3,
-             beta_1 = ..4
-             ),
+      n_subj = ..1, # plug each row of parameter values into single_run()
+      n_pop  = ..2,
+      n_rock = ..3,
+      beta_1 = ..4
+    ),
     .options = furrr_options(seed = TRUE),
     .progress = TRUE
   )
@@ -476,10 +475,10 @@ pgrid_expand <- pgrid |>
 
 # replicate the parameter search many times
 sims_params <- future_replicate(
-    n = reps,
-    expr = parameter_search(),
-    simplify = FALSE
-    ) |>
+  n = reps,
+  expr = parameter_search(),
+  simplify = FALSE
+) |>
   imap( ~ mutate(.x, rep = .y, .before = "effect")) |> # include rep ID
   bind_rows() |> # combine into a single tibble
   mutate(pgrid_expand, .before = "effect") # add in the parameter grid values
@@ -535,6 +534,6 @@ sims_table |>
     fn = scales::col_numeric(
       palette = c("red", "green"),
       domain = c(0, 1)
-      )
+    )
   )
 ```

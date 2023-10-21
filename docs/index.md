@@ -30,8 +30,6 @@ We are always grateful for any feedback you are willing to provide about our tut
 7. [Software Comparison](./software-comparison.html)
 8. [Resources](./resources.html)
 
-\
-
 ![](images/Ultimate_Power_Vol_1_5_Textless.png)
 
 ## Contributors {-}

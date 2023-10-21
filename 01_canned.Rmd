@@ -2,7 +2,6 @@
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
-# knitr::opts_knit$set(root.dir="R/Rinstall")
 ```
 
 # (PART) Concepts {-}
@@ -27,14 +26,14 @@ $$
 
 We want $\beta$ (Type II error) to be small and power to be large. When designing a study, rather than calculating power when sample size and effect size are fixed, researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size.
 
-In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the cholesterol levels of people in two populations, one with a diet comprising low oat consumption and the other with high oat consumption, we could specify the following null and alternative hypotheses, respectively: 
+In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the cholesterol levels of people in two populations, one with a diet comprising low oat consumption and the other with high oat consumption, we could specify the following null and alternative hypotheses, respectively:
 
 $$
 \begin{align}
 \textrm{H}_0 : \mu_1 - \mu_2 &= 0 \\
 \textrm{H}_1 : \mu_1 - \mu_2 &\neq 0
 \end{align}
-$$ 
+$$
 
 where $\mu_1$ and $\mu_2$ are the mean cholesterol levels in the two populations being compared. We can use a formula to determine the sample sizes required so that the test has a specific power. We will need the following inputs to the formula:
 

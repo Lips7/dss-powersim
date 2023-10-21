@@ -2,13 +2,18 @@
 
 # Python
 
-To begin with, the simulation-based power analysis in Python follows the structure in the last section in R, and there are repetitions in the text to describe the method. However, there are differences between the two languages; we will specify those discrepancies  in the following "note" parts.
+To begin with, the simulation-based power analysis in Python follows the structure in the last section in R,
+and there are repetitions in the text to describe the method.
+However, there are differences between the two languages;
+we will specify those discrepancies in the following "note" parts.
 
 ## Setup
 
 Note: There are two differences between Python and the R language:
 
-1. R uses the p_load function to automatically install missing libraries and import libraries. Python needs to manually configure the environment. If the library is missing, you can use “! pip install [package_name]” to install;
+1. R uses the p_load function to automatically install missing libraries and import libraries.
+Python needs to manually configure the environment.
+If the library is missing, you can use “! pip install [package_name]” to install;
 2. The R has set parallelism in the setup part, but Python uses the dask package to perform parallel computing in the simulation part.
 
 We will need to use several Python packages to optimize our workflow and fit mixed effects models.
@@ -40,16 +45,26 @@ np.random.seed(2138)
 
 ## Data simulation step by step
 
-To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see Power of What? for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. Much of the general workflow here is borrowed from DeBruine & Dale (2021) Understanding Mixed-Effects Models through Simulation. We’ll start by writing code that simulates datasets under the alternative hypothesis.
+To give an overview of the power simulation task,
+we will simulate data from a design with crossed random factors of subjects and songs
+(see [Power of What?](./power-of-what.html) for design details),
+fit a model to the simulated data, recover from the model output the parameter values we put in,
+calculate power, and finally automate the whole process so that we can calculate power for different effect sizes.
+Much of the general workflow here is borrowed from [DeBruine & Dale (2021) Understanding Mixed-Effects Models through Simulation](https://journals.sagepub.com/doi/full/10.1177/2515245920965119).
+We’ll start by writing code that simulates datasets under the alternative hypothesis.
 
 Note: There are two differences between Python and the R:
 
-1. We use the package of "statsmodels" to set up the mixd effect model in Python. However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
-2. There's no "broom.mixed::tidy()" function in Python and that's why the output is incomplete.
+1. We use the package of "statsmodels" to set up the mixd effect model in Python.
+However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
+2. There's no `broom.mixed::tidy()` function in Python and that's why the output is incomplete.
 
 ### Establish the simulation parameters
 
-Before we start, let’s set some global parameters for our power simulations. Since simulations can take a long time to run, we’ll use 30 replications here as an example, but we recommend increasing this number to at least 1000 replications for a more accurate final power calculation.
+Before we start, let’s set some global parameters for our power simulations.
+Since simulations can take a long time to run,
+we’ll use 30 replications here as an example,
+but we recommend increasing this number to at least 1000 replications for a more accurate final power calculation.
 
 
 ```python
@@ -62,7 +77,8 @@ alpha = 0.05
 
 ### Establish the data-generating parameters
 
-The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the data-generating process, or DGP. We previously decided upon the the data-generating parameters (see Power of What?), so we just need to code them here.
+The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the data-generating process,or DGP.
+We previously decided upon the the data-generating parameters (see [Power of What?](./power-of-what.html)), so we just need to code them here.
 
 
 ```python
@@ -77,6 +93,7 @@ sigma = 8    # residual (error) sd
 ```
 
 ### Simulate the sampling process
+
 Next, we will simulate the sampling process for the data. First, let’s define parameters related to the number of observations.
 
 
@@ -89,7 +106,10 @@ n_rock = 15  # number of songs in rock category
 
 #### Simulate the sampling of songs
 
-We need to create a table listing each song \(i\), which category it is in (rock or pop), and its random effect $O_{0i}$. The latter is sampled from a univariate normal distribution using the function np.random.normal().
+We need to create a table listing each song $i$,
+which category it is in (rock or pop),
+and its random effect $O_{0i}$.
+The latter is sampled from a univariate normal distribution using the function `np.random.normal()`.
 
 
 ```python
@@ -119,9 +139,11 @@ print(songs.head(10))
 ```
 
 #### Simulate the sampling of subjects
-Now we simulate the sampling of participants, which results in table listing each individual and their two correlated random effects (a random intercept and random slope). To do this, we must sample $T_{0j} ,T_{1j}$ pairs - one for each subject - from a bivariate normal distribution.
+Now we simulate the sampling of participants, which results in table listing each individual and their two correlated random effects (a random intercept and random slope).
+To do this, we must sample $T_{0j} ,T_{1j}$ pairs - one for each subject - from a bivariate normal distribution.
 
-We will use the function np.random.multivariate_normal(), which generates a table of n simulated values from a multivariate normal distribution by specifying the means and covariance matrix(cov).
+We will use the function `np.random.multivariate_normal()`,
+which generates a table of n simulated values from a multivariate normal distribution by specifying the means and covariance matrix(cov).
 
 
 ```python
@@ -155,7 +177,8 @@ print(subjects.head(10))
 
 #### Check the simulated values
 
-Let’s do a quick sanity check by comparing our simulated values to the parameters we used as inputs. Because the sampling process is stochastic, we shouldn’t expect that these will exactly match for any given run of the simulation.
+Let’s do a quick sanity check by comparing our simulated values to the parameters we used as inputs.
+Because the sampling process is stochastic, we shouldn’t expect that these will exactly match for any given run of the simulation.
 
 
 ```python
@@ -178,7 +201,10 @@ print(check_values)
 
 #### Simulate trials
 
-Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the subjects and songs tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of sigma.
+Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials
+by including every possible combination of the rows in the subjects and songs tables.
+Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unknown factors.
+We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of sigma.
 
 
 ```python
@@ -205,7 +231,9 @@ print(trials.head(10))
 
 #### Calculate response values
 
-With this resulting trials table, in combination with the constants $\beta_0$ and $\beta_1$, we have the full set of values that we need to compute the response variable liking_ij according the linear model we defined previously (see Power of What?).
+With this resulting trials table, in combination with the constants $\beta_0$ and $\beta_1$,
+we have the full set of values that we need to compute the response variable liking_ij
+according the linear model we defined previously (see [Power of What?](./power-of-what.html)).
 
 
 ```python
@@ -239,8 +267,8 @@ Let’s visualize the distribution of the response variable for each of the two 
 palette = {'pop': 'orange', 'rock': 'dodgerblue'}
 
 # actual data
-sns.violinplot(x='category', y='liking_ij', data=dat_sim, palette=palette, inner=None, alpha=0.5)
-sns.pointplot(x='category', y='liking_ij', data=dat_sim, estimator=np.mean, ci=None, color='black')
+sns.violinplot(x='category', y='liking_ij', hue='category',data=dat_sim, palette=palette, inner=None, alpha=0.5, legend=False)
+sns.pointplot(x='category', y='liking_ij', data=dat_sim, estimator=np.mean, errorbar=None, color='black')
 
 # predicted means
 plt.axhline(y=(beta_0 + 0*beta_1), color='orange', linestyle='dashed')
@@ -250,11 +278,12 @@ plt.title("Predicted versus simulated values")
 plt.show()
 ```
 
-<img src="figures/unnamed-chunk-12-1.png" width="672" />
+<img src="figures/unnamed-chunk-12-1.png" width="768" />
 
 ### Analyze the simulated data
 
-Now we can analyze our simulated data in a linear mixed effects model using the function mixedlm from the {statsmodels} package. The formula and vc_formula in mixedlm() map onto how we calculated our liking_ij outcome variable above.
+Now we can analyze our simulated data in a linear mixed effects model using the function mixedlm from the `{statsmodels}` package.
+The formula and vc_formula in `mixedlm()` map onto how we calculated our `liking_ij` outcome variable above.
 
 The terms in formula are as follows:
 liking_ij is the response.
@@ -263,13 +292,13 @@ genre_i is the dummy coded variable identifying whether song $i$ belongs to the 
 
 The terms in vc_formula are as follows:
 
-- 0 + C(song_id)  specifies a song-specific random intercept O_0i.
-- 0 + C(subject_id) specifies a subject-specific random intercept T_0j.
-- 0 + C(subject_id):genre_i specifies the subject specific random slope of the genre category T_1j.
+- 0 + C(song_id) specifies a song-specific random intercept (`O_0i`).
+- 0 + C(subject_id) specifies a subject-specific random intercept (`T_0j`).
+- 0 + C(subject_id):genre_i specifies the subject specific random slope of the genre category (`T_1j`).
 
-However, due to the inability of the function mixedlm(), the module did not indicate the correlation between subject-specific random intercept and the subject specific random slope of the genre category.
-
-
+However, due to the inability of the function `mixedlm()`,
+the module did not indicate the correlation between subject-specific random intercept
+and the subject specific random slope of the genre category.
 
 
 ```python
@@ -315,7 +344,7 @@ formatted_sim_result = pd.DataFrame({
     'term': ['Intercept', 'genre_i', '', '', '', '', ''],
     'parameter': ['beta_0', 'beta_1', 'omega_0', 'tau_0', 'rho', 'tau_1', 'sigma'],
     'value': [beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma],
-    'simulated': [mod_sim.fe_params[0], mod_sim.fe_params[1],
+    'simulated': [mod_sim.fe_params.iloc[0], mod_sim.fe_params.iloc[1],
                   '', '',
                  '', '',
                  '']
@@ -353,17 +382,18 @@ def sim_data(n_subj=25, n_pop=15, n_rock=15, beta_0=60, beta_1=5, omega_0=3, tau
     subjects = pd.DataFrame(random_effects, columns=['T_0j', 'T_1j'])
     subjects['subj_id'] = np.arange(1, n_subj + 1)
 
-    trials = pd.merge(subjects, songs, how='cross')
+    trials = subjects.assign(key=1).merge(songs.assign(key=1), on='key').drop(columns='key')
     trials['e_ij'] = np.random.normal(0, sigma, len(trials))
     trials['liking_ij'] = beta_0 + trials['T_0j'] + trials['O_0i'] + (beta_1 + trials['T_1j']) * trials['genre_i'] + trials['e_ij']
 
     return trials[['subj_id', 'song_id', 'category', 'genre_i', 'liking_ij']]
 ```
 
+
+
 ## Power calculation single run
 
-We can wrap the data generating function and modeling code in a new function single_run() that returns a table of the analysis results for a single simulation run.
-
+We can wrap the data generating function and modeling code in a new function `single_run()` that returns a table of the analysis results for a single simulation run.
 
 
 ```python
@@ -380,7 +410,7 @@ def single_run(n_subj=25, n_pop=15, n_rock=15, beta_0=60, beta_1=5, omega_0=3, t
     return df[['Coef.', 'Std.Err.', 'p_value']]
 ```
 
-Let’s test that our new single_run() function performs as expected.
+Let’s test that our new `single_run()` function performs as expected.
 
 
 ```python
@@ -390,11 +420,11 @@ print(single_run())
 
 ```
 ##               Coef. Std.Err.   p_value
-## Intercept    62.364    1.620  0.000000
-## genre_i       1.794    1.454  0.217012
-## genre_i Var  15.056    0.854  0.027138
-## song_id Var   8.783    0.387  0.004477
-## subj_id Var  46.691    1.848  0.001541
+## Intercept    66.336    1.715  0.000000
+## genre_i      -0.654    1.664  0.694325
+## genre_i Var  22.266    1.121  0.012768
+## song_id Var  11.543    0.482  0.002662
+## subj_id Var  50.054    1.980  0.001524
 ```
 
 
@@ -405,22 +435,23 @@ print(single_run(n_pop = 10, n_rock = 50, beta_1 = 2))
 
 ```
 ##               Coef. Std.Err.        p_value
-## Intercept    60.065    1.635  1.824465e-295
-## genre_i       2.934    1.308   2.494009e-02
-## genre_i Var  14.922    0.811   1.634819e-02
-## song_id Var   6.946    0.230   8.011783e-05
-## subj_id Var  43.595    1.826   1.830974e-03
+## Intercept    61.201    1.764  9.993356e-264
+## genre_i       2.813    1.336   3.527181e-02
+## genre_i Var   4.349    0.417   1.732626e-01
+## song_id Var  11.084    0.332   1.320817e-05
+## subj_id Var  44.234    1.838   1.658627e-03
 ```
 
 ## Power calculation automated
 
 To get an accurate estimation of power, we need to run the simulation many times. Here we use the package dask to parallelize existing code to speed up iterative processes.
 
-We use dask.delayed function to decorate single_run() so that it operates lazily, then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.
+We use dask.delayed function to decorate `single_run()` so that it operates lazily,
+then call the delayed version repeatedly using for statement, and finally call dask.compute function to get the result of simulations.
 
 Note: There are two differences between Python and the R:
 
-1. The R uses the “future_map_dfr() function” to use the single_run() function in a loop, and Python directly uses the “for” structure to do a loop;
+1. The R uses the `future_map_dfr()` function” to use the `single_run()` function in a loop, and Python directly uses the “for” structure to do a loop;
 2. The R sets parallel computing in the setup part, while Python uses the “dask” library for parallel computing.
 
 
@@ -438,7 +469,8 @@ sims_result = client.gather(client.compute(sims))
 
 sims_df = pd.concat(sims_result).reset_index().rename(columns={'index':'term'})
 ```
-We can finally calculate power for our parameter of interest $\beta_1$ denoted in the model output table as the term $genre_{i}$ by filtering to keep only that term and the calculating the proportion of times the \(p\)-value is below the alpha (0.05) threshold.
+We can finally calculate power for our parameter of interest $\beta_1$ denoted in the model output table as the term $genre_{i}$
+by filtering to keep only that term and the calculating the proportion of times the $p$-value is below the alpha (0.05) threshold.
 
 
 ```python
@@ -451,7 +483,7 @@ print(f"Mean estimate: {mean_estimate}")
 ```
 
 ```
-## Mean estimate: 4.938033333333333
+## Mean estimate: -0.3134666666666666
 ```
 
 ```python
@@ -459,7 +491,7 @@ print(f"Mean standard error: {mean_se}")
 ```
 
 ```
-## Mean standard error: 1.5021
+## Mean standard error: 1.4849333333333334
 ```
 
 ```python
@@ -467,12 +499,14 @@ print(f"Power: {power}")
 ```
 
 ```
-## Power: 0.8666666666666667
+## Power: 0.03333333333333333
 ```
 
 ### Check false positive rate
 
-We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of genre_ij (beta_1) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.
+We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate).
+We set the effect of `genre_ij` (`beta_1`) to 0 to calculate the false positive rate,
+which is the probability of concluding there is an effect when there is no actual effect in the population.
 
 
 
@@ -489,7 +523,7 @@ print((sims_fp_df[sims_fp_df['term'] == 'genre_i']['p_value'].astype(float) < al
 ```
 
 ```
-## 0.06666666666666667
+## 0.13333333333333333
 ```
 
 Ideally, the false positive rate will be equal to alpha, which we set at 0.05.
@@ -497,13 +531,17 @@ Ideally, the false positive rate will be equal to alpha, which we set at 0.05.
 
 ## Power for different effect sizes
 
-In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.
+In real life, we will not know the effect size of our quantity of interest and
+so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes.
+Perhaps we might also want to calculate power as we vary other data-generating parameters,
+such as the number of pop and rock songs sampled and the number of subjects sampled.
+We can create a table that combines all combinations of the parameters we want to vary in a grid.
 
 Note: There are two differences between Python and the R:
 
-1. Python uses the “product” function to permutate and combine parameters and then uses “loop” and “dask.compute” to perform parallel computing;
-2. Python couldn’t repeatedly use parameter_search() and instead uses two layers of the loop to realize multiple simulations of each permutation and combination of parameters.
- 
+1. Python uses the `product()` function to permutate and combine parameters and then uses "loop" and `dask.compute()` to perform parallel computing;
+2. Python couldn’t repeatedly use `parameter_search()` and instead uses two layers of the loop to realize multiple simulations of each permutation and combination of parameters.
+
 
 ```python
  # grid of parameter values of interest
@@ -515,7 +553,9 @@ params = {
 }
 ```
 
-We can now wrap delayed_single_run() function within a more general function parameter_search() that takes the grid of parameter values as input and uses the for a statement to iterate over each row of parameter values in pgrid and feed them into delayed_single_run().
+We can now wrap `delayed_single_run()` function within a more general function `parameter_search()` that
+takes the grid of parameter values as input and uses the for a statement to iterate over
+each row of parameter values in pgrid and feed them into `delayed_single_run()`.
 
 
 ```python
@@ -535,7 +575,7 @@ def parameter_search(params):
     return pd.concat(client.gather(client.compute(sims))).reset_index().rename(columns={'index':'term'})
 ```
 
-If we call parameter_search(), it will return a single replication of simulations for each combination of parameter values in pgrid.
+If we call `parameter_search()`, it will return a single replication of simulations for each combination of parameter values in pgrid.
 
 
 ```python
@@ -543,23 +583,26 @@ print(parameter_search(params))
 ```
 
 ```
-##             term   Coef. Std.Err.       p_value  n_subj  n_pop  n_rock  beta_1
-## 0      Intercept  55.450    3.105  2.415190e-71      10     10      10       1
-## 1        genre_i   1.199    2.658  6.519669e-01      10     10      10       1
-## 2    genre_i Var  38.828    3.184  1.316875e-01      10     10      10       1
-## 3    song_id Var   9.359    0.769  1.323369e-01      10     10      10       1
-## 4    subj_id Var  80.488    5.086  5.045800e-02      10     10      10       1
-## ..           ...     ...      ...           ...     ...    ...     ...     ...
-## 115    Intercept  60.039    1.181  0.000000e+00      50     40      40       5
-## 116      genre_i   3.434    0.925  2.068133e-04      50     40      40       5
-## 117  genre_i Var  14.046    0.441  5.421090e-05      50     40      40       5
-## 118  song_id Var  10.264    0.236  3.523060e-08      50     40      40       5
-## 119  subj_id Var  55.393    1.463  1.625316e-06      50     40      40       5
+##             term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
+## 0      Intercept  60.032    2.277  3.653518e-153      10     10      10       1
+## 1        genre_i  -0.420    2.250   8.520186e-01      10     10      10       1
+## 2    genre_i Var  26.542    2.568   2.136670e-01      10     10      10       1
+## 3    song_id Var   5.129    0.382   1.058687e-01      10     10      10       1
+## 4    subj_id Var  39.817    2.722   7.835456e-02      10     10      10       1
+## ..           ...     ...      ...            ...     ...    ...     ...     ...
+## 115    Intercept  64.985    1.117   0.000000e+00      50     40      40       5
+## 116      genre_i  -0.108    0.948   9.095202e-01      50     40      40       5
+## 117  genre_i Var  15.044    0.460   5.013323e-05      50     40      40       5
+## 118  song_id Var  10.639    0.239   3.638054e-08      50     40      40       5
+## 119  subj_id Var  47.405    1.231   1.853551e-06      50     40      40       5
 ## 
 ## [120 rows x 8 columns]
 ```
 
-To run multiple replications of simulations for each combination of parameter values in pgrid, we can use the for a statement to iterate over each row of parameter values in pgrid for the number of times specified by reps. Fair warning: this will take some time if you have set a high number of replications!
+To run multiple replications of simulations for each combination of parameter values in pgrid,
+we can use the for a statement to iterate over each row of parameter values
+in pgrid for the number of times specified by reps.
+Fair warning: this will take some time if you have set a high number of replications!
 
 
 ```python
@@ -584,22 +627,23 @@ print(sims_params_df)
 
 ```
 ##              term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
-## 0       Intercept  58.836    2.384  1.957545e-134      10     10      10       1
-## 1         genre_i  -0.142    2.622   9.569227e-01      10     10      10       1
-## 2     genre_i Var  34.504    2.802   1.332714e-01      10     10      10       1
-## 3     song_id Var  10.387    0.734   8.431281e-02      10     10      10       1
-## 4     subj_id Var  39.737    2.714   7.433111e-02      10     10      10       1
+## 0       Intercept  67.136    2.226  9.407457e-200      10     10      10       1
+## 1         genre_i   4.018    2.385   9.201102e-02      10     10      10       1
+## 2     genre_i Var  34.901    3.081   1.469297e-01      10     10      10       1
+## 3     song_id Var   4.881    0.382   1.018588e-01      10     10      10       1
+## 4     subj_id Var  38.589    2.741   7.145265e-02      10     10      10       1
 ## ...           ...     ...      ...            ...     ...    ...     ...     ...
-## 3595    Intercept  60.399    1.127   0.000000e+00      50     40      40       5
-## 3596      genre_i   5.691    0.977   5.622933e-09      50     40      40       5
-## 3597  genre_i Var  20.372    0.593   2.174159e-05      50     40      40       5
-## 3598  song_id Var   9.615    0.218   5.265133e-08      50     40      40       5
-## 3599  subj_id Var  49.879    1.292   1.824855e-06      50     40      40       5
+## 3595    Intercept  63.354    1.091   0.000000e+00      50     40      40       5
+## 3596      genre_i   0.831    1.028   4.188217e-01      50     40      40       5
+## 3597  genre_i Var  21.069    0.625   1.710804e-05      50     40      40       5
+## 3598  song_id Var  11.485    0.262   2.346378e-08      50     40      40       5
+## 3599  subj_id Var  43.663    1.168   1.900018e-06      50     40      40       5
 ## 
 ## [3600 rows x 8 columns]
 ```
 
-Now, as before, we can calculate power. But this time, we’ll group by all of the parameters we manipulated in pgrid, so we can get power estimates for all combinations of parameter values.
+Now, as before, we can calculate power. But this time, we’ll group by all of the parameters we manipulated in pgrid,
+so we can get power estimates for all combinations of parameter values.
 
 
 ```python
@@ -618,30 +662,30 @@ print(sims_table)
 
 ```
 ##        term  n_subj  n_pop  n_rock  beta_1  mean_estimate   mean_se     power
-## 0   genre_i      10     10      10       1       1.065900  2.359100  0.000000
-## 1   genre_i      10     10      10       3       2.626333  2.305933  0.233333
-## 2   genre_i      10     10      10       5       5.062433  2.415333  0.566667
-## 3   genre_i      10     10      40       1       1.226067  2.181600  0.133333
-## 4   genre_i      10     10      40       3       2.586967  2.284667  0.100000
-## 5   genre_i      10     10      40       5       5.116967  2.095067  0.733333
-## 6   genre_i      10     40      10       1       1.192433  2.265033  0.000000
-## 7   genre_i      10     40      10       3       3.118600  2.243900  0.233333
-## 8   genre_i      10     40      10       5       4.767500  2.289600  0.566667
-## 9   genre_i      10     40      40       1       0.601267  2.067200  0.000000
-## 10  genre_i      10     40      40       3       2.358067  1.928533  0.133333
-## 11  genre_i      10     40      40       5       4.865067  1.952967  0.733333
-## 12  genre_i      50     10      10       1       1.604467  1.589900  0.166667
-## 13  genre_i      50     10      10       3       3.071600  1.554867  0.500000
-## 14  genre_i      50     10      10       5       4.744967  1.471667  0.966667
-## 15  genre_i      50     10      40       1       0.921800  1.336967  0.166667
-## 16  genre_i      50     10      40       3       3.069933  1.327233  0.533333
-## 17  genre_i      50     10      40       5       4.898767  1.349433  0.933333
-## 18  genre_i      50     40      10       1       0.722300  1.387900  0.066667
-## 19  genre_i      50     40      10       3       3.230600  1.338833  0.666667
-## 20  genre_i      50     40      10       5       4.988400  1.354067  1.000000
-## 21  genre_i      50     40      40       1       0.938633  0.988300  0.166667
-## 22  genre_i      50     40      40       3       2.681433  0.981200  0.866667
-## 23  genre_i      50     40      40       5       5.402067  0.969400  1.000000
+## 0   genre_i      10     10      10       1       0.193067  2.408767  0.066667
+## 1   genre_i      10     10      10       3      -0.014333  2.239667  0.100000
+## 2   genre_i      10     10      10       5       0.627500  2.388900  0.000000
+## 3   genre_i      10     10      40       1      -0.262400  2.134333  0.033333
+## 4   genre_i      10     10      40       3       0.526800  2.309400  0.033333
+## 5   genre_i      10     10      40       5      -0.308233  2.293700  0.000000
+## 6   genre_i      10     40      10       1      -0.099333  2.257600  0.033333
+## 7   genre_i      10     40      10       3      -1.011567  2.179333  0.066667
+## 8   genre_i      10     40      10       5      -0.057833  2.225033  0.033333
+## 9   genre_i      10     40      40       1      -0.583367  2.016033  0.033333
+## 10  genre_i      10     40      40       3      -0.247933  1.814567  0.033333
+## 11  genre_i      10     40      40       5       0.253867  1.967767  0.033333
+## 12  genre_i      50     10      10       1       0.376567  1.524867  0.000000
+## 13  genre_i      50     10      10       3       0.408833  1.584467  0.066667
+## 14  genre_i      50     10      10       5       0.783167  1.491133  0.100000
+## 15  genre_i      50     10      40       1      -0.202533  1.382633  0.033333
+## 16  genre_i      50     10      40       3       0.366800  1.349433  0.033333
+## 17  genre_i      50     10      40       5      -0.579967  1.419667  0.033333
+## 18  genre_i      50     40      10       1       0.224733  1.521667  0.033333
+## 19  genre_i      50     40      10       3       0.265567  1.298267  0.066667
+## 20  genre_i      50     40      10       5      -0.143600  1.393033  0.066667
+## 21  genre_i      50     40      40       1      -0.101667  0.979500  0.000000
+## 22  genre_i      50     40      40       3      -0.306000  0.975700  0.000000
+## 23  genre_i      50     40      40       5      -0.066433  0.997967  0.033333
 ```
 
 Here’s a graph that visualizes the output of the power simulation.
@@ -671,29 +715,29 @@ for i, (pop, rock) in enumerate(sims_table.groupby(['n_pop', 'n_rock'])):
 
 ```
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000024F99EA3ED0>
+## <matplotlib.lines.Line2D object at 0x000001BCFC91E390>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000024F9A657C10>
+## <matplotlib.legend.Legend object at 0x000001BCC2B129D0>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000024F9A0D2510>
+## <matplotlib.lines.Line2D object at 0x000001BCC25103D0>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000024F9A444E10>
+## <matplotlib.legend.Legend object at 0x000001BCFCC278D0>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000024F9A2ECE50>
+## <matplotlib.lines.Line2D object at 0x000001BCC2C24D90>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000024F99EBD750>
+## <matplotlib.legend.Legend object at 0x000001BCC2981610>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x0000024F9A6FAA50>
+## <matplotlib.lines.Line2D object at 0x000001BCFCDCC990>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x0000024F9A884890>
+## <matplotlib.legend.Legend object at 0x000001BCC2CD11D0>
 ```
 
 ```python
@@ -704,4 +748,4 @@ plt.tight_layout()
 plt.show()
 ```
 
-<img src="figures/unnamed-chunk-30-3.png" width="1152" />
+<img src="figures/unnamed-chunk-31-3.png" width="1152" />

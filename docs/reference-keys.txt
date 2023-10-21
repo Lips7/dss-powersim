@@ -1,5 +1,6 @@
 tab:param-def
 tab:param-all
+tab:unnamed-chunk-12
 power-analysis
 canned-routines
 step-by-step
@@ -51,6 +52,7 @@ power-for-different-effect-sizes-1
 stata
 setup-2
 data-simulation-step-by-step-2
+establish-the-simulation-parameters-2
 establish-the-data-generating-parameters-2
 simulate-the-sampling-process-2
 simulate-the-sampling-of-songs-2
@@ -66,3 +68,7 @@ power-calculation-automated-2
 check-false-positive-rate-2
 power-for-different-effect-sizes-2
 software-comparison
+r-1
+python-1
+stata-1
+results
