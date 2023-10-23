@@ -227,7 +227,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.1" data-path="software-comparison.html"><a href="software-comparison.html#summary"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 <li class="chapter" data-level="7.2" data-path="software-comparison.html"><a href="software-comparison.html#absolute-running-time"><i class="fa fa-check"></i><b>7.2</b> Absolute Running Time</a></li>
 </ul></li>
-<li class="part"><span><b>V Appendix</b></span></li>
 <li class="chapter" data-level="8" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html"><i class="fa fa-check"></i><b>8</b> Single Run Benchmark</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html#r-1"><i class="fa fa-check"></i><b>8.1</b> R</a></li>
@@ -285,7 +284,7 @@ machine and then load them into our search path.</p>
 <pre><code>## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-##  C:\Users\Lips Apple\AppData\Local\Temp\RtmpMN1DTW\downloaded_packages</code></pre>
+##  C:\Users\Lips Apple\AppData\Local\Temp\RtmpYNNamd\downloaded_packages</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r.html#cb5-1" tabindex="-1"></a><span class="fu">faux_options</span>(<span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>We will also set the pseudo-random number generator seed to <code>02138</code> to
 make the stochastic components of our simulations reproducible.</p>
@@ -744,7 +743,7 @@ of times the <span class="math inline">\(p\)</span>-value is below the <code>alp
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          4.97    1.47   0.9</code></pre>
+## 1 genre_i          5.11    1.47  0.94</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as
@@ -762,7 +761,7 @@ there is no actual effect in the population.</p>
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.05</code></pre>
+## 1  0.06</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set
 at 0.05.</p>
 </div>

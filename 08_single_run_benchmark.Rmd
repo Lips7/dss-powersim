@@ -9,8 +9,6 @@ require(dplyr)
 require(magrittr)
 ```
 
-# (PART) Appendix {-}
-
 # Single Run Benchmark
 
 In this section, we will measure the performance differences among r, python and stata, specifically the `single_run` function of each software,

@@ -68,6 +68,7 @@ tibble::tribble(
   apa_table(
     align = c("c", "c", "c", "c", "c", "c"),
     caption = "Absolute Running Time",
-    escape = FALSE
+    escape = FALSE,
+    format.args = list(format="d")
   )
 ```
