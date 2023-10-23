@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8 Single Run Benchmark | dss-powersim</title>
+  <meta name="description" content="This is a tutorial for power simulation" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8 Single Run Benchmark | dss-powersim" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is a tutorial for power simulation" />
+  <meta name="github-repo" content="hlmshtj-dan/Simulation-Power" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Single Run Benchmark | dss-powersim" />
+  
+  <meta name="twitter:description" content="This is a tutorial for power simulation" />
+  
+
+<meta name="author" content="" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="software-comparison.html"/>
+<link rel="next" href="resources.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Power Simulation</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Simulation-Based Power Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#table-of-contents"><i class="fa fa-check"></i>Table of Contents</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i>Contributors</a></li>
+</ul></li>
+<li class="part"><span><b>I Concepts</b></span></li>
+<li class="chapter" data-level="1" data-path="power-analysis.html"><a href="power-analysis.html"><i class="fa fa-check"></i><b>1</b> Power Analysis</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="power-analysis.html"><a href="power-analysis.html#canned-routines"><i class="fa fa-check"></i><b>1.1</b> Canned routines</a></li>
+<li class="chapter" data-level="1.2" data-path="power-analysis.html"><a href="power-analysis.html#step-by-step"><i class="fa fa-check"></i><b>1.2</b> Step by step</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>2</b> Simulation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="simulation.html"><a href="simulation.html#customization"><i class="fa fa-check"></i><b>2.1</b> Customization</a></li>
+<li class="chapter" data-level="2.2" data-path="simulation.html"><a href="simulation.html#step-by-step-1"><i class="fa fa-check"></i><b>2.2</b> Step by step</a></li>
+</ul></li>
+<li class="part"><span><b>II Preparation</b></span></li>
+<li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of What?</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#study-design"><i class="fa fa-check"></i><b>3.1</b> Study design</a></li>
+<li class="chapter" data-level="3.2" data-path="power-of-what.html"><a href="power-of-what.html#mixed-effects-model"><i class="fa fa-check"></i><b>3.2</b> Mixed effects model</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification"><i class="fa fa-check"></i><b>3.2.1</b> Step 1: model specification</a></li>
+<li class="chapter" data-level="3.2.2" data-path="power-of-what.html"><a href="power-of-what.html#step-2-variable-composition"><i class="fa fa-check"></i><b>3.2.2</b> Step 2: Variable composition</a></li>
+<li class="chapter" data-level="3.2.3" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition"><i class="fa fa-check"></i><b>3.2.3</b> Step 3: Parameter composition</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Implementation</b></span></li>
+<li class="chapter" data-level="4" data-path="r.html"><a href="r.html"><i class="fa fa-check"></i><b>4</b> R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="r.html"><a href="r.html#setup"><i class="fa fa-check"></i><b>4.1</b> Setup</a></li>
+<li class="chapter" data-level="4.2" data-path="r.html"><a href="r.html#data-simulation-step-by-step"><i class="fa fa-check"></i><b>4.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#establish-the-simulation-parameters"><i class="fa fa-check"></i><b>4.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>4.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="4.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>4.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.4</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>4.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="4.5" data-path="r.html"><a href="r.html#power-calculation-automated"><i class="fa fa-check"></i><b>4.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="r.html"><a href="r.html#check-false-positive-rate"><i class="fa fa-check"></i><b>4.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="r.html"><a href="r.html#power-for-different-effect-sizes"><i class="fa fa-check"></i><b>4.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="python.html"><a href="python.html"><i class="fa fa-check"></i><b>5</b> Python</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="python.html"><a href="python.html#setup-1"><i class="fa fa-check"></i><b>5.1</b> Setup</a></li>
+<li class="chapter" data-level="5.2" data-path="python.html"><a href="python.html#data-simulation-step-by-step-1"><i class="fa fa-check"></i><b>5.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="python.html"><a href="python.html#establish-the-simulation-parameters-1"><i class="fa fa-check"></i><b>5.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="5.2.2" data-path="python.html"><a href="python.html#establish-the-data-generating-parameters-1"><i class="fa fa-check"></i><b>5.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="5.2.3" data-path="python.html"><a href="python.html#simulate-the-sampling-process-1"><i class="fa fa-check"></i><b>5.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="5.2.4" data-path="python.html"><a href="python.html#analyze-the-simulated-data-1"><i class="fa fa-check"></i><b>5.2.4</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="python.html"><a href="python.html#data-simulation-automated-1"><i class="fa fa-check"></i><b>5.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="5.4" data-path="python.html"><a href="python.html#power-calculation-single-run-1"><i class="fa fa-check"></i><b>5.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="5.5" data-path="python.html"><a href="python.html#power-calculation-automated-1"><i class="fa fa-check"></i><b>5.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="python.html"><a href="python.html#check-false-positive-rate-1"><i class="fa fa-check"></i><b>5.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="python.html"><a href="python.html#power-for-different-effect-sizes-1"><i class="fa fa-check"></i><b>5.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stata.html"><a href="stata.html"><i class="fa fa-check"></i><b>6</b> Stata</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stata.html"><a href="stata.html#setup-2"><i class="fa fa-check"></i><b>6.1</b> Setup</a></li>
+<li class="chapter" data-level="6.2" data-path="stata.html"><a href="stata.html#data-simulation-step-by-step-2"><i class="fa fa-check"></i><b>6.2</b> Data simulation step by step</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stata.html"><a href="stata.html#establish-the-simulation-parameters-2"><i class="fa fa-check"></i><b>6.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stata.html"><a href="stata.html#establish-the-data-generating-parameters-2"><i class="fa fa-check"></i><b>6.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="6.2.3" data-path="stata.html"><a href="stata.html#simulate-the-sampling-process-2"><i class="fa fa-check"></i><b>6.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="6.2.4" data-path="stata.html"><a href="stata.html#analyze-the-simulated-data-2"><i class="fa fa-check"></i><b>6.2.4</b> Analyze the simulated data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stata.html"><a href="stata.html#data-simulation-automated-2"><i class="fa fa-check"></i><b>6.3</b> Data simulation automated</a></li>
+<li class="chapter" data-level="6.4" data-path="stata.html"><a href="stata.html#power-calculation-single-run-2"><i class="fa fa-check"></i><b>6.4</b> Power calculation single run</a></li>
+<li class="chapter" data-level="6.5" data-path="stata.html"><a href="stata.html#power-calculation-automated-2"><i class="fa fa-check"></i><b>6.5</b> Power calculation automated</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="stata.html"><a href="stata.html#check-false-positive-rate-2"><i class="fa fa-check"></i><b>6.5.1</b> Check false positive rate</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="stata.html"><a href="stata.html#power-for-different-effect-sizes-2"><i class="fa fa-check"></i><b>6.6</b> Power for different effect sizes</a></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="7" data-path="software-comparison.html"><a href="software-comparison.html"><i class="fa fa-check"></i><b>7</b> Software Comparison</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="software-comparison.html"><a href="software-comparison.html#summary"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.2" data-path="software-comparison.html"><a href="software-comparison.html#absolute-running-time"><i class="fa fa-check"></i><b>7.2</b> Absolute Running Time</a></li>
+</ul></li>
+<li class="part"><span><b>V Appendix</b></span></li>
+<li class="chapter" data-level="8" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html"><i class="fa fa-check"></i><b>8</b> Single Run Benchmark</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html#r-1"><i class="fa fa-check"></i><b>8.1</b> R</a></li>
+<li class="chapter" data-level="8.2" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html#python-1"><i class="fa fa-check"></i><b>8.2</b> Python</a></li>
+<li class="chapter" data-level="8.3" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html#stata-1"><i class="fa fa-check"></i><b>8.3</b> Stata</a></li>
+<li class="chapter" data-level="8.4" data-path="single-run-benchmark.html"><a href="single-run-benchmark.html#benchmark-results"><i class="fa fa-check"></i><b>8.4</b> Benchmark Results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i>Resources</a>
+<ul>
+<li class="chapter" data-level="" data-path="resources.html"><a href="resources.html#r-2"><i class="fa fa-check"></i>R</a></li>
+<li class="chapter" data-level="" data-path="resources.html"><a href="resources.html#stata-2"><i class="fa fa-check"></i>Stata</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="single-run-benchmark" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Single Run Benchmark<a href="single-run-benchmark.html#single-run-benchmark" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this section, we will measure the performance differences among r, python and stata, specifically the <code>single_run</code> function of each software,
+which is the atomic function of whole power simulation program.
+But, due to the differences of parameters selection, the measurement is not technically subjective, the benchmark results here are for reference only.</p>
+<div id="r-1" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> R<a href="single-run-benchmark.html#r-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In implementation with <a href="./r.html">R</a>, we used all parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\omega_0\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\tau_1\)</span>, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\sigma\)</span>) to generate simulated data
+and used the function <code>lmer()</code> from the package <code>{lmerTest}</code> to perform linear mixed effects analyze.</p>
+<p>Here are the definitions of functions <a href="./r.html#data-simulation-automated">sim_data</a> and <a href="./r.html#power-calculation-single-run">single_run</a>.</p>
+<p>We’ll use <code>benchmark</code> function from package <code>{rbenchmark}</code> to measure the running time of function <code>single_run</code>.</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="single-run-benchmark.html#cb133-1" tabindex="-1"></a><span class="fu">library</span>(rbenchmark)</span>
+<span id="cb133-2"><a href="single-run-benchmark.html#cb133-2" tabindex="-1"></a></span>
+<span id="cb133-3"><a href="single-run-benchmark.html#cb133-3" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">within</span>(</span>
+<span id="cb133-4"><a href="single-run-benchmark.html#cb133-4" tabindex="-1"></a>  <span class="fu">benchmark</span>(</span>
+<span id="cb133-5"><a href="single-run-benchmark.html#cb133-5" tabindex="-1"></a>    <span class="at">single_run =</span> <span class="fu">single_run</span>(),</span>
+<span id="cb133-6"><a href="single-run-benchmark.html#cb133-6" tabindex="-1"></a>    <span class="at">replications =</span> <span class="dv">100</span>,</span>
+<span id="cb133-7"><a href="single-run-benchmark.html#cb133-7" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;elapsed&quot;</span>, <span class="st">&quot;replications&quot;</span>)</span>
+<span id="cb133-8"><a href="single-run-benchmark.html#cb133-8" tabindex="-1"></a>  ),</span>
+<span id="cb133-9"><a href="single-run-benchmark.html#cb133-9" tabindex="-1"></a>  {</span>
+<span id="cb133-10"><a href="single-run-benchmark.html#cb133-10" tabindex="-1"></a>    average <span class="ot">&lt;-</span> elapsed <span class="sc">/</span> replications</span>
+<span id="cb133-11"><a href="single-run-benchmark.html#cb133-11" tabindex="-1"></a>  }</span>
+<span id="cb133-12"><a href="single-run-benchmark.html#cb133-12" tabindex="-1"></a>)</span>
+<span id="cb133-13"><a href="single-run-benchmark.html#cb133-13" tabindex="-1"></a></span>
+<span id="cb133-14"><a href="single-run-benchmark.html#cb133-14" tabindex="-1"></a>r_average <span class="ot">&lt;-</span> result[<span class="dv">1</span>, <span class="st">&quot;average&quot;</span>]</span>
+<span id="cb133-15"><a href="single-run-benchmark.html#cb133-15" tabindex="-1"></a></span>
+<span id="cb133-16"><a href="single-run-benchmark.html#cb133-16" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">&quot;Average running time is %f s&quot;</span>, r_average)</span></code></pre></div>
+<pre><code>## [1] &quot;Average running time is 0.232100 s&quot;</code></pre>
+</div>
+<div id="python-1" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Python<a href="single-run-benchmark.html#python-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In implementation with <a href="./python.html">Python</a>, we used all parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\omega_0\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\tau_1\)</span>, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\sigma\)</span>) to generate simulated data
+and used the function <code>mixedlm()</code> from package <code>{statsmodels}</code> to perform linear mixed effects analyze.</p>
+<p>Here are the definitions of functions <a href="./python.html#data-simulation-automated">sim_data</a> and <a href="./python.html#power-calculation-single-run">single_run</a>.</p>
+<p>We’ll use <code>timeit</code> function from the package <code>{timeit}</code> to measure the running time of function <code>single_run</code>.</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb135-1"><a href="single-run-benchmark.html#cb135-1" tabindex="-1"></a><span class="im">import</span> timeit</span>
+<span id="cb135-2"><a href="single-run-benchmark.html#cb135-2" tabindex="-1"></a></span>
+<span id="cb135-3"><a href="single-run-benchmark.html#cb135-3" tabindex="-1"></a>result <span class="op">=</span> timeit.timeit(single_run, number<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb135-4"><a href="single-run-benchmark.html#cb135-4" tabindex="-1"></a>python_average <span class="op">=</span> result<span class="op">/</span><span class="dv">100</span></span>
+<span id="cb135-5"><a href="single-run-benchmark.html#cb135-5" tabindex="-1"></a></span>
+<span id="cb135-6"><a href="single-run-benchmark.html#cb135-6" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Average running time is </span><span class="sc">{</span>python_average<span class="sc">}</span><span class="ss"> s&quot;</span>)</span></code></pre></div>
+<pre><code>## Average running time is 1.1418413130000409 s</code></pre>
+</div>
+<div id="stata-1" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Stata<a href="single-run-benchmark.html#stata-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In implementation with <a href="./stata.html">Stata</a>, we only used 4 parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\sigma\)</span>) to generate simulated data
+and used the function <code>mixed</code> to perform linear mixed effects analyze.</p>
+<p>Here are the definitions of functions <a href="./stata.html#data-simulation-automated">sim_data</a> and <a href="./stata.html#power-calculation-single-run">single_run</a>.</p>
+<p>In stata, we have to implement the benchmark code by our own.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb137-1"><a href="single-run-benchmark.html#cb137-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> tstart</span>
+<span id="cb137-2"><a href="single-run-benchmark.html#cb137-2" tabindex="-1"></a><span class="kw">program</span> tstart, rclass</span>
+<span id="cb137-3"><a href="single-run-benchmark.html#cb137-3" tabindex="-1"></a>  <span class="kw">timer</span> <span class="kw">clear</span> 1</span>
+<span id="cb137-4"><a href="single-run-benchmark.html#cb137-4" tabindex="-1"></a>  <span class="kw">timer</span> <span class="kw">on</span> 1</span>
+<span id="cb137-5"><a href="single-run-benchmark.html#cb137-5" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb137-6"><a href="single-run-benchmark.html#cb137-6" tabindex="-1"></a></span>
+<span id="cb137-7"><a href="single-run-benchmark.html#cb137-7" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> tend</span>
+<span id="cb137-8"><a href="single-run-benchmark.html#cb137-8" tabindex="-1"></a><span class="kw">program</span> tend, rclass</span>
+<span id="cb137-9"><a href="single-run-benchmark.html#cb137-9" tabindex="-1"></a>  <span class="kw">timer</span> <span class="kw">off</span> 1</span>
+<span id="cb137-10"><a href="single-run-benchmark.html#cb137-10" tabindex="-1"></a>  <span class="kw">qui</span> <span class="kw">timer</span> <span class="ot">list</span> 1</span>
+<span id="cb137-11"><a href="single-run-benchmark.html#cb137-11" tabindex="-1"></a>  <span class="fu">scalar</span> <span class="fu">r</span> = <span class="fu">r</span>(t1)</span>
+<span id="cb137-12"><a href="single-run-benchmark.html#cb137-12" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb137-13"><a href="single-run-benchmark.html#cb137-13" tabindex="-1"></a></span>
+<span id="cb137-14"><a href="single-run-benchmark.html#cb137-14" tabindex="-1"></a>tstart</span>
+<span id="cb137-15"><a href="single-run-benchmark.html#cb137-15" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb137-16"><a href="single-run-benchmark.html#cb137-16" tabindex="-1"></a>    forval i = 1/100 {</span>
+<span id="cb137-17"><a href="single-run-benchmark.html#cb137-17" tabindex="-1"></a>        single_run 25 15 15 60 5 7 8</span>
+<span id="cb137-18"><a href="single-run-benchmark.html#cb137-18" tabindex="-1"></a>    }</span>
+<span id="cb137-19"><a href="single-run-benchmark.html#cb137-19" tabindex="-1"></a>}</span>
+<span id="cb137-20"><a href="single-run-benchmark.html#cb137-20" tabindex="-1"></a>tend</span>
+<span id="cb137-21"><a href="single-run-benchmark.html#cb137-21" tabindex="-1"></a><span class="kw">local</span> result = <span class="fu">scalar</span>(<span class="fu">r</span>)</span>
+<span id="cb137-22"><a href="single-run-benchmark.html#cb137-22" tabindex="-1"></a><span class="kw">local</span> stata_average = <span class="fu">r</span> / 100</span>
+<span id="cb137-23"><a href="single-run-benchmark.html#cb137-23" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Average running time is &quot;</span> <span class="ot">`stata_average&#39;</span> <span class="st">&quot; s&quot;</span></span>
+<span id="cb137-24"><a href="single-run-benchmark.html#cb137-24" tabindex="-1"></a></span>
+<span id="cb137-25"><a href="single-run-benchmark.html#cb137-25" tabindex="-1"></a><span class="kw">quietly</span> {</span>
+<span id="cb137-26"><a href="single-run-benchmark.html#cb137-26" tabindex="-1"></a>    file open result <span class="kw">using</span> <span class="st">&quot;./data/stata_average.txt&quot;</span>, write <span class="kw">replace</span></span>
+<span id="cb137-27"><a href="single-run-benchmark.html#cb137-27" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb137-28"><a href="single-run-benchmark.html#cb137-28" tabindex="-1"></a></span>
+<span id="cb137-29"><a href="single-run-benchmark.html#cb137-29" tabindex="-1"></a>    file write result <span class="st">&quot;`stata_average&#39;&quot;</span></span>
+<span id="cb137-30"><a href="single-run-benchmark.html#cb137-30" tabindex="-1"></a>    file <span class="kw">close</span> result</span>
+<span id="cb137-31"><a href="single-run-benchmark.html#cb137-31" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">more</span> <span class="kw">on</span></span>
+<span id="cb137-32"><a href="single-run-benchmark.html#cb137-32" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>Average running time is .23617 s</code></pre>
+</div>
+<div id="benchmark-results" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Benchmark Results<a href="single-run-benchmark.html#benchmark-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Finally, we get all the results of r, python and stata, let’s show them with a table.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 8.1: </span> Benchmark results.</caption>
+<thead>
+<tr class="header">
+<th align="left">Software</th>
+<th align="left">Parameters</th>
+<th align="left">Average Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">R</td>
+<td align="left"><span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\omega_0\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\tau_1\)</span>, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\sigma\)</span></td>
+<td align="left">0.23</td>
+</tr>
+<tr class="even">
+<td align="left">Python</td>
+<td align="left"><span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\omega_0\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\tau_1\)</span>, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\sigma\)</span></td>
+<td align="left">1.14</td>
+</tr>
+<tr class="odd">
+<td align="left">Stata</td>
+<td align="left"><span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\tau_0\)</span>, <span class="math inline">\(\sigma\)</span></td>
+<td align="left">0.24</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="software-comparison.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hlmshtj-dan/Simulation-Power/edit/main/08_single_run_benchmark.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["dss-powersim.pdf", "dss-powersim.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
