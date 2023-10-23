@@ -28,7 +28,8 @@ We are always grateful for any feedback you are willing to provide about our tut
 5. [Python Examples](./python.html)
 6. [Stata Examples](./stata.html)
 7. [Software Comparison](./software-comparison.html)
-8. [Resources](./resources.html)
+8. [Single Run Benchmark](./single_run_benchmark.html)
+9. [Resources](./resources.html)
 
 ![](images/Ultimate_Power_Vol_1_5_Textless.png)
 

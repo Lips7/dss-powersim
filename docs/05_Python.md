@@ -56,7 +56,9 @@ We’ll start by writing code that simulates datasets under the alternative hypo
 Note: There are two differences between Python and the R:
 
 1. We use the package of "statsmodels" to set up the mixd effect model in Python.
-However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
+However, this package doesn't have extension to fit a complex crossed random effects model,
+and the ability to show the correlation between the random intercept and the random slope of the subject like that in R,
+we can only use a similar method to fit the model;
 2. There's no `broom.mixed::tidy()` function in Python and that's why the output is incomplete.
 
 ### Establish the simulation parameters
@@ -143,7 +145,7 @@ Now we simulate the sampling of participants, which results in table listing eac
 To do this, we must sample $T_{0j} ,T_{1j}$ pairs - one for each subject - from a bivariate normal distribution.
 
 We will use the function `np.random.multivariate_normal()`,
-which generates a table of n simulated values from a multivariate normal distribution by specifying the means and covariance matrix(cov).
+which generates a table of `n` simulated values from a multivariate normal distribution by specifying the means and covariance matrix (cov).
 
 
 ```python
@@ -286,9 +288,10 @@ Now we can analyze our simulated data in a linear mixed effects model using the 
 The formula and vc_formula in `mixedlm()` map onto how we calculated our `liking_ij` outcome variable above.
 
 The terms in formula are as follows:
-liking_ij is the response.
-1 is the intercept ($\beta_0$), which is the mean of the response for the pop genre of songs (because we used dummy coding for the genre_i term).
-genre_i is the dummy coded variable identifying whether song $i$ belongs to the pop or rock genre.
+
+- liking_ij is the response.
+- 1 is the intercept ($\beta_0$), which is the mean of the response for the pop genre of songs (because we used dummy coding for the genre_i term).
+- genre_i is the dummy coded variable identifying whether song $i$ belongs to the pop or rock genre.
 
 The terms in vc_formula are as follows:
 
@@ -344,10 +347,7 @@ formatted_sim_result = pd.DataFrame({
     'term': ['Intercept', 'genre_i', '', '', '', '', ''],
     'parameter': ['beta_0', 'beta_1', 'omega_0', 'tau_0', 'rho', 'tau_1', 'sigma'],
     'value': [beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma],
-    'simulated': [mod_sim.fe_params.iloc[0], mod_sim.fe_params.iloc[1],
-                  '', '',
-                 '', '',
-                 '']
+    'simulated': [mod_sim.fe_params.iloc[0], mod_sim.fe_params.iloc[1], '', '', '', '', '']
 })
 
 print(formatted_sim_result)
@@ -420,11 +420,11 @@ print(single_run())
 
 ```
 ##               Coef. Std.Err.   p_value
-## Intercept    66.336    1.715  0.000000
-## genre_i      -0.654    1.664  0.694325
-## genre_i Var  22.266    1.121  0.012768
-## song_id Var  11.543    0.482  0.002662
-## subj_id Var  50.054    1.980  0.001524
+## Intercept    62.364    1.620  0.000000
+## genre_i       1.794    1.454  0.217012
+## genre_i Var  15.056    0.854  0.027138
+## song_id Var   8.783    0.387  0.004477
+## subj_id Var  46.691    1.848  0.001541
 ```
 
 
@@ -435,11 +435,11 @@ print(single_run(n_pop = 10, n_rock = 50, beta_1 = 2))
 
 ```
 ##               Coef. Std.Err.        p_value
-## Intercept    61.201    1.764  9.993356e-264
-## genre_i       2.813    1.336   3.527181e-02
-## genre_i Var   4.349    0.417   1.732626e-01
-## song_id Var  11.084    0.332   1.320817e-05
-## subj_id Var  44.234    1.838   1.658627e-03
+## Intercept    60.065    1.635  1.824465e-295
+## genre_i       2.934    1.308   2.494009e-02
+## genre_i Var  14.922    0.811   1.634819e-02
+## song_id Var   6.946    0.230   8.011783e-05
+## subj_id Var  43.595    1.826   1.830974e-03
 ```
 
 ## Power calculation automated
@@ -483,7 +483,7 @@ print(f"Mean estimate: {mean_estimate}")
 ```
 
 ```
-## Mean estimate: -0.3134666666666666
+## Mean estimate: 5.0537
 ```
 
 ```python
@@ -491,7 +491,7 @@ print(f"Mean standard error: {mean_se}")
 ```
 
 ```
-## Mean standard error: 1.4849333333333334
+## Mean standard error: 1.4789333333333334
 ```
 
 ```python
@@ -499,7 +499,7 @@ print(f"Power: {power}")
 ```
 
 ```
-## Power: 0.03333333333333333
+## Power: 0.9
 ```
 
 ### Check false positive rate
@@ -523,7 +523,7 @@ print((sims_fp_df[sims_fp_df['term'] == 'genre_i']['p_value'].astype(float) < al
 ```
 
 ```
-## 0.13333333333333333
+## 0.0
 ```
 
 Ideally, the false positive rate will be equal to alpha, which we set at 0.05.
@@ -584,17 +584,17 @@ print(parameter_search(params))
 
 ```
 ##             term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
-## 0      Intercept  60.032    2.277  3.653518e-153      10     10      10       1
-## 1        genre_i  -0.420    2.250   8.520186e-01      10     10      10       1
-## 2    genre_i Var  26.542    2.568   2.136670e-01      10     10      10       1
-## 3    song_id Var   5.129    0.382   1.058687e-01      10     10      10       1
-## 4    subj_id Var  39.817    2.722   7.835456e-02      10     10      10       1
+## 0      Intercept  61.634    1.685  6.645349e-293      10     10      10       1
+## 1        genre_i   5.130    1.971   9.247504e-03      10     10      10       1
+## 2    genre_i Var  11.926    1.670   3.955052e-01      10     10      10       1
+## 3    song_id Var   6.398    0.494   1.235221e-01      10     10      10       1
+## 4    subj_id Var  14.929    1.016   8.043422e-02      10     10      10       1
 ## ..           ...     ...      ...            ...     ...    ...     ...     ...
-## 115    Intercept  64.985    1.117   0.000000e+00      50     40      40       5
-## 116      genre_i  -0.108    0.948   9.095202e-01      50     40      40       5
-## 117  genre_i Var  15.044    0.460   5.013323e-05      50     40      40       5
-## 118  song_id Var  10.639    0.239   3.638054e-08      50     40      40       5
-## 119  subj_id Var  47.405    1.231   1.853551e-06      50     40      40       5
+## 115    Intercept  61.332    1.037   0.000000e+00      50     40      40       5
+## 116      genre_i   3.121    1.068   3.472719e-03      50     40      40       5
+## 117  genre_i Var  22.232    0.693   7.356275e-05      50     40      40       5
+## 118  song_id Var  12.612    0.447   4.875797e-04      50     40      40       5
+## 119  subj_id Var  36.410    0.809   2.683366e-08      50     40      40       5
 ## 
 ## [120 rows x 8 columns]
 ```
@@ -627,17 +627,17 @@ print(sims_params_df)
 
 ```
 ##              term   Coef. Std.Err.        p_value  n_subj  n_pop  n_rock  beta_1
-## 0       Intercept  67.136    2.226  9.407457e-200      10     10      10       1
-## 1         genre_i   4.018    2.385   9.201102e-02      10     10      10       1
-## 2     genre_i Var  34.901    3.081   1.469297e-01      10     10      10       1
-## 3     song_id Var   4.881    0.382   1.018588e-01      10     10      10       1
-## 4     subj_id Var  38.589    2.741   7.145265e-02      10     10      10       1
+## 0       Intercept  64.272    2.972  1.015150e-103      10     10      10       1
+## 1         genre_i   1.313    2.319   5.711956e-01      10     10      10       1
+## 2     genre_i Var  13.256    1.545   2.729210e-01      10     10      10       1
+## 3     song_id Var  14.144    0.910   4.697565e-02      10     10      10       1
+## 4     subj_id Var  68.058    4.494   5.294626e-02      10     10      10       1
 ## ...           ...     ...      ...            ...     ...    ...     ...     ...
-## 3595    Intercept  63.354    1.091   0.000000e+00      50     40      40       5
-## 3596      genre_i   0.831    1.028   4.188217e-01      50     40      40       5
-## 3597  genre_i Var  21.069    0.625   1.710804e-05      50     40      40       5
-## 3598  song_id Var  11.485    0.262   2.346378e-08      50     40      40       5
-## 3599  subj_id Var  43.663    1.168   1.900018e-06      50     40      40       5
+## 3595    Intercept  61.106    0.950   0.000000e+00      50     40      40       5
+## 3596      genre_i   5.974    0.874   8.097438e-12      50     40      40       5
+## 3597  genre_i Var  16.459    0.356   1.915712e-08      50     40      40       5
+## 3598  song_id Var   7.335    0.138   1.122390e-10      50     40      40       5
+## 3599  subj_id Var  34.306    0.702   2.820328e-09      50     40      40       5
 ## 
 ## [3600 rows x 8 columns]
 ```
@@ -662,30 +662,30 @@ print(sims_table)
 
 ```
 ##        term  n_subj  n_pop  n_rock  beta_1  mean_estimate   mean_se     power
-## 0   genre_i      10     10      10       1       0.193067  2.408767  0.066667
-## 1   genre_i      10     10      10       3      -0.014333  2.239667  0.100000
-## 2   genre_i      10     10      10       5       0.627500  2.388900  0.000000
-## 3   genre_i      10     10      40       1      -0.262400  2.134333  0.033333
-## 4   genre_i      10     10      40       3       0.526800  2.309400  0.033333
-## 5   genre_i      10     10      40       5      -0.308233  2.293700  0.000000
-## 6   genre_i      10     40      10       1      -0.099333  2.257600  0.033333
-## 7   genre_i      10     40      10       3      -1.011567  2.179333  0.066667
-## 8   genre_i      10     40      10       5      -0.057833  2.225033  0.033333
-## 9   genre_i      10     40      40       1      -0.583367  2.016033  0.033333
-## 10  genre_i      10     40      40       3      -0.247933  1.814567  0.033333
-## 11  genre_i      10     40      40       5       0.253867  1.967767  0.033333
-## 12  genre_i      50     10      10       1       0.376567  1.524867  0.000000
-## 13  genre_i      50     10      10       3       0.408833  1.584467  0.066667
-## 14  genre_i      50     10      10       5       0.783167  1.491133  0.100000
-## 15  genre_i      50     10      40       1      -0.202533  1.382633  0.033333
-## 16  genre_i      50     10      40       3       0.366800  1.349433  0.033333
-## 17  genre_i      50     10      40       5      -0.579967  1.419667  0.033333
-## 18  genre_i      50     40      10       1       0.224733  1.521667  0.033333
-## 19  genre_i      50     40      10       3       0.265567  1.298267  0.066667
-## 20  genre_i      50     40      10       5      -0.143600  1.393033  0.066667
-## 21  genre_i      50     40      40       1      -0.101667  0.979500  0.000000
-## 22  genre_i      50     40      40       3      -0.306000  0.975700  0.000000
-## 23  genre_i      50     40      40       5      -0.066433  0.997967  0.033333
+## 0   genre_i      10     10      10       1       0.968567  2.359500  0.066667
+## 1   genre_i      10     10      10       3       2.711167  2.392767  0.200000
+## 2   genre_i      10     10      10       5       4.633967  2.309233  0.600000
+## 3   genre_i      10     10      40       1       0.820900  2.255433  0.000000
+## 4   genre_i      10     10      40       3       4.020000  2.173000  0.466667
+## 5   genre_i      10     10      40       5       5.214967  2.284733  0.666667
+## 6   genre_i      10     40      10       1       1.004667  2.227100  0.066667
+## 7   genre_i      10     40      10       3       2.725500  2.138300  0.166667
+## 8   genre_i      10     40      10       5       4.948467  2.229467  0.533333
+## 9   genre_i      10     40      40       1       0.906433  2.052900  0.066667
+## 10  genre_i      10     40      40       3       3.051967  1.813300  0.366667
+## 11  genre_i      10     40      40       5       5.063900  2.176133  0.700000
+## 12  genre_i      50     10      10       1       0.805567  1.586033  0.033333
+## 13  genre_i      50     10      10       3       2.836900  1.486067  0.366667
+## 14  genre_i      50     10      10       5       5.130467  1.529067  0.900000
+## 15  genre_i      50     10      40       1       0.963833  1.351433  0.133333
+## 16  genre_i      50     10      40       3       2.652067  1.330767  0.566667
+## 17  genre_i      50     10      40       5       5.353667  1.405733  1.000000
+## 18  genre_i      50     40      10       1       1.388267  1.360200  0.100000
+## 19  genre_i      50     40      10       3       3.313000  1.367167  0.600000
+## 20  genre_i      50     40      10       5       4.972600  1.475933  0.933333
+## 21  genre_i      50     40      40       1       0.955000  1.006933  0.100000
+## 22  genre_i      50     40      40       3       2.889733  0.980033  0.900000
+## 23  genre_i      50     40      40       5       5.070533  1.001300  1.000000
 ```
 
 Here’s a graph that visualizes the output of the power simulation.
@@ -715,29 +715,29 @@ for i, (pop, rock) in enumerate(sims_table.groupby(['n_pop', 'n_rock'])):
 
 ```
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x000001BCFC91E390>
+## <matplotlib.lines.Line2D object at 0x000001E697EC7350>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x000001BCC2B129D0>
+## <matplotlib.legend.Legend object at 0x000001E696A18D50>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x000001BCC25103D0>
+## <matplotlib.lines.Line2D object at 0x000001E696C96AD0>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x000001BCFCC278D0>
+## <matplotlib.legend.Legend object at 0x000001E6907EA550>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x000001BCC2C24D90>
+## <matplotlib.lines.Line2D object at 0x000001E6966E19D0>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x000001BCC2981610>
+## <matplotlib.legend.Legend object at 0x000001E6966F9090>
 ## <Axes: xlabel='mean_estimate', ylabel='power'>
-## <matplotlib.lines.Line2D object at 0x000001BCFCDCC990>
+## <matplotlib.lines.Line2D object at 0x000001E696731210>
 ## Text(0.5, 0, 'Effect size (rock genre - pop genre)')
 ## Text(0, 0.5, 'Power')
 ## (0.0, 1.0)
-## <matplotlib.legend.Legend object at 0x000001BCC2CD11D0>
+## <matplotlib.legend.Legend object at 0x000001E6966C1E10>
 ```
 
 ```python

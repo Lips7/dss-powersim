@@ -67,7 +67,9 @@ We’ll start by writing code that simulates datasets under the alternative hypo
 Note: There are two differences between Python and the R:
 
 1. We use the package of "statsmodels" to set up the mixd effect model in Python.
-However, this package doesn't have extension to show the correlation between the random intercept and the random slope of the subject like that in R;
+However, this package doesn't have extension to fit a complex crossed random effects model,
+and the ability to show the correlation between the random intercept and the random slope of the subject like that in R,
+we can only use a similar method to fit the model;
 2. There's no `broom.mixed::tidy()` function in Python and that's why the output is incomplete.
 
 ### Establish the simulation parameters
@@ -136,7 +138,7 @@ Now we simulate the sampling of participants, which results in table listing eac
 To do this, we must sample $T_{0j} ,T_{1j}$ pairs - one for each subject - from a bivariate normal distribution.
 
 We will use the function `np.random.multivariate_normal()`,
-which generates a table of n simulated values from a multivariate normal distribution by specifying the means and covariance matrix(cov).
+which generates a table of `n` simulated values from a multivariate normal distribution by specifying the means and covariance matrix (cov).
 
 ```{python}
 # simulate a sample of subjects
@@ -222,9 +224,10 @@ Now we can analyze our simulated data in a linear mixed effects model using the 
 The formula and vc_formula in `mixedlm()` map onto how we calculated our `liking_ij` outcome variable above.
 
 The terms in formula are as follows:
-liking_ij is the response.
-1 is the intercept ($\beta_0$), which is the mean of the response for the pop genre of songs (because we used dummy coding for the genre_i term).
-genre_i is the dummy coded variable identifying whether song $i$ belongs to the pop or rock genre.
+
+- liking_ij is the response.
+- 1 is the intercept ($\beta_0$), which is the mean of the response for the pop genre of songs (because we used dummy coding for the genre_i term).
+- genre_i is the dummy coded variable identifying whether song $i$ belongs to the pop or rock genre.
 
 The terms in vc_formula are as follows:
 
@@ -257,10 +260,7 @@ formatted_sim_result = pd.DataFrame({
     'term': ['Intercept', 'genre_i', '', '', '', '', ''],
     'parameter': ['beta_0', 'beta_1', 'omega_0', 'tau_0', 'rho', 'tau_1', 'sigma'],
     'value': [beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma],
-    'simulated': [mod_sim.fe_params.iloc[0], mod_sim.fe_params.iloc[1],
-                  '', '',
-                 '', '',
-                 '']
+    'simulated': [mod_sim.fe_params.iloc[0], mod_sim.fe_params.iloc[1], '', '', '', '', '']
 })
 
 print(formatted_sim_result)
@@ -270,7 +270,7 @@ print(formatted_sim_result)
 
 Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.
 
-```{python}
+```{python, eval=TRUE, echo=TRUE}
 def sim_data(n_subj=25, n_pop=15, n_rock=15, beta_0=60, beta_1=5, omega_0=3, tau_0=7, tau_1=4, rho=0.2, sigma=8):
     songs = pd.DataFrame({
         'song_id': np.arange(n_pop + n_rock),
@@ -288,6 +288,29 @@ def sim_data(n_subj=25, n_pop=15, n_rock=15, beta_0=60, beta_1=5, omega_0=3, tau
     trials['liking_ij'] = beta_0 + trials['T_0j'] + trials['O_0i'] + (beta_1 + trials['T_1j']) * trials['genre_i'] + trials['e_ij']
 
     return trials[['subj_id', 'song_id', 'category', 'genre_i', 'liking_ij']]
+```
+
+```{python, eval=FALSE, echo=FALSE}
+def sim_data(n_subj=25, n_pop=15, n_rock=15, beta_0=60, beta_1=5, omega_0=3, tau_0=7, tau_1=4, rho=0.2, sigma=8):
+    random_effects = np.repeat(np.random.multivariate_normal([0, 0], [[tau_0**2, rho*tau_0*tau_1], [rho*tau_0*tau_1, tau_1**2]], size=n_subj), n_pop + n_rock, axis=0)
+
+    subj_id = np.repeat(np.arange(1, n_subj + 1), n_pop + n_rock)
+    song_id = np.tile(np.arange(n_pop + n_rock), n_subj)
+    category = np.tile(np.repeat(["pop", "rock"], [n_pop, n_rock]), n_subj)
+    genre_i = np.tile(np.repeat([0, 1], [n_pop, n_rock]), n_subj)
+    O_0i = np.tile(np.random.normal(0, omega_0, n_pop + n_rock), n_subj)
+    T_0j = random_effects[:, 0]
+    T_1j = random_effects[:, 1]
+    e_ij = np.random.normal(0, sigma, (n_pop + n_rock) * n_subj)
+    liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j * genre_i + e_ij)
+
+    return pd.DataFrame({
+        'subj_id': subj_id,
+        'song_id': song_id,
+        'category': category,
+        'genre_i': genre_i,
+        'liking_ij': liking_ij
+    })
 ```
 
 ## Power calculation single run

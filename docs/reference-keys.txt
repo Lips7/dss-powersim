@@ -1,6 +1,8 @@
 tab:param-def
 tab:param-all
-tab:unnamed-chunk-12
+tab:unnamed-chunk-1
+tab:unnamed-chunk-2
+tab:unnamed-chunk-9
 power-analysis
 canned-routines
 step-by-step
@@ -68,7 +70,10 @@ power-calculation-automated-2
 check-false-positive-rate-2
 power-for-different-effect-sizes-2
 software-comparison
+summary
+absolute-running-time
+single-run-benchmark
 r-1
 python-1
 stata-1
-results
+benchmark-results

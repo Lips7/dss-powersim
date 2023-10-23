@@ -13,7 +13,8 @@ rmd_files:
   - "05_Python.Rmd"
   - "06_Stata.Rmd"
   - "07_software_comparison.Rmd"
-  - "08_resources.Rmd"
+  - "08_single_run_benchmark.Rmd"
+  - "09_resources.Rmd"
 
 delete_merged_file: true
 
